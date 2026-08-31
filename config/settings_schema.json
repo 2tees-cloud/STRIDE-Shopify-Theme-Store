@@ -16,9 +16,15 @@
       },
       {
         "type": "font_picker",
+        "id": "type_header_font",
+        "default": "playfair_display_n4",
+        "label": "t:general.header_font"
+      },
+      {
+        "type": "font_picker",
         "id": "type_primary_font",
         "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "label": "t:general.body_font"
       }
     ]
   },
