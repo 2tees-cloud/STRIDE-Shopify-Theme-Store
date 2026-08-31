@@ -59,14 +59,62 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
+        "default": "#F7F5F1",
         "label": "t:labels.background"
       },
       {
         "type": "color",
+        "id": "background_alt_color",
+        "default": "#EFEBE4",
+        "label": "t:labels.background_alt"
+      },
+      {
+        "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#141311",
         "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "foreground_muted_color",
+        "default": "#6B665D",
+        "label": "t:labels.foreground_muted"
+      },
+      {
+        "type": "color",
+        "id": "surface_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.surface"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "default": "#DDD8CE",
+        "label": "t:labels.border"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#B5502D",
+        "label": "t:labels.accent"
+      },
+      {
+        "type": "color",
+        "id": "on_accent_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.on_accent"
+      },
+      {
+        "type": "color",
+        "id": "accent_secondary_color",
+        "default": "#7C8471",
+        "label": "t:labels.accent_secondary"
+      },
+      {
+        "type": "color",
+        "id": "urgency_color",
+        "default": "#E8462E",
+        "label": "t:labels.urgency"
       },
       {
         "type": "range",
