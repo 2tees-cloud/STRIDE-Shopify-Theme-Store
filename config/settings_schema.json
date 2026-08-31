@@ -119,7 +119,7 @@
       {
         "type": "color",
         "id": "urgency_color",
-        "default": "#E8462E",
+        "default": "#CC3E23",
         "label": "t:labels.urgency"
       },
       {

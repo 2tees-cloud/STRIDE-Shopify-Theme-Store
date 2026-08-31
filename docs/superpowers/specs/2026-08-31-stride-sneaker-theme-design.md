@@ -37,11 +37,13 @@ Defined as CSS custom properties in `snippets/css-variables.liquid`, driven by `
 | `--color-accent` | `#B5502D` (clay/terracotta) | primary CTA, links, active states |
 | `--color-on-accent` | `#FFFFFF` | text/icons on accent-filled surfaces |
 | `--color-accent-secondary` | `#7C8471` (sage) | "new"/"eco" badges, secondary accents |
-| `--color-urgency` | `#E8462E` | Sale price, low-stock badges, real countdown |
+| `--color-urgency` | `#CC3E23` | Sale price, low-stock badges, real countdown |
 | `--color-border` | `#DDD8CE` | dividers, input borders |
 | `--color-surface` | `#FFFFFF` | cards, drawers, popovers |
 
 All pairs must pass WCAG contrast per §7: 4.5:1 for body text, 3:1 for large text (≥18pt/24px) and non-text UI elements (icons, focus outlines). Verify `--color-text` on `--color-background`/`--color-surface`, `--color-on-accent` on `--color-accent`/`--color-urgency`.
+
+**Sage color usage constraint**: Never use `--color-accent-secondary` as the text color of small body-sized copy; use it as a badge/chip background or icon/border color, with `--color-foreground` as the actual text color on top of it.
 
 ### 2.2 Typography
 
