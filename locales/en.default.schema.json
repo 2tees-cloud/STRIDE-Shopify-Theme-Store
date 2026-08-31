@@ -1,6 +1,7 @@
 {
   "general": {
     "404": "Not found",
+    "announcement_bar": "Announcement bar",
     "article": "Article",
     "block": "Block",
     "blog": "Blog",
@@ -23,6 +24,7 @@
     "header_font": "Heading font",
     "layout": "Layout",
     "main": "Main",
+    "message": "Message",
     "page": "Page",
     "password": "Password",
     "product": "Product",
@@ -60,7 +62,9 @@
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
     "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "rotation_speed": "Rotation speed",
+    "link": "Link"
   },
   "options": {
     "alignment": {
