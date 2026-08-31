@@ -19,6 +19,15 @@
     "update": "Update",
     "remove": "Remove"
   },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thanks for reaching out. We'll get back to you soon."
+    }
+  },
   "customers": {
     "login": {
       "email": "Email",

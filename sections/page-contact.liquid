@@ -1,0 +1,79 @@
+{% comment %}
+  This section is used in the page.contact template to render a store's
+  contact page, combining page content with Shopify's native contact form.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+{% endcomment %}
+
+<h1>{{ page.title }}</h1>
+
+{{ page.content }}
+
+{% form 'contact', class: 'contact-form' %}
+  {% if form.posted_successfully? %}
+    <p class="form-status form-status--success">{{ 'contact.form.success' | t }}</p>
+  {% endif %}
+
+  {% if form.errors %}
+    <div class="form-status form-status--error">
+      {{ form.errors | default_errors }}
+    </div>
+  {% endif %}
+
+  <div class="field">
+    <label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+    <input
+      type="text"
+      id="ContactFormName"
+      name="contact[name]"
+      value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+    >
+  </div>
+
+  <div class="field">
+    <label for="ContactFormEmail">{{ 'contact.form.email' | t }}</label>
+    <input
+      type="email"
+      id="ContactFormEmail"
+      name="contact[email]"
+      autocomplete="email"
+      autocapitalize="off"
+      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+      required
+    >
+  </div>
+
+  <div class="field">
+    <label for="ContactFormMessage">{{ 'contact.form.message' | t }}</label>
+    <textarea rows="5" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+  </div>
+
+  <button type="submit">{{ 'contact.form.submit' | t }}</button>
+{% endform %}
+
+{% stylesheet %}
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 32rem;
+  }
+  .contact-form .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .form-status--success {
+    color: var(--color-accent-secondary);
+  }
+  .form-status--error {
+    color: var(--color-urgency);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.contact",
+  "settings": []
+}
+{% endschema %}
