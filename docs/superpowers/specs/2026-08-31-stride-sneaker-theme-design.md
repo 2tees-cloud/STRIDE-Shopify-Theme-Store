@@ -32,27 +32,29 @@ Defined as CSS custom properties in `snippets/css-variables.liquid`, driven by `
 |---|---|---|
 | `--color-background` | `#F7F5F1` (warm off-white) | page background |
 | `--color-background-alt` | `#EFEBE4` | section alternation, cards |
-| `--color-text` | `#141311` (near-black) | body text |
-| `--color-text-muted` | `#6B665D` | secondary text, captions |
-| `--color-accent` | `#B5502D` (clay/terracotta) | primary CTA, links, active states |
+| `--color-foreground` | `#141311` (near-black) | body text |
+| `--color-foreground-muted` | `#6B665D` | secondary text, captions |
+| `--color-accent` | `#A84A29` (clay/terracotta) | primary CTA, links, active states |
 | `--color-on-accent` | `#FFFFFF` | text/icons on accent-filled surfaces |
 | `--color-accent-secondary` | `#7C8471` (sage) | "new"/"eco" badges, secondary accents |
-| `--color-urgency` | `#CC3E23` | Sale price, low-stock badges, real countdown |
+| `--color-urgency` | `#B23A1F` | Sale price, low-stock badges, real countdown |
 | `--color-border` | `#DDD8CE` | dividers, input borders |
 | `--color-surface` | `#FFFFFF` | cards, drawers, popovers |
 
-All pairs must pass WCAG contrast per §7: 4.5:1 for body text, 3:1 for large text (≥18pt/24px) and non-text UI elements (icons, focus outlines). Verify `--color-text` on `--color-background`/`--color-surface`, `--color-on-accent` on `--color-accent`/`--color-urgency`.
+All pairs must pass WCAG contrast per §7: 4.5:1 for body text, 3:1 for large text (≥18pt/24px) and non-text UI elements (icons, focus outlines). Verify `--color-foreground` on `--color-background`/`--color-surface`, `--color-on-accent` on `--color-accent`/`--color-urgency`.
 
 **Sage color usage constraint**: Never use `--color-accent-secondary` as the text color of small body-sized copy; use it as a badge/chip background or icon/border color, with `--color-foreground` as the actual text color on top of it.
+
+**Background-surface audit note**: the contrast audit also covers `--color-background-alt` (the darkest of the three background surfaces these tokens can sit under as text) — `--color-accent` and `--color-urgency` were darkened from their original values specifically so both still pass 4.5:1 against `--color-background-alt`, not just `--color-background`/`--color-surface`.
 
 ### 2.2 Typography
 
 Two `font_picker` settings in `settings_schema.json`, **restricted to fonts in Shopify's current font library** (no custom uploads, no Google Fonts `<link>` tags — this is a hard Theme Store rule):
 
-- `type_header_font` — a serif display face from Shopify's library, used for the wordmark, hero headlines, section titles. Exact family confirmed against the live `font_picker` list at implementation time (candidates: `"forum_n4"`, `"fraunces_n4"`, or nearest available serif).
-- `type_body_font` — a sans-serif grotesque from Shopify's library (e.g. `"assistant_n4"`), used for body copy, nav, buttons, form inputs.
+- `type_header_font` — a serif display face from Shopify's library, used for the wordmark, hero headlines, section titles. Exact family confirmed against the live `font_picker` list at implementation time (candidates: `"fraunces_n4"` or nearest available serif; `"playfair_display_n4"` shipped as the default since `"forum_n4"` was not present in the live font library at implementation time).
+- `type_primary_font` — a sans-serif grotesque from Shopify's library (shipped default: `"work_sans_n4"`), used for body copy, nav, buttons, form inputs.
 
-Rendered via `{{ settings.type_header_font | font_face: font_display: 'swap' }}` in `theme.liquid`; bold/italic/bold-italic variants loaded through `font_modify` per the checklist. Exposed as `--font-display` / `--font-body` custom properties. A modular type scale (CSS `clamp()`) covers display, h1–h4, body, small/caption, button label — headings h1–h6 are visually distinct from one another (size/weight/spacing), per §7.
+Rendered via `{{ settings.type_header_font | font_face: font_display: 'swap' }}` in `theme.liquid`; bold/italic/bold-italic variants loaded through `font_modify` per the checklist. Exposed as `--font-header--family` (plus `--font-header--style` / `--font-header--weight`) and `--font-body--family` (plus `--font-body--style` / `--font-body--weight`) custom properties. A modular type scale (CSS `clamp()`) covers display, h1–h4, body, small/caption, button label — headings h1–h6 are visually distinct from one another (size/weight/spacing), per §7.
 
 ### 2.3 Spacing & layout
 
@@ -67,7 +69,7 @@ New `sections/announcement-bar.liquid`, rendered inside the header section group
 ### 3.2 Header (`sections/header.liquid`)
 
 - Sticky on scroll, condenses padding after a scroll threshold (IntersectionObserver, no scroll-jank).
-- Logo: text wordmark using `--font-display` by default, image-logo override supporting multiple aspect ratios (checklist requirement).
+- Logo: text wordmark using `--font-header--family` by default, image-logo override supporting multiple aspect ratios (checklist requirement).
 - Primary nav from `main-menu` linklist with **multi-level dropdown** support (`<details>`-based disclosure, keyboard accessible) — multi-level nav is a mandatory feature (§6), not just one level as originally scoped.
 - **Account component** in the header, desktop and mobile (mandatory feature) — login/account link that reflects logged-in state.
 - Search entry point opening a **predictive search** panel (mandatory feature — live results as you type, via Shopify's predictive search API).

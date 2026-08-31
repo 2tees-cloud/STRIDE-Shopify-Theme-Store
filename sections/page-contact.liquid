@@ -26,7 +26,8 @@
       type="text"
       id="ContactFormName"
       name="contact[name]"
-      value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+      autocomplete="name"
+      value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
     >
   </div>
 
@@ -38,7 +39,7 @@
       name="contact[email]"
       autocomplete="email"
       autocapitalize="off"
-      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+      value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
       required
     >
   </div>
@@ -64,7 +65,7 @@
     gap: var(--space-1);
   }
   .form-status--success {
-    color: var(--color-accent-secondary);
+    color: var(--color-foreground);
   }
   .form-status--error {
     color: var(--color-urgency);
