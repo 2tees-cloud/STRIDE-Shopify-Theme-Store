@@ -46,6 +46,11 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "labels": {
+    "menu": "Menu",
+    "country": "Country/region",
+    "language": "Language"
+  },
   "password": {
     "title": "This shop is private",
     "password": "Password",

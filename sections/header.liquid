@@ -1,15 +1,60 @@
-<header>
+<header class="header">
   <h2 class="header__title">
     {{ shop.name | link_to: routes.root_url }}
   </h2>
 
-  <div class="header__menu">
+  <nav class="header__menu" aria-label="{{ 'labels.menu' | t }}">
     {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
+      {% if link.links.size > 0 %}
+        <details class="header__menu-item header__menu-item--has-children">
+          <summary>{{ link.title }}</summary>
+          <ul class="header__submenu">
+            {% for child_link in link.links %}
+              <li>
+                <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </details>
+      {% else %}
+        <a class="header__menu-item" href="{{ link.url }}">{{ link.title }}</a>
+      {% endif %}
     {% endfor %}
+  </nav>
+
+  <div class="header__localization">
+    {% if localization.available_countries.size > 1 %}
+      {% form 'localization', id: 'HeaderCountryForm', class: 'header__localization-form' %}
+        <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+        <select name="country_code" aria-label="{{ 'labels.country' | t }}" data-localization-form-submit>
+          {% for country in localization.available_countries %}
+            <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+              {{ country.name }} ({{ country.currency.iso_code }})
+            </option>
+          {% endfor %}
+        </select>
+      {% endform %}
+    {% endif %}
+
+    {% if localization.available_languages.size > 1 %}
+      {% form 'localization', id: 'HeaderLanguageForm', class: 'header__localization-form' %}
+        <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+        <select name="locale_code" aria-label="{{ 'labels.language' | t }}" data-localization-form-submit>
+          {% for language in localization.available_languages %}
+            <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
+              {{ language.endonym_name | capitalize }}
+            </option>
+          {% endfor %}
+        </select>
+      {% endform %}
+    {% endif %}
   </div>
 
   <div class="header__icons">
+    <a href="{{ routes.search_url }}" aria-label="{{ 'search.title' | t }}">
+      {{ 'icon-search.svg' | inline_asset_content }}
+    </a>
+
     {% if shop.customer_accounts_enabled %}
       <shopify-account menu="{{ section.settings.customer_account_menu }}">
         {{ 'icon-account.svg' | inline_asset_content }}
@@ -27,11 +72,30 @@
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
+  .shopify-section-group-header-group {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding-block: var(--space-4);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-4);
+    background-color: var(--color-background);
+    transition: padding-block 0.2s ease;
+  }
+  header.header.header--condensed {
+    padding-block: var(--space-2);
+  }
+  header .header__title {
+    font-family: var(--font-header--family);
+    font-style: var(--font-header--style);
+    font-weight: var(--font-header--weight);
   }
   header a {
     position: relative;
@@ -49,13 +113,77 @@
   }
   header svg {
     width: 2rem;
+    flex-shrink: 0;
   }
   header .header__menu,
+  header .header__localization,
   header .header__icons {
     display: flex;
     gap: 1rem;
   }
+  header .header__menu {
+    align-items: center;
+  }
+  header .header__menu-item {
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+  header details.header__menu-item {
+    position: relative;
+  }
+  header details.header__menu-item > summary {
+    list-style: none;
+    color: var(--color-foreground);
+  }
+  header details.header__menu-item > summary::-webkit-details-marker {
+    display: none;
+  }
+  header details[open].header__menu-item > summary {
+    color: var(--color-accent);
+  }
+  header .header__submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    min-width: 10rem;
+    z-index: 1;
+  }
+  header .header__submenu a {
+    display: block;
+    padding-block: var(--space-1);
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+  header .header__localization-form select {
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-foreground);
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var sentinel = document.querySelector('[data-scroll-sentinel]');
+    var header = document.querySelector('.header');
+    if (!sentinel || !header) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      header.classList.toggle('header--condensed', !entries[0].isIntersecting);
+    });
+    observer.observe(sentinel);
+  })();
+
+  document.querySelectorAll('[data-localization-form-submit]').forEach(function (select) {
+    select.addEventListener('change', function () {
+      select.form.submit();
+    });
+  });
+{% endjavascript %}
 
 {% schema %}
 {
