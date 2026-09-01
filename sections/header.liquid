@@ -14,7 +14,7 @@
     {{ shop.name | link_to: routes.root_url }}
   </h2>
 
-  <div class="header__panel" id="MobileNavPanel" inert aria-hidden="true">
+  <div class="header__panel" id="MobileNavPanel">
     <div class="header__panel-header">
       <button type="button" class="header__panel-close" data-mobile-nav-close aria-label="{{ 'labels.close_menu' | t }}">
         {{ 'icon-x.svg' | inline_asset_content }}
@@ -276,6 +276,8 @@
   }
   header details.header__menu-item {
     position: relative;
+    flex-direction: column;
+    align-items: flex-start;
   }
   header details.header__menu-item > summary {
     list-style: none;
@@ -300,6 +302,10 @@
     min-width: 0;
   }
   @media (min-width: 750px) {
+    header details.header__menu-item {
+      flex-direction: row;
+      align-items: center;
+    }
     header .header__submenu {
       position: absolute;
       top: 100%;
@@ -330,10 +336,15 @@
     var header = root.querySelector('.header');
     if (!sentinel || !header) return;
 
+    if (window.__strideStickyObserver) {
+      window.__strideStickyObserver.disconnect();
+    }
+
     var observer = new IntersectionObserver(function (entries) {
       header.classList.toggle('header--condensed', !entries[0].isIntersecting);
     });
     observer.observe(sentinel);
+    window.__strideStickyObserver = observer;
   }
 
   function initLocalizationForms(root) {
@@ -344,21 +355,51 @@
     });
   }
 
+  var mobileNavCurrent = { panel: null };
+
+  function syncMobileNavForViewport(matches) {
+    var panel = mobileNavCurrent.panel;
+    if (!panel) return;
+
+    if (matches) {
+      panel.classList.remove('is-open');
+      panel.removeAttribute('inert');
+      panel.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = '';
+    } else if (!panel.classList.contains('is-open')) {
+      panel.setAttribute('inert', '');
+      panel.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  var mobileNavQuery = window.matchMedia('(min-width: 750px)');
+  mobileNavQuery.addEventListener('change', function (event) {
+    syncMobileNavForViewport(event.matches);
+  });
+
   function initMobileNav(root) {
     var trigger = root.querySelector('[data-mobile-nav-trigger]');
     var panel = root.querySelector('#MobileNavPanel');
     var overlay = root.querySelector('[data-mobile-nav-overlay]');
     var closeButton = root.querySelector('[data-mobile-nav-close]');
     if (!trigger || !panel || !overlay) return;
+
+    mobileNavCurrent.panel = panel;
+    syncMobileNavForViewport(mobileNavQuery.matches);
+
     if (panel.dataset.mobileNavInitialized) return;
     panel.dataset.mobileNavInitialized = 'true';
 
     var lastFocusedElement = null;
 
     function getFocusableElements() {
-      return Array.from(
+      var candidates = Array.from(
         panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, summary, [tabindex]:not([tabindex="-1"])')
       );
+      return candidates.filter(function (el) {
+        var closedDetails = el.closest('details:not([open])');
+        return !closedDetails || closedDetails.querySelector('summary') === el;
+      });
     }
 
     function openPanel() {
@@ -381,8 +422,10 @@
 
     function closePanel() {
       panel.classList.remove('is-open');
-      panel.setAttribute('inert', '');
-      panel.setAttribute('aria-hidden', 'true');
+      if (!mobileNavQuery.matches) {
+        panel.setAttribute('inert', '');
+        panel.setAttribute('aria-hidden', 'true');
+      }
       trigger.setAttribute('aria-expanded', 'false');
       overlay.classList.remove('is-open');
       document.body.style.overflow = '';
@@ -427,11 +470,6 @@
     trigger.addEventListener('click', openPanel);
     overlay.addEventListener('click', closePanel);
     if (closeButton) closeButton.addEventListener('click', closePanel);
-
-    var desktopQuery = window.matchMedia('(min-width: 750px)');
-    desktopQuery.addEventListener('change', function (event) {
-      if (event.matches) closePanel();
-    });
   }
 
   initStickyHeader(document);
