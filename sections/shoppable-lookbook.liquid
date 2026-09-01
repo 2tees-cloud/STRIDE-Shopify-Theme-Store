@@ -1,0 +1,297 @@
+{% comment %}
+  Asymmetric grid of tagged lookbook photos. Each block is one photo
+  tile with exactly one product hotspot (a repeater of "one photo, many
+  hotspots" isn't representable in classic section/block schema, so the
+  grid itself provides the "many photos, many tags" effect instead).
+  Hotspot popovers show via CSS :hover/:focus-within for mouse/keyboard
+  (no JS required for that base experience) — the JS in this file is
+  ONLY a click-toggle fallback for touch devices, which don't reliably
+  support :hover. No separate close button: the popover dismisses via
+  re-clicking the same hotspot, clicking elsewhere, or Escape.
+{% endcomment %}
+
+{% if section.blocks.size > 0 %}
+  <div class="shoppable-lookbook full-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="shoppable-lookbook__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="shoppable-lookbook__grid">
+      {% for block in section.blocks %}
+        <div class="shoppable-lookbook__item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <img
+              class="shoppable-lookbook__image"
+              src="{{ block.settings.image | image_url: width: 1200 }}"
+              srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 1200 }} 1200w"
+              sizes="(min-width: 750px) 40vw, 90vw"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+              loading="lazy"
+              alt="{{ block.settings.image.alt | escape }}"
+            >
+          {% endif %}
+
+          {% if block.settings.product != blank %}
+            {% assign tagged_product = block.settings.product %}
+            <button
+              type="button"
+              class="shoppable-lookbook__hotspot"
+              style="left: {{ block.settings.position_x }}%; top: {{ block.settings.position_y }}%"
+              aria-expanded="false"
+              aria-controls="LookbookPopover-{{ block.id }}"
+              aria-label="{{ 'lookbook.view_product_named' | t: product_title: tagged_product.title }}"
+              data-lookbook-hotspot
+            >
+              <span aria-hidden="true">+</span>
+            </button>
+            <div class="shoppable-lookbook__popover" id="LookbookPopover-{{ block.id }}" style="left: {{ block.settings.position_x }}%; top: {{ block.settings.position_y }}%">
+              {% if tagged_product.featured_image %}
+                <img
+                  class="shoppable-lookbook__popover-image"
+                  src="{{ tagged_product.featured_image | image_url: width: 200 }}"
+                  width="{{ tagged_product.featured_image.width }}"
+                  height="{{ tagged_product.featured_image.height }}"
+                  loading="lazy"
+                  alt=""
+                >
+              {% endif %}
+              <span class="shoppable-lookbook__popover-title">{{ tagged_product.title }}</span>
+              <span class="shoppable-lookbook__popover-price">{{ tagged_product.price | money }}</span>
+              <a href="{{ tagged_product.url }}" class="shoppable-lookbook__popover-link">{{ 'lookbook.view_product' | t }}</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .shoppable-lookbook {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .shoppable-lookbook {
+      padding-inline: var(--space-6);
+    }
+  }
+  .shoppable-lookbook__heading {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-6);
+    text-align: center;
+  }
+  .shoppable-lookbook__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 16rem;
+    gap: var(--space-3);
+  }
+  @media (min-width: 750px) {
+    .shoppable-lookbook__grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 14rem;
+      gap: var(--space-4);
+    }
+    .shoppable-lookbook__item:nth-child(3n+1) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+  .shoppable-lookbook__item {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-background-alt);
+  }
+  .shoppable-lookbook__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .shoppable-lookbook__hotspot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 2rem;
+    height: 2rem;
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 1.125rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgb(255 255 255 / 60%);
+    z-index: 1;
+  }
+  .shoppable-lookbook__hotspot:focus-visible {
+    outline: 2px solid var(--color-on-accent);
+    outline-offset: 2px;
+  }
+  .shoppable-lookbook__popover {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - var(--space-4)));
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background-color: var(--color-surface);
+    color: var(--color-foreground);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 2;
+  }
+  .shoppable-lookbook__item:hover .shoppable-lookbook__popover,
+  .shoppable-lookbook__item:focus-within .shoppable-lookbook__popover,
+  .shoppable-lookbook__popover.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shoppable-lookbook__popover {
+      transition: opacity 0.01ms;
+    }
+  }
+  .shoppable-lookbook__popover-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .shoppable-lookbook__popover-title {
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  .shoppable-lookbook__popover-price {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+  .shoppable-lookbook__popover-link {
+    font-size: 0.875rem;
+    text-decoration: underline;
+    color: var(--color-foreground);
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  function initLookbook(root) {
+    var hotspots = root.matches && root.matches('[data-lookbook-hotspot]')
+      ? [root]
+      : Array.prototype.slice.call(root.querySelectorAll('[data-lookbook-hotspot]'));
+
+    function closeAll(exceptButton) {
+      hotspots.forEach(function (button) {
+        if (button === exceptButton) return;
+        var popover = document.getElementById(button.getAttribute('aria-controls'));
+        button.setAttribute('aria-expanded', 'false');
+        if (popover) popover.classList.remove('is-open');
+      });
+    }
+
+    hotspots.forEach(function (button) {
+      var popover = document.getElementById(button.getAttribute('aria-controls'));
+      if (!popover) return;
+
+      button.addEventListener('click', function () {
+        var isOpen = popover.classList.contains('is-open');
+        closeAll(button);
+        popover.classList.toggle('is-open', !isOpen);
+        button.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.shoppable-lookbook__item')) {
+        closeAll(null);
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') return;
+      var openButton = hotspots.find(function (button) {
+        return button.getAttribute('aria-expanded') === 'true';
+      });
+      if (openButton) {
+        closeAll(null);
+        openButton.focus();
+      }
+    });
+  }
+
+  initLookbook(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initLookbook(event.target);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.shoppable_lookbook",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Shop the look"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "t:general.look",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:labels.product"
+        },
+        {
+          "type": "range",
+          "id": "position_x",
+          "label": "t:labels.position_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "position_y",
+          "label": "t:labels.position_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.shoppable_lookbook",
+      "blocks": [
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" }
+      ]
+    }
+  ]
+}
+{% endschema %}

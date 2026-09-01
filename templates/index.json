@@ -112,6 +112,39 @@
         "collection": "викрутки",
         "item_limit": 5
       }
+    },
+    "shoppable-lookbook": {
+      "type": "shoppable-lookbook",
+      "blocks": {
+        "look-1": {
+          "type": "look",
+          "settings": {
+            "product": "aquatica-3qjed2-8-0-sverdlovynnyi-nasos-250-vt",
+            "position_x": 50,
+            "position_y": 60
+          }
+        },
+        "look-2": {
+          "type": "look",
+          "settings": {
+            "product": "aquatica-4skm100m-sverdlovynnyi-nasos-0-75-kvt",
+            "position_x": 40,
+            "position_y": 45
+          }
+        },
+        "look-3": {
+          "type": "look",
+          "settings": {
+            "product": "aquatica-et24-membrana-dlia-hidroakumuliatora-90-mm-19-24-l",
+            "position_x": 55,
+            "position_y": 50
+          }
+        }
+      },
+      "block_order": ["look-1", "look-2", "look-3"],
+      "settings": {
+        "heading": "Shop the look"
+      }
     }
   },
   "order": [
@@ -119,6 +152,7 @@
     "marquee",
     "product-anatomy",
     "drop-countdown",
-    "collection-index"
+    "collection-index",
+    "shoppable-lookbook"
   ]
 }

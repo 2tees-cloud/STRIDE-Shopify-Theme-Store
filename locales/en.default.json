@@ -68,6 +68,10 @@
     "colorways": "Colorways",
     "view_in": "View in {{ color }}"
   },
+  "lookbook": {
+    "view_product": "View product",
+    "view_product_named": "View {{ product_title }}"
+  },
   "newsletter": {
     "email": "Email",
     "submit": "Subscribe",
