@@ -143,5 +143,25 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "t:general.social_media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "t:labels.instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_x_link",
+        "label": "t:labels.x"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "t:labels.tiktok"
+      }
+    ]
   }
 ]

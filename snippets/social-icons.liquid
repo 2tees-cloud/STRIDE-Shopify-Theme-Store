@@ -1,0 +1,51 @@
+{% comment %}
+  Renders configured social media icon links, reading URLs from theme
+  settings. Only platforms with a URL configured are rendered. Callable
+  from any section: {% render 'social-icons' %}
+{% endcomment %}
+
+<ul class="social-icons">
+  {% if settings.social_instagram_link != blank %}
+    <li>
+      <a href="{{ settings.social_instagram_link }}" aria-label="Instagram">
+        {{ 'icon-instagram.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_x_link != blank %}
+    <li>
+      <a href="{{ settings.social_x_link }}" aria-label="X">
+        {{ 'icon-x.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_tiktok_link != blank %}
+    <li>
+      <a href="{{ settings.social_tiktok_link }}" aria-label="TikTok">
+        {{ 'icon-tiktok.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+</ul>
+
+{% stylesheet %}
+  .social-icons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-3);
+  }
+  .social-icons svg {
+    width: 1.25rem;
+    flex-shrink: 0;
+  }
+  .social-icons a {
+    display: flex;
+    min-width: 24px;
+    min-height: 24px;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}

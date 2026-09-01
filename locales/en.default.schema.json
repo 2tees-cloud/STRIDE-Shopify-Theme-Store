@@ -36,6 +36,7 @@
     "section": "Section",
     "settings": "Settings",
     "sidebar": "Sidebar",
+    "social_media": "Social media",
     "text": "Text",
     "theme": "Theme",
     "typography": "Typography"
@@ -68,7 +69,10 @@
     "text_style": "Text style",
     "text": "Text",
     "rotation_speed": "Rotation speed",
-    "link": "Link"
+    "link": "Link",
+    "instagram": "Instagram",
+    "x": "X",
+    "tiktok": "TikTok"
   },
   "options": {
     "alignment": {
