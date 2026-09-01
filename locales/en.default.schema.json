@@ -13,6 +13,7 @@
     "collection_card": "Collection card",
     "collections_grid": "Collections grid",
     "colors": "Colors",
+    "colorway": "Colorway",
     "column": "Column",
     "contact": "Contact form",
     "content": "Content",
@@ -24,6 +25,7 @@
     "group": "Group",
     "header": "Header",
     "header_font": "Heading font",
+    "hero": "Hero",
     "layout": "Layout",
     "main": "Main",
     "message": "Message",
@@ -75,7 +77,13 @@
     "link": "Link",
     "instagram": "Instagram",
     "x": "X",
-    "tiktok": "TikTok"
+    "tiktok": "TikTok",
+    "cta_text": "Button label",
+    "cta_link": "Button link",
+    "image": "Image",
+    "color": "Swatch color",
+    "color_name": "Color name",
+    "product": "Linked product"
   },
   "options": {
     "alignment": {

@@ -9,12 +9,12 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "hero-colorway",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero"
   ]
 }

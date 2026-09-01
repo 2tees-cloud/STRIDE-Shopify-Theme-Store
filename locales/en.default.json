@@ -56,6 +56,10 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "hero": {
+    "colorways": "Colorways",
+    "view_in_html": "View in {{ color }}"
+  },
   "newsletter": {
     "email": "Email",
     "submit": "Subscribe",
