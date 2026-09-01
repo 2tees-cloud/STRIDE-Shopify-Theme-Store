@@ -350,12 +350,14 @@
     var overlay = root.querySelector('[data-mobile-nav-overlay]');
     var closeButton = root.querySelector('[data-mobile-nav-close]');
     if (!trigger || !panel || !overlay) return;
+    if (panel.dataset.mobileNavInitialized) return;
+    panel.dataset.mobileNavInitialized = 'true';
 
     var lastFocusedElement = null;
 
     function getFocusableElements() {
       return Array.from(
-        panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, summary, [tabindex]:not([tabindex="-1"])')
       );
     }
 
