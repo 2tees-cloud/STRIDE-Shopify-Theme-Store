@@ -28,6 +28,8 @@
     "hero": "Hero",
     "layout": "Layout",
     "main": "Main",
+    "marquee": "Marquee",
+    "marquee_item": "Item",
     "message": "Message",
     "newsletter": "Newsletter signup",
     "page": "Page",
@@ -83,7 +85,8 @@
     "image": "Image",
     "color": "Swatch color",
     "color_name": "Color name",
-    "product": "Linked product"
+    "product": "Linked product",
+    "speed": "Scroll speed"
   },
   "options": {
     "alignment": {

@@ -12,9 +12,14 @@
     "hero": {
       "type": "hero-colorway",
       "settings": {}
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {}
     }
   },
   "order": [
-    "hero"
+    "hero",
+    "marquee"
   ]
 }
