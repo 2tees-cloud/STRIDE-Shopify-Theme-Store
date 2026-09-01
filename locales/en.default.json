@@ -17,7 +17,15 @@
     "checkout": "Checkout",
     "title": "Cart",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "close": "Close cart",
+    "empty": "Your cart is empty",
+    "continue_shopping": "Continue shopping",
+    "subtotal": "Subtotal",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "free_shipping_remaining_html": "You're {{ amount }} away from free shipping",
+    "free_shipping_unlocked": "You've unlocked free shipping!"
   },
   "contact": {
     "form": {
