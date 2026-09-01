@@ -184,19 +184,46 @@
 {% endstylesheet %}
 
 {% javascript %}
+  // Module-scope helpers and listeners: these are registered exactly once
+  // for the whole document, regardless of how many times initLookbook runs
+  // below (it re-runs on every shopify:section:load event document-wide,
+  // including for unrelated sections reloading in the theme editor — so
+  // anything attached to `document` must live outside initLookbook or it
+  // accumulates a fresh duplicate listener on every unrelated section edit).
+  function getAllHotspots() {
+    return Array.prototype.slice.call(document.querySelectorAll('[data-lookbook-hotspot]'));
+  }
+
+  function closeAll(exceptButton) {
+    getAllHotspots().forEach(function (button) {
+      if (button === exceptButton) return;
+      var popover = document.getElementById(button.getAttribute('aria-controls'));
+      button.setAttribute('aria-expanded', 'false');
+      if (popover) popover.classList.remove('is-open');
+    });
+  }
+
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('.shoppable-lookbook__item')) {
+      closeAll(null);
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape') return;
+    var openButton = getAllHotspots().find(function (button) {
+      return button.getAttribute('aria-expanded') === 'true';
+    });
+    if (openButton) {
+      closeAll(null);
+      openButton.focus();
+    }
+  });
+
   function initLookbook(root) {
     var hotspots = root.matches && root.matches('[data-lookbook-hotspot]')
       ? [root]
       : Array.prototype.slice.call(root.querySelectorAll('[data-lookbook-hotspot]'));
-
-    function closeAll(exceptButton) {
-      hotspots.forEach(function (button) {
-        if (button === exceptButton) return;
-        var popover = document.getElementById(button.getAttribute('aria-controls'));
-        button.setAttribute('aria-expanded', 'false');
-        if (popover) popover.classList.remove('is-open');
-      });
-    }
 
     hotspots.forEach(function (button) {
       var popover = document.getElementById(button.getAttribute('aria-controls'));
@@ -208,23 +235,6 @@
         popover.classList.toggle('is-open', !isOpen);
         button.setAttribute('aria-expanded', String(!isOpen));
       });
-    });
-
-    document.addEventListener('click', function (event) {
-      if (!event.target.closest('.shoppable-lookbook__item')) {
-        closeAll(null);
-      }
-    });
-
-    document.addEventListener('keydown', function (event) {
-      if (event.key !== 'Escape') return;
-      var openButton = hotspots.find(function (button) {
-        return button.getAttribute('aria-expanded') === 'true';
-      });
-      if (openButton) {
-        closeAll(null);
-        openButton.focus();
-      }
     });
   }
 
