@@ -115,3 +115,8 @@ body {
 .shopify-section > .full-width {
   grid-column: 1 / -1;
 }
+
+.scroll-sentinel {
+  height: 4rem;
+  pointer-events: none;
+}

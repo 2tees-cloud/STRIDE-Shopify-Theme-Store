@@ -6,7 +6,7 @@
   <nav class="header__menu" aria-label="{{ 'labels.menu' | t }}">
     {% for link in section.settings.menu.links %}
       {% if link.links.size > 0 %}
-        <details class="header__menu-item header__menu-item--has-children">
+        <details class="header__menu-item">
           <summary>{{ link.title }}</summary>
           <ul class="header__submenu">
             {% for child_link in link.links %}
@@ -25,7 +25,6 @@
   <div class="header__localization">
     {% if localization.available_countries.size > 1 %}
       {% form 'localization', id: 'HeaderCountryForm', class: 'header__localization-form' %}
-        <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
         <select name="country_code" aria-label="{{ 'labels.country' | t }}" data-localization-form-submit>
           {% for country in localization.available_countries %}
             <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
@@ -33,19 +32,24 @@
             </option>
           {% endfor %}
         </select>
+        <noscript>
+          <button type="submit">{{ 'labels.update' | t }}</button>
+        </noscript>
       {% endform %}
     {% endif %}
 
     {% if localization.available_languages.size > 1 %}
       {% form 'localization', id: 'HeaderLanguageForm', class: 'header__localization-form' %}
-        <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
-        <select name="locale_code" aria-label="{{ 'labels.language' | t }}" data-localization-form-submit>
+        <select name="language_code" aria-label="{{ 'labels.language' | t }}" data-localization-form-submit>
           {% for language in localization.available_languages %}
             <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
               {{ language.endonym_name | capitalize }}
             </option>
           {% endfor %}
         </select>
+        <noscript>
+          <button type="submit">{{ 'labels.update' | t }}</button>
+        </noscript>
       {% endform %}
     {% endif %}
   </div>
@@ -76,11 +80,9 @@
     position: sticky;
     top: 0;
     z-index: 10;
+    background-color: var(--color-background);
   }
   header.header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
     padding-block: var(--space-4);
     display: flex;
     align-items: center;
@@ -88,6 +90,11 @@
     gap: var(--space-4);
     background-color: var(--color-background);
     transition: padding-block 0.2s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    header.header {
+      transition: none;
+    }
   }
   header.header.header--condensed {
     padding-block: var(--space-2);
@@ -127,6 +134,9 @@
   header .header__menu-item {
     color: var(--color-foreground);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    min-height: 24px;
   }
   header details.header__menu-item {
     position: relative;
@@ -134,6 +144,9 @@
   header details.header__menu-item > summary {
     list-style: none;
     color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    min-height: 24px;
   }
   header details.header__menu-item > summary::-webkit-details-marker {
     display: none;
