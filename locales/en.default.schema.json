@@ -18,6 +18,7 @@
     "contact": "Contact form",
     "content": "Content",
     "custom_section": "Custom section",
+    "drop_countdown": "Drop countdown",
     "favicon": "Favicon",
     "fonts": "Fonts",
     "footer": "Footer",
@@ -84,6 +85,7 @@
     "tiktok": "TikTok",
     "cta_text": "Button label",
     "cta_link": "Button link",
+    "fallback_text": "Message after the countdown ends",
     "image": "Image",
     "label": "Label",
     "position_x": "Horizontal position",
@@ -91,7 +93,9 @@
     "color": "Swatch color",
     "color_name": "Color name",
     "product": "Linked product",
-    "speed": "Scroll speed"
+    "speed": "Scroll speed",
+    "target_date": "Target date and time",
+    "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone)."
   },
   "options": {
     "alignment": {

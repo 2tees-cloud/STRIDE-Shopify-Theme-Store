@@ -94,11 +94,22 @@
       "settings": {
         "heading": "Built for the long run"
       }
+    },
+    "drop-countdown": {
+      "type": "drop-countdown",
+      "settings": {
+        "heading": "Next drop",
+        "description": "Sign up to be first in line when it lands.",
+        "target_date": "2027-09-01 09:00",
+        "cta_text": "Get notified",
+        "cta_link": "/pages/contact"
+      }
     }
   },
   "order": [
     "hero",
     "marquee",
-    "product-anatomy"
+    "product-anatomy",
+    "drop-countdown"
   ]
 }

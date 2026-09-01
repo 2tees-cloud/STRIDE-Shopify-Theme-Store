@@ -1,0 +1,221 @@
+{% comment %}
+  Countdown to a real, merchant-set date/time. Liquid computes the
+  correct remaining time at render time (accurate even with JS disabled
+  or slow to load); JS then re-computes from the same target timestamp
+  every second. If the target date is blank, unparseable, or already
+  passed, NO timer markup renders — only the fallback message. This is
+  a hard requirement (spec: no fake or resettable urgency timer), not a
+  design choice — do not change this to show a static "00:00:00:00" or
+  any other placeholder timer state.
+{% endcomment %}
+
+{% liquid
+  assign now_ts = 'now' | date: '%s' | times: 1
+  assign target_ts = 0
+  if section.settings.target_date != blank
+    assign target_ts = section.settings.target_date | date: '%s' | times: 1
+  endif
+  assign remaining_seconds = target_ts | minus: now_ts
+%}
+
+{% if remaining_seconds > 0 %}
+  {% liquid
+    assign countdown_days = remaining_seconds | divided_by: 86400
+    assign countdown_hours = remaining_seconds | modulo: 86400 | divided_by: 3600
+    assign countdown_minutes = remaining_seconds | modulo: 3600 | divided_by: 60
+    assign countdown_seconds_value = remaining_seconds | modulo: 60
+    assign countdown_hours_padded = countdown_hours | prepend: '00' | slice: -2, 2
+    assign countdown_minutes_padded = countdown_minutes | prepend: '00' | slice: -2, 2
+    assign countdown_seconds_padded = countdown_seconds_value | prepend: '00' | slice: -2, 2
+  %}
+  <div class="drop-countdown full-width" data-drop-countdown data-target-timestamp="{{ target_ts }}">
+    <div class="drop-countdown__content">
+      {% if section.settings.heading != blank %}
+        <h2 class="drop-countdown__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <p class="drop-countdown__description">{{ section.settings.description }}</p>
+      {% endif %}
+
+      <div class="drop-countdown__timer" role="timer" aria-live="off">
+        <div class="drop-countdown__unit">
+          <span class="drop-countdown__value" data-countdown-days>{{ countdown_days }}</span>
+          <span class="drop-countdown__label">{{ 'countdown.days' | t }}</span>
+        </div>
+        <div class="drop-countdown__unit">
+          <span class="drop-countdown__value" data-countdown-hours>{{ countdown_hours_padded }}</span>
+          <span class="drop-countdown__label">{{ 'countdown.hours' | t }}</span>
+        </div>
+        <div class="drop-countdown__unit">
+          <span class="drop-countdown__value" data-countdown-minutes>{{ countdown_minutes_padded }}</span>
+          <span class="drop-countdown__label">{{ 'countdown.minutes' | t }}</span>
+        </div>
+        <div class="drop-countdown__unit">
+          <span class="drop-countdown__value" data-countdown-seconds>{{ countdown_seconds_padded }}</span>
+          <span class="drop-countdown__label">{{ 'countdown.seconds' | t }}</span>
+        </div>
+      </div>
+
+      {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
+        <a href="{{ section.settings.cta_link | escape }}" class="drop-countdown__cta">{{ section.settings.cta_text }}</a>
+      {% endif %}
+    </div>
+  </div>
+{% elsif section.settings.heading != blank or section.settings.fallback_text != blank %}
+  <div class="drop-countdown drop-countdown--ended full-width">
+    <div class="drop-countdown__content">
+      {% if section.settings.heading != blank %}
+        <h2 class="drop-countdown__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.fallback_text != blank %}
+        <p class="drop-countdown__description">{{ section.settings.fallback_text }}</p>
+      {% else %}
+        <p class="drop-countdown__description">{{ 'countdown.ended' | t }}</p>
+      {% endif %}
+      {% if section.settings.cta_text != blank and section.settings.cta_link != blank %}
+        <a href="{{ section.settings.cta_link | escape }}" class="drop-countdown__cta">{{ section.settings.cta_text }}</a>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .drop-countdown {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding-block: var(--space-8);
+  }
+  .drop-countdown__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+  .drop-countdown__heading {
+    font-family: var(--font-header--family);
+    font-size: clamp(2rem, 6vw, 4rem);
+    margin: 0;
+  }
+  .drop-countdown__description {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+  .drop-countdown__timer {
+    display: flex;
+    gap: var(--space-4);
+  }
+  .drop-countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 4rem;
+  }
+  .drop-countdown__value {
+    font-family: var(--font-header--family);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .drop-countdown__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-background);
+    opacity: 0.7;
+    margin-top: var(--space-1);
+  }
+  .drop-countdown__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: var(--space-3) var(--space-5);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-weight: 700;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.querySelectorAll('[data-drop-countdown]').forEach(function (countdown) {
+    var targetTimestamp = parseInt(countdown.dataset.targetTimestamp, 10) * 1000;
+    var daysEl = countdown.querySelector('[data-countdown-days]');
+    var hoursEl = countdown.querySelector('[data-countdown-hours]');
+    var minutesEl = countdown.querySelector('[data-countdown-minutes]');
+    var secondsEl = countdown.querySelector('[data-countdown-seconds]');
+    if (!targetTimestamp || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+    var timer;
+
+    function pad(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function tick() {
+      var remaining = Math.floor((targetTimestamp - Date.now()) / 1000);
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        window.location.reload();
+        return;
+      }
+
+      daysEl.textContent = Math.floor(remaining / 86400);
+      hoursEl.textContent = pad(Math.floor((remaining % 86400) / 3600));
+      minutesEl.textContent = pad(Math.floor((remaining % 3600) / 60));
+      secondsEl.textContent = pad(remaining % 60);
+    }
+
+    tick();
+    timer = setInterval(tick, 1000);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.drop_countdown",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Next drop"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.subtext"
+    },
+    {
+      "type": "text",
+      "id": "target_date",
+      "label": "t:labels.target_date",
+      "info": "t:labels.target_date_info"
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_text",
+      "label": "t:labels.fallback_text"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "t:labels.cta_text",
+      "default": "Get notified"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "t:labels.cta_link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.drop_countdown"
+    }
+  ]
+}
+{% endschema %}

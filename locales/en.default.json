@@ -38,6 +38,13 @@
       "success": "Thanks for reaching out. We'll get back to you soon."
     }
   },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "ended": "This drop has ended — check back soon for what's next."
+  },
   "customers": {
     "login": {
       "email": "Email",
