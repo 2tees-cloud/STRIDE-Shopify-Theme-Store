@@ -19,12 +19,14 @@
     "favicon": "Favicon",
     "fonts": "Fonts",
     "footer": "Footer",
+    "footer_link_list": "Link list",
     "group": "Group",
     "header": "Header",
     "header_font": "Heading font",
     "layout": "Layout",
     "main": "Main",
     "message": "Message",
+    "newsletter": "Newsletter signup",
     "page": "Page",
     "password": "Password",
     "product": "Product",
@@ -53,6 +55,7 @@
     "favicon": "Favicon image",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
+    "heading": "Heading",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
     "menu": "Menu",
@@ -61,6 +64,7 @@
     "page_margin": "Page margin",
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
+    "subtext": "Subtext",
     "text_style": "Text style",
     "text": "Text",
     "rotation_speed": "Rotation speed",
@@ -88,6 +92,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }
