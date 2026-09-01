@@ -7,7 +7,7 @@
 
 <div class="newsletter-signup" {{ block.shopify_attributes }}>
   {% if block.settings.heading != blank %}
-    <h3 class="newsletter-signup__heading">{{ block.settings.heading }}</h3>
+    <h2 class="newsletter-signup__heading">{{ block.settings.heading }}</h2>
   {% endif %}
 
   {% if block.settings.subtext != blank %}
@@ -20,6 +20,12 @@
     {% if form.posted_successfully? %}
       <p class="newsletter-signup__success">{{ 'newsletter.success' | t }}</p>
     {% else %}
+      {% if form.errors %}
+        <div class="newsletter-signup__error">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
       <div class="newsletter-signup__field">
         <label for="NewsletterEmail-{{ block.id }}">{{ 'newsletter.email' | t }}</label>
         <input
@@ -27,6 +33,7 @@
           name="contact[email]"
           id="NewsletterEmail-{{ block.id }}"
           autocomplete="email"
+          value="{% if form.email %}{{ form.email | escape }}{% endif %}"
           required
         >
         <button type="submit">{{ 'newsletter.submit' | t }}</button>
@@ -53,7 +60,7 @@
   }
   .newsletter-signup__field input {
     width: 100%;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-foreground-muted);
     background-color: var(--color-surface);
     color: var(--color-foreground);
     padding: var(--space-2);
@@ -69,6 +76,9 @@
   .newsletter-signup__success {
     color: var(--color-foreground);
     font-weight: 700;
+  }
+  .newsletter-signup__error {
+    color: var(--color-urgency);
   }
 {% endstylesheet %}
 

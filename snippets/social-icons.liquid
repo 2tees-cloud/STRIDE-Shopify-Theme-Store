@@ -7,21 +7,21 @@
 <ul class="social-icons">
   {% if settings.social_instagram_link != blank %}
     <li>
-      <a href="{{ settings.social_instagram_link }}" aria-label="Instagram">
+      <a href="{{ settings.social_instagram_link | escape }}" aria-label="Instagram">
         {{ 'icon-instagram.svg' | inline_asset_content }}
       </a>
     </li>
   {% endif %}
   {% if settings.social_x_link != blank %}
     <li>
-      <a href="{{ settings.social_x_link }}" aria-label="X">
+      <a href="{{ settings.social_x_link | escape }}" aria-label="X">
         {{ 'icon-x.svg' | inline_asset_content }}
       </a>
     </li>
   {% endif %}
   {% if settings.social_tiktok_link != blank %}
     <li>
-      <a href="{{ settings.social_tiktok_link }}" aria-label="TikTok">
+      <a href="{{ settings.social_tiktok_link | escape }}" aria-label="TikTok">
         {{ 'icon-tiktok.svg' | inline_asset_content }}
       </a>
     </li>

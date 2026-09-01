@@ -7,14 +7,16 @@
 
 <div class="footer-link-list" {{ block.shopify_attributes }}>
   {% if block.settings.heading != blank %}
-    <h3 class="footer-link-list__heading">{{ block.settings.heading }}</h3>
+    <h2 class="footer-link-list__heading">{{ block.settings.heading }}</h2>
   {% endif %}
 
-  <ul class="footer-link-list__links">
-    {% for link in block.settings.menu.links %}
-      <li>{{ link.title | link_to: link.url }}</li>
-    {% endfor %}
-  </ul>
+  {% if block.settings.menu.links.size > 0 %}
+    <ul class="footer-link-list__links">
+      {% for link in block.settings.menu.links %}
+        <li>{{ link.title | link_to: link.url }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 </div>
 
 {% stylesheet %}
@@ -32,6 +34,9 @@
     gap: var(--space-1);
   }
   .footer-link-list__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
     color: var(--color-foreground-muted);
   }
 {% endstylesheet %}
@@ -48,7 +53,8 @@
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "t:labels.menu",
+      "default": "footer"
     }
   ],
   "presets": [{ "name": "t:general.footer_link_list" }]
