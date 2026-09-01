@@ -7,8 +7,8 @@
 {% if section.blocks.size > 0 %}
   <div class="marquee full-width" style="--marquee-duration: {{ section.settings.speed }}s">
     <div class="marquee__track">
-      {% for i in (1..2) %}
-        <div class="marquee__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+      {% for i in (1..4) %}
+        <div class="marquee__group"{% unless forloop.first %} aria-hidden="true" inert{% endunless %}>
           {% for block in section.blocks %}
             <span class="marquee__item" {{ block.shopify_attributes }}>
               {% if block.settings.link != blank %}
@@ -35,6 +35,10 @@
     display: flex;
     width: max-content;
     animation: marquee-scroll var(--marquee-duration) linear infinite;
+  }
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track {
+    animation-play-state: paused;
   }
   @media (prefers-reduced-motion: reduce) {
     .marquee__track {

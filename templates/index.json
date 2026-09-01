@@ -11,10 +11,52 @@
   "sections": {
     "hero": {
       "type": "hero-colorway",
-      "settings": {}
+      "blocks": {
+        "colorway-1": {
+          "type": "colorway",
+          "settings": {
+            "color": "#B5502D",
+            "color_name": "Clay"
+          }
+        },
+        "colorway-2": {
+          "type": "colorway",
+          "settings": {
+            "color": "#3B3A36",
+            "color_name": "Graphite"
+          }
+        }
+      },
+      "block_order": ["colorway-1", "colorway-2"],
+      "settings": {
+        "heading": "Feels like you",
+        "cta_text": "Shop now",
+        "cta_link": "/collections/all"
+      }
     },
     "marquee": {
       "type": "marquee",
+      "blocks": {
+        "item-1": {
+          "type": "item",
+          "settings": {
+            "text": "New drop every Friday"
+          }
+        },
+        "item-2": {
+          "type": "item",
+          "settings": {
+            "text": "Free shipping over $100"
+          }
+        },
+        "item-3": {
+          "type": "item",
+          "settings": {
+            "text": "30-day returns"
+          }
+        }
+      },
+      "block_order": ["item-1", "item-2", "item-3"],
       "settings": {}
     }
   },

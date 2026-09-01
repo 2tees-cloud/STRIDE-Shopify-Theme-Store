@@ -55,35 +55,42 @@
 {% endstylesheet %}
 
 {% javascript %}
-  document.querySelectorAll('[data-announcement-bar]').forEach(function (bar) {
-    var items = Array.from(bar.querySelectorAll('.announcement-bar__item'));
-    if (items.length < 2) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  function initAnnouncementBar(root) {
+    root.querySelectorAll('[data-announcement-bar]').forEach(function (bar) {
+      var items = Array.from(bar.querySelectorAll('.announcement-bar__item'));
+      if (items.length < 2) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    var interval = parseFloat(bar.dataset.interval) * 1000 || 5000;
-    var index = 0;
-    var timer;
+      var interval = parseFloat(bar.dataset.interval) * 1000 || 5000;
+      var index = 0;
+      var timer;
 
-    function next() {
-      items[index].classList.remove('is-active');
-      index = (index + 1) % items.length;
-      items[index].classList.add('is-active');
-    }
+      function next() {
+        items[index].classList.remove('is-active');
+        index = (index + 1) % items.length;
+        items[index].classList.add('is-active');
+      }
 
-    function start() {
-      stop();
-      timer = setInterval(next, interval);
-    }
+      function start() {
+        stop();
+        timer = setInterval(next, interval);
+      }
 
-    function stop() {
-      if (timer) clearInterval(timer);
-    }
+      function stop() {
+        if (timer) clearInterval(timer);
+      }
 
-    start();
-    bar.addEventListener('mouseenter', stop);
-    bar.addEventListener('mouseleave', start);
-    bar.addEventListener('focusin', stop);
-    bar.addEventListener('focusout', start);
+      start();
+      bar.addEventListener('mouseenter', stop);
+      bar.addEventListener('mouseleave', start);
+      bar.addEventListener('focusin', stop);
+      bar.addEventListener('focusout', start);
+    });
+  }
+
+  initAnnouncementBar(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initAnnouncementBar(event.target);
   });
 {% endjavascript %}
 

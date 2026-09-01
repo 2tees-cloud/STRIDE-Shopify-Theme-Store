@@ -29,7 +29,7 @@
     "layout": "Layout",
     "main": "Main",
     "marquee": "Marquee",
-    "marquee_item": "Item",
+    "marquee_item": "Ticker message",
     "message": "Message",
     "newsletter": "Newsletter signup",
     "page": "Page",

@@ -58,7 +58,7 @@
   },
   "hero": {
     "colorways": "Colorways",
-    "view_in_html": "View in {{ color }}"
+    "view_in": "View in {{ color }}"
   },
   "newsletter": {
     "email": "Email",
