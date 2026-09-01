@@ -355,13 +355,16 @@
     });
   }
 
-  var mobileNavCurrent = { panel: null };
+  var mobileNavCurrent = { panel: null, teardown: null };
 
   function syncMobileNavForViewport(matches) {
     var panel = mobileNavCurrent.panel;
     if (!panel) return;
 
     if (matches) {
+      if (mobileNavCurrent.teardown) {
+        mobileNavCurrent.teardown();
+      }
       panel.classList.remove('is-open');
       panel.removeAttribute('inert');
       panel.setAttribute('aria-hidden', 'false');
@@ -466,6 +469,13 @@
         first.focus();
       }
     }
+
+    mobileNavCurrent.teardown = function () {
+      trigger.setAttribute('aria-expanded', 'false');
+      overlay.classList.remove('is-open');
+      overlay.hidden = true;
+      document.removeEventListener('keydown', onKeydown);
+    };
 
     trigger.addEventListener('click', openPanel);
     overlay.addEventListener('click', closePanel);
