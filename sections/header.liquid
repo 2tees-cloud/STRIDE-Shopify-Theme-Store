@@ -65,10 +65,8 @@
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+    <a href="{{ routes.cart_url }}" data-cart-drawer-trigger>
+      <sup data-cart-count class="{% if cart.item_count == 0 %}is-hidden{% endif %}">{{ cart.item_count }}</sup>
 
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
@@ -117,6 +115,9 @@
     left: 100%;
     overflow: hidden;
     max-width: var(--page-margin);
+  }
+  header a sup.is-hidden {
+    display: none;
   }
   header svg {
     width: 2rem;
