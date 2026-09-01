@@ -67,6 +67,7 @@
   },
   "labels": {
     "menu": "Menu",
+    "close_menu": "Close menu",
     "country": "Country/region",
     "language": "Language",
     "update": "Update"

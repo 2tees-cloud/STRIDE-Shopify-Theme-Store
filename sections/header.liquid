@@ -1,57 +1,76 @@
 <header class="header">
+  <button
+    type="button"
+    class="header__nav-toggle"
+    data-mobile-nav-trigger
+    aria-expanded="false"
+    aria-controls="MobileNavPanel"
+    aria-label="{{ 'labels.menu' | t }}"
+  >
+    {{ 'icon-menu.svg' | inline_asset_content }}
+  </button>
+
   <h2 class="header__title">
     {{ shop.name | link_to: routes.root_url }}
   </h2>
 
-  <nav class="header__menu" aria-label="{{ 'labels.menu' | t }}">
-    {% for link in section.settings.menu.links %}
-      {% if link.links.size > 0 %}
-        <details class="header__menu-item">
-          <summary>{{ link.title }}</summary>
-          <ul class="header__submenu">
-            {% for child_link in link.links %}
-              <li>
-                <a href="{{ child_link.url }}">{{ child_link.title }}</a>
-              </li>
+  <div class="header__panel" id="MobileNavPanel" inert aria-hidden="true">
+    <div class="header__panel-header">
+      <button type="button" class="header__panel-close" data-mobile-nav-close aria-label="{{ 'labels.close_menu' | t }}">
+        {{ 'icon-x.svg' | inline_asset_content }}
+      </button>
+    </div>
+
+    <nav class="header__menu" aria-label="{{ 'labels.menu' | t }}">
+      {% for link in section.settings.menu.links %}
+        {% if link.links.size > 0 %}
+          <details class="header__menu-item">
+            <summary>{{ link.title }}</summary>
+            <ul class="header__submenu">
+              {% for child_link in link.links %}
+                <li>
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% else %}
+          <a class="header__menu-item" href="{{ link.url }}">{{ link.title }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="header__localization">
+      {% if localization.available_countries.size > 1 %}
+        {% form 'localization', id: 'HeaderCountryForm', class: 'header__localization-form' %}
+          <select name="country_code" aria-label="{{ 'labels.country' | t }}" data-localization-form-submit>
+            {% for country in localization.available_countries %}
+              <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                {{ country.name }} ({{ country.currency.iso_code }})
+              </option>
             {% endfor %}
-          </ul>
-        </details>
-      {% else %}
-        <a class="header__menu-item" href="{{ link.url }}">{{ link.title }}</a>
+          </select>
+          <noscript>
+            <button type="submit">{{ 'labels.update' | t }}</button>
+          </noscript>
+        {% endform %}
       {% endif %}
-    {% endfor %}
-  </nav>
 
-  <div class="header__localization">
-    {% if localization.available_countries.size > 1 %}
-      {% form 'localization', id: 'HeaderCountryForm', class: 'header__localization-form' %}
-        <select name="country_code" aria-label="{{ 'labels.country' | t }}" data-localization-form-submit>
-          {% for country in localization.available_countries %}
-            <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
-              {{ country.name }} ({{ country.currency.iso_code }})
-            </option>
-          {% endfor %}
-        </select>
-        <noscript>
-          <button type="submit">{{ 'labels.update' | t }}</button>
-        </noscript>
-      {% endform %}
-    {% endif %}
-
-    {% if localization.available_languages.size > 1 %}
-      {% form 'localization', id: 'HeaderLanguageForm', class: 'header__localization-form' %}
-        <select name="language_code" aria-label="{{ 'labels.language' | t }}" data-localization-form-submit>
-          {% for language in localization.available_languages %}
-            <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
-              {{ language.endonym_name | capitalize }}
-            </option>
-          {% endfor %}
-        </select>
-        <noscript>
-          <button type="submit">{{ 'labels.update' | t }}</button>
-        </noscript>
-      {% endform %}
-    {% endif %}
+      {% if localization.available_languages.size > 1 %}
+        {% form 'localization', id: 'HeaderLanguageForm', class: 'header__localization-form' %}
+          <select name="language_code" aria-label="{{ 'labels.language' | t }}" data-localization-form-submit>
+            {% for language in localization.available_languages %}
+              <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
+                {{ language.endonym_name | capitalize }}
+              </option>
+            {% endfor %}
+          </select>
+          <noscript>
+            <button type="submit">{{ 'labels.update' | t }}</button>
+          </noscript>
+        {% endform %}
+      {% endif %}
+    </div>
   </div>
 
   <div class="header__icons">
@@ -73,6 +92,8 @@
   </div>
 </header>
 
+<div class="header__panel-overlay" data-mobile-nav-overlay hidden></div>
+
 {% stylesheet %}
   .shopify-section-group-header-group:has(header.header) {
     position: sticky;
@@ -84,7 +105,6 @@
     padding-block: var(--space-4);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-4);
     background-color: var(--color-background);
     transition: padding-block 0.2s ease;
@@ -101,6 +121,7 @@
     font-family: var(--font-header--family);
     font-style: var(--font-header--style);
     font-weight: var(--font-header--weight);
+    flex: 1;
   }
   header a {
     position: relative;
@@ -123,15 +144,129 @@
     width: 2rem;
     flex-shrink: 0;
   }
-  header .header__menu,
-  header .header__localization,
   header .header__icons {
     display: flex;
     gap: 1rem;
+    flex-shrink: 0;
   }
-  header .header__menu {
+
+  header .header__nav-toggle {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-foreground);
+    flex-shrink: 0;
   }
+  header .header__nav-toggle svg {
+    width: 1.5rem;
+  }
+  header .header__panel-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+  header .header__panel-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-foreground);
+  }
+
+  header .header__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(20rem, 85vw);
+    background-color: var(--color-surface);
+    z-index: 21;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+  }
+  header .header__panel.is-open {
+    transform: translateX(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    header .header__panel {
+      transition: none;
+    }
+  }
+  .header__panel-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgb(0 0 0 / 40%);
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  .header__panel-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header__panel-overlay {
+      transition: none;
+    }
+  }
+
+  header .header__menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  header .header__localization {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 750px) {
+    header .header__nav-toggle {
+      display: none;
+    }
+    header .header__panel {
+      position: static;
+      width: auto;
+      transform: none;
+      transition: none;
+      padding: 0;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-6);
+      overflow: visible;
+    }
+    header .header__panel-header {
+      display: none;
+    }
+    header .header__menu {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    header .header__localization {
+      flex-direction: row;
+      gap: 1rem;
+    }
+    .header__panel-overlay {
+      display: none;
+    }
+  }
+
   header .header__menu-item {
     color: var(--color-foreground);
     cursor: pointer;
@@ -156,16 +291,25 @@
     color: var(--color-accent);
   }
   header .header__submenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
+    position: static;
     list-style: none;
     margin: 0;
-    padding: var(--space-2);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    min-width: 10rem;
-    z-index: 1;
+    padding: var(--space-2) 0 0 var(--space-4);
+    background-color: transparent;
+    border: none;
+    min-width: 0;
+  }
+  @media (min-width: 750px) {
+    header .header__submenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      padding: var(--space-2);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      min-width: 10rem;
+      z-index: 1;
+    }
   }
   header .header__submenu a {
     display: block;
@@ -181,21 +325,121 @@
 {% endstylesheet %}
 
 {% javascript %}
-  (function () {
+  function initStickyHeader(root) {
     var sentinel = document.querySelector('[data-scroll-sentinel]');
-    var header = document.querySelector('.header');
+    var header = root.querySelector('.header');
     if (!sentinel || !header) return;
 
     var observer = new IntersectionObserver(function (entries) {
       header.classList.toggle('header--condensed', !entries[0].isIntersecting);
     });
     observer.observe(sentinel);
-  })();
+  }
 
-  document.querySelectorAll('[data-localization-form-submit]').forEach(function (select) {
-    select.addEventListener('change', function () {
-      select.form.submit();
+  function initLocalizationForms(root) {
+    root.querySelectorAll('[data-localization-form-submit]').forEach(function (select) {
+      select.addEventListener('change', function () {
+        select.form.submit();
+      });
     });
+  }
+
+  function initMobileNav(root) {
+    var trigger = root.querySelector('[data-mobile-nav-trigger]');
+    var panel = root.querySelector('#MobileNavPanel');
+    var overlay = root.querySelector('[data-mobile-nav-overlay]');
+    var closeButton = root.querySelector('[data-mobile-nav-close]');
+    if (!trigger || !panel || !overlay) return;
+
+    var lastFocusedElement = null;
+
+    function getFocusableElements() {
+      return Array.from(
+        panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')
+      );
+    }
+
+    function openPanel() {
+      lastFocusedElement = document.activeElement;
+      panel.classList.add('is-open');
+      panel.removeAttribute('inert');
+      panel.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      overlay.hidden = false;
+      requestAnimationFrame(function () {
+        overlay.classList.add('is-open');
+      });
+      document.body.style.overflow = 'hidden';
+
+      var focusable = getFocusableElements();
+      if (focusable.length > 0) focusable[0].focus();
+
+      document.addEventListener('keydown', onKeydown);
+    }
+
+    function closePanel() {
+      panel.classList.remove('is-open');
+      panel.setAttribute('inert', '');
+      panel.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKeydown);
+
+      setTimeout(function () {
+        overlay.hidden = true;
+      }, 300);
+
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    function onKeydown(event) {
+      if (event.key === 'Escape') {
+        closePanel();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      var focusable = getFocusableElements();
+      if (focusable.length === 0) return;
+
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+
+      if (!panel.contains(document.activeElement)) {
+        event.preventDefault();
+        first.focus();
+        return;
+      }
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    trigger.addEventListener('click', openPanel);
+    overlay.addEventListener('click', closePanel);
+    if (closeButton) closeButton.addEventListener('click', closePanel);
+
+    var desktopQuery = window.matchMedia('(min-width: 750px)');
+    desktopQuery.addEventListener('change', function (event) {
+      if (event.matches) closePanel();
+    });
+  }
+
+  initStickyHeader(document);
+  initLocalizationForms(document);
+  initMobileNav(document);
+
+  document.addEventListener('shopify:section:load', function (event) {
+    initStickyHeader(event.target);
+    initLocalizationForms(event.target);
+    initMobileNav(event.target);
   });
 {% endjavascript %}
 
