@@ -2,8 +2,10 @@
   Editorial collection teaser. Desktop: numbered list rows with a
   hover-reveal large product image (pure CSS, no JS — each row owns a
   fixed-position preview image shown via :hover/:focus-within on that
-  row only, so only one is visible at a time since only one row can be
-  :hover/:focus-within at once). Mobile: same markup becomes a standard
+  row only). A :has() guard forces the preview off on a merely-focused
+  row whenever a different row is actively hovered, so mixed mouse+
+  keyboard input (e.g. Tab to one row, then hover another without
+  moving focus) still only ever shows one preview at a time. Mobile: same markup becomes a standard
   responsive grid via CSS only — hover isn't meaningful on touch, so
   the preview mechanism is simply switched off below 750px in favor of
   an always-visible inline image per spec §4.3.
@@ -13,7 +15,7 @@
 {% endcomment %}
 
 {% if section.settings.collection != blank %}
-  {% assign featured_collection = collections[section.settings.collection] %}
+  {% assign featured_collection = section.settings.collection %}
   <div class="collection-index full-width">
     {% if section.settings.heading != blank %}
       <h2 class="collection-index__heading">{{ section.settings.heading }}</h2>
@@ -121,6 +123,20 @@
     .collection-index__row:focus-within .collection-index__preview {
       opacity: 1;
       transform: translateY(-50%) scale(1);
+    }
+    /*
+      Mixed-input guard: if the mouse tabbed to one row (leaving it
+      :focus-within) and then hovers a DIFFERENT row, both previews
+      would otherwise show at once. When any row in the list is
+      :hover, force-hide the preview on a focus-only row that isn't
+      itself the hovered one, so hover always wins and only one
+      preview is ever visible at a time.
+    */
+    .collection-index__list:has(.collection-index__row:hover)
+      .collection-index__row:not(:hover):focus-within
+      .collection-index__preview {
+      opacity: 0;
+      pointer-events: none;
     }
     @media (prefers-reduced-motion: reduce) {
       .collection-index__preview {
