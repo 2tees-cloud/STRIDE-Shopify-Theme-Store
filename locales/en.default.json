@@ -43,7 +43,8 @@
     "hours": "Hours",
     "minutes": "Minutes",
     "seconds": "Seconds",
-    "ended": "This drop has ended — check back soon for what's next."
+    "ended": "This drop has ended — check back soon for what's next.",
+    "set_target_date": "Set a target date above to start the countdown."
   },
   "customers": {
     "login": {

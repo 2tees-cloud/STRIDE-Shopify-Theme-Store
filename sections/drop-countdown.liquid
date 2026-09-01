@@ -61,6 +61,12 @@
       {% endif %}
     </div>
   </div>
+{% elsif request.design_mode and section.settings.target_date == blank %}
+  <div class="drop-countdown drop-countdown--unconfigured full-width">
+    <div class="drop-countdown__content">
+      <p class="drop-countdown__description">{{ 'countdown.set_target_date' | t }}</p>
+    </div>
+  </div>
 {% elsif section.settings.heading != blank or section.settings.fallback_text != blank %}
   <div class="drop-countdown drop-countdown--ended full-width">
     <div class="drop-countdown__content">
@@ -84,6 +90,12 @@
     background-color: var(--color-foreground);
     color: var(--color-background);
     padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .drop-countdown {
+      padding-inline: var(--space-6);
+    }
   }
   .drop-countdown__content {
     display: flex;
@@ -105,6 +117,8 @@
   }
   .drop-countdown__timer {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-4);
   }
   .drop-countdown__unit {
@@ -140,37 +154,52 @@
 {% endstylesheet %}
 
 {% javascript %}
-  document.querySelectorAll('[data-drop-countdown]').forEach(function (countdown) {
-    var targetTimestamp = parseInt(countdown.dataset.targetTimestamp, 10) * 1000;
-    var daysEl = countdown.querySelector('[data-countdown-days]');
-    var hoursEl = countdown.querySelector('[data-countdown-hours]');
-    var minutesEl = countdown.querySelector('[data-countdown-minutes]');
-    var secondsEl = countdown.querySelector('[data-countdown-seconds]');
-    if (!targetTimestamp || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+  function initDropCountdown(root) {
+    var countdowns = root.matches && root.matches('[data-drop-countdown]')
+      ? [root]
+      : Array.prototype.slice.call(root.querySelectorAll('[data-drop-countdown]'));
 
-    var timer;
+    countdowns.forEach(function (countdown) {
+      var targetTimestamp = parseInt(countdown.dataset.targetTimestamp, 10) * 1000;
+      var daysEl = countdown.querySelector('[data-countdown-days]');
+      var hoursEl = countdown.querySelector('[data-countdown-hours]');
+      var minutesEl = countdown.querySelector('[data-countdown-minutes]');
+      var secondsEl = countdown.querySelector('[data-countdown-seconds]');
+      if (!targetTimestamp || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
 
-    function pad(value) {
-      return String(value).padStart(2, '0');
-    }
+      var timer;
+      var hasReloaded = false;
 
-    function tick() {
-      var remaining = Math.floor((targetTimestamp - Date.now()) / 1000);
-
-      if (remaining <= 0) {
-        clearInterval(timer);
-        window.location.reload();
-        return;
+      function pad(value) {
+        return String(value).padStart(2, '0');
       }
 
-      daysEl.textContent = Math.floor(remaining / 86400);
-      hoursEl.textContent = pad(Math.floor((remaining % 86400) / 3600));
-      minutesEl.textContent = pad(Math.floor((remaining % 3600) / 60));
-      secondsEl.textContent = pad(remaining % 60);
-    }
+      function tick() {
+        var remaining = Math.floor((targetTimestamp - Date.now()) / 1000);
 
-    tick();
-    timer = setInterval(tick, 1000);
+        if (remaining <= 0) {
+          clearInterval(timer);
+          if (!hasReloaded) {
+            hasReloaded = true;
+            window.location.reload();
+          }
+          return;
+        }
+
+        daysEl.textContent = Math.floor(remaining / 86400);
+        hoursEl.textContent = pad(Math.floor((remaining % 86400) / 3600));
+        minutesEl.textContent = pad(Math.floor((remaining % 3600) / 60));
+        secondsEl.textContent = pad(remaining % 60);
+      }
+
+      tick();
+      timer = setInterval(tick, 1000);
+    });
+  }
+
+  initDropCountdown(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initDropCountdown(event.target);
   });
 {% endjavascript %}
 
