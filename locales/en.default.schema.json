@@ -12,6 +12,7 @@
     "collection": "Collection",
     "collections": "Collections",
     "collection_card": "Collection card",
+    "collection_index": "Collection index",
     "collections_grid": "Collections grid",
     "colors": "Colors",
     "colorway": "Colorway",
@@ -96,7 +97,9 @@
     "product": "Linked product",
     "speed": "Scroll speed",
     "target_date": "Target date and time",
-    "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone)."
+    "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone).",
+    "collection": "Collection",
+    "item_limit": "Number of products"
   },
   "options": {
     "alignment": {

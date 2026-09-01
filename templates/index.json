@@ -104,12 +104,21 @@
         "cta_text": "Get notified",
         "cta_link": "/pages/contact"
       }
+    },
+    "collection-index": {
+      "type": "collection-index",
+      "settings": {
+        "heading": "Shop the edit",
+        "collection": "викрутки",
+        "item_limit": 5
+      }
     }
   },
   "order": [
     "hero",
     "marquee",
     "product-anatomy",
-    "drop-countdown"
+    "drop-countdown",
+    "collection-index"
   ]
 }

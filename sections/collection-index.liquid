@@ -1,0 +1,191 @@
+{% comment %}
+  Editorial collection teaser. Desktop: numbered list rows with a
+  hover-reveal large product image (pure CSS, no JS — each row owns a
+  fixed-position preview image shown via :hover/:focus-within on that
+  row only, so only one is visible at a time since only one row can be
+  :hover/:focus-within at once). Mobile: same markup becomes a standard
+  responsive grid via CSS only — hover isn't meaningful on touch, so
+  the preview mechanism is simply switched off below 750px in favor of
+  an always-visible inline image per spec §4.3.
+
+  This is a homepage TEASER only — the full /collections/[handle] page
+  (spec §5.2) carries the actual required filtering/sorting/pagination.
+{% endcomment %}
+
+{% if section.settings.collection != blank %}
+  {% assign featured_collection = collections[section.settings.collection] %}
+  <div class="collection-index full-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="collection-index__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <ol class="collection-index__list">
+      {% for product in featured_collection.products limit: section.settings.item_limit %}
+        <li class="collection-index__row">
+          <a href="{{ product.url }}" class="collection-index__link">
+            <span class="collection-index__index" aria-hidden="true">{{ forloop.index | prepend: '00' | slice: -2, 2 }}</span>
+            <span class="collection-index__title">{{ product.title }}</span>
+            <span class="collection-index__price">{{ product.price | money }}</span>
+          </a>
+          {% if product.featured_image %}
+            <span class="collection-index__preview" aria-hidden="true">
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w"
+                sizes="(min-width: 750px) 30vw, 45vw"
+                width="{{ product.featured_image.width }}"
+                height="{{ product.featured_image.height }}"
+                loading="lazy"
+                alt=""
+              >
+            </span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .collection-index {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .collection-index {
+      padding-inline: var(--space-6);
+    }
+  }
+  .collection-index__heading {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-6);
+  }
+  .collection-index__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+  .collection-index__row {
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .collection-index__link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    text-decoration: none;
+    color: var(--color-foreground);
+    min-height: 24px;
+  }
+  .collection-index__index {
+    font-family: var(--font-header--family);
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+  .collection-index__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    flex-grow: 1;
+  }
+  .collection-index__price {
+    color: var(--color-foreground-muted);
+    flex-shrink: 0;
+  }
+  .collection-index__preview {
+    display: none;
+  }
+  @media (min-width: 750px) {
+    .collection-index__preview {
+      display: block;
+      position: fixed;
+      top: 50%;
+      right: var(--space-8);
+      width: min(28vw, 22rem);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-50%) scale(0.96);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+    .collection-index__preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .collection-index__row:hover .collection-index__preview,
+    .collection-index__row:focus-within .collection-index__preview {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .collection-index__preview {
+        transition: opacity 0.01ms;
+        transform: translateY(-50%);
+      }
+      .collection-index__row:hover .collection-index__preview,
+      .collection-index__row:focus-within .collection-index__preview {
+        transform: translateY(-50%);
+      }
+    }
+  }
+  @media (max-width: 749px) {
+    .collection-index__list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .collection-index__row {
+      border-bottom: none;
+    }
+    .collection-index__link {
+      flex-wrap: wrap;
+    }
+    .collection-index__preview {
+      display: block;
+      margin-top: var(--space-2);
+    }
+    .collection-index__preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection_index",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Shop the edit"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:labels.collection"
+    },
+    {
+      "type": "range",
+      "id": "item_limit",
+      "label": "t:labels.item_limit",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.collection_index"
+    }
+  ]
+}
+{% endschema %}
