@@ -142,6 +142,9 @@
           updateCartCount(cart.item_count);
         }
         return refreshDrawer();
+      })
+      .catch(function (error) {
+        console.error(error);
       });
   }
 
