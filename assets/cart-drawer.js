@@ -3,7 +3,7 @@
   var overlay = document.querySelector('[data-cart-drawer-overlay]');
   if (!drawer || !overlay) return;
 
-  var body = drawer.querySelector('[data-cart-drawer-body]');
+  var routeRoot = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
   var lastFocusedElement = null;
 
   function getFocusableElements() {
@@ -15,6 +15,7 @@
   function openDrawer() {
     lastFocusedElement = document.activeElement;
     drawer.classList.add('is-open');
+    drawer.removeAttribute('inert');
     drawer.setAttribute('aria-hidden', 'false');
     overlay.hidden = false;
     requestAnimationFrame(function () {
@@ -30,6 +31,7 @@
 
   function closeDrawer() {
     drawer.classList.remove('is-open');
+    drawer.setAttribute('inert', '');
     drawer.setAttribute('aria-hidden', 'true');
     overlay.classList.remove('is-open');
     document.body.style.overflow = '';
@@ -56,6 +58,12 @@
     var first = focusable[0];
     var last = focusable[focusable.length - 1];
 
+    if (!drawer.contains(document.activeElement)) {
+      event.preventDefault();
+      first.focus();
+      return;
+    }
+
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
       last.focus();
@@ -74,7 +82,7 @@
   }
 
   function refreshDrawer() {
-    return fetch('/?sections=cart-drawer')
+    return fetch(routeRoot + '?sections=cart-drawer')
       .then(function (response) {
         return response.json();
       })
@@ -86,7 +94,11 @@
         if (!newDrawer) return;
 
         drawer.innerHTML = newDrawer.innerHTML;
-        body = drawer.querySelector('[data-cart-drawer-body]');
+
+        if (drawer.classList.contains('is-open')) {
+          var focusable = getFocusableElements();
+          if (focusable.length > 0) focusable[0].focus();
+        }
       });
   }
 
@@ -101,7 +113,7 @@
       ]
     });
 
-    return fetch('/cart/add.js', {
+    return fetch(routeRoot + 'cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: body
@@ -111,7 +123,7 @@
         return response.json();
       })
       .then(function () {
-        return fetch('/cart.js');
+        return fetch(routeRoot + 'cart.js');
       })
       .then(function (response) {
         return response.json();
@@ -129,7 +141,7 @@
   }
 
   function changeCartLine(line, quantity) {
-    return fetch('/cart/change.js', {
+    return fetch(routeRoot + 'cart/change.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ line: line, quantity: quantity })
@@ -177,17 +189,19 @@
     }
   });
 
-  document.querySelectorAll('[data-cart-drawer-trigger]').forEach(function (trigger) {
-    trigger.addEventListener('click', function (event) {
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-cart-drawer-trigger]');
+    if (trigger) {
       event.preventDefault();
       openDrawer();
-    });
+    }
   });
 
-  document.querySelectorAll('[data-add-to-cart-form]').forEach(function (form) {
-    form.addEventListener('submit', function (event) {
+  document.addEventListener('submit', function (event) {
+    var form = event.target.closest('[data-add-to-cart-form]');
+    if (form) {
       event.preventDefault();
       addToCart(form);
-    });
+    }
   });
 })();

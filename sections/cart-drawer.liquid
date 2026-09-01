@@ -9,7 +9,7 @@
   https://shopify.dev/docs/storefronts/themes/architecture/sections
 {% endcomment %}
 
-<aside id="cart-drawer" class="cart-drawer" aria-hidden="true" aria-label="{{ 'cart.title' | t }}">
+<aside id="cart-drawer" class="cart-drawer" inert aria-hidden="true" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
   <div class="cart-drawer__header">
     <h2 class="cart-drawer__title">{{ 'cart.title' | t }}</h2>
     <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="{{ 'cart.close' | t }}">
@@ -48,7 +48,9 @@
       <ul class="cart-drawer__items" role="list">
         {% for item in cart.items %}
           <li class="cart-drawer__item" data-cart-item data-line="{{ forloop.index }}">
-            {% render 'image', class: 'cart-drawer__item-image', image: item.image, url: item.url, width: 160, height: 160, crop: 'center' %}
+            {% if item.image %}
+              {% render 'image', class: 'cart-drawer__item-image', image: item.image, url: item.url, width: 160, height: 160, crop: 'center' %}
+            {% endif %}
 
             <div class="cart-drawer__item-details">
               <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title }}</a>
@@ -79,13 +81,23 @@
   </div>
 
   {% if cart.item_count > 0 %}
-    <div class="cart-drawer__footer">
+    <form action="{{ routes.cart_url }}" method="post" class="cart-drawer__footer">
+      <div class="cart-drawer__note-field">
+        <label for="CartDrawerNote">{{ 'cart.note' | t }}</label>
+        <textarea name="note" id="CartDrawerNote" class="cart-drawer__note">{{ cart.note }}</textarea>
+      </div>
+
       <div class="cart-drawer__subtotal">
         <span>{{ 'cart.subtotal' | t }}</span>
         <span data-cart-subtotal>{{ cart.total_price | money }}</span>
       </div>
-      <a href="{{ routes.cart_url }}" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</a>
-    </div>
+      {% if cart.taxes_included %}
+        <p class="cart-drawer__tax-note">{{ 'cart.taxes_included' | t }}</p>
+      {% endif %}
+
+      <button type="submit" name="checkout" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</button>
+      {{ content_for_additional_checkout_buttons }}
+    </form>
   {% endif %}
 </aside>
 
@@ -248,6 +260,25 @@
     flex-direction: column;
     gap: var(--space-3);
   }
+  .cart-drawer__note-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .cart-drawer__note {
+    resize: vertical;
+    min-height: 3rem;
+    border: 1px solid var(--color-foreground-muted);
+    background-color: var(--color-surface);
+    color: var(--color-foreground);
+    padding: var(--space-2);
+    font: inherit;
+  }
+  .cart-drawer__tax-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
   .cart-drawer__subtotal {
     display: flex;
     justify-content: space-between;
@@ -257,12 +288,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     min-height: 24px;
     padding: var(--space-3);
     background-color: var(--color-foreground);
     color: var(--color-background);
+    border: none;
     text-decoration: none;
     font-weight: 700;
+    font: inherit;
+    cursor: pointer;
   }
 {% endstylesheet %}
 
@@ -275,7 +310,7 @@
       "id": "free_shipping_threshold",
       "label": "t:labels.free_shipping_threshold",
       "info": "t:labels.free_shipping_threshold_info",
-      "default": 100
+      "default": 0
     }
   ]
 }

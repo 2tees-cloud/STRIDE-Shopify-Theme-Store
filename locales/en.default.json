@@ -25,7 +25,9 @@
     "decrease_quantity": "Decrease quantity",
     "increase_quantity": "Increase quantity",
     "free_shipping_remaining_html": "You're {{ amount }} away from free shipping",
-    "free_shipping_unlocked": "You've unlocked free shipping!"
+    "free_shipping_unlocked": "You've unlocked free shipping!",
+    "note": "Order notes",
+    "taxes_included": "Taxes included"
   },
   "contact": {
     "form": {

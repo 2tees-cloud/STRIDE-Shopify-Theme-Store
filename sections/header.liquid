@@ -65,7 +65,7 @@
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}" data-cart-drawer-trigger>
+    <a href="{{ routes.cart_url }}" data-cart-drawer-trigger aria-label="{{ 'cart.title' | t }}">
       <sup data-cart-count class="{% if cart.item_count == 0 %}is-hidden{% endif %}">{{ cart.item_count }}</sup>
 
       {{ 'icon-cart.svg' | inline_asset_content }}
