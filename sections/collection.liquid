@@ -20,6 +20,8 @@
   </div>
 
   {% paginate collection.products by 24 %}
+    {% render 'collection-filters', collection: collection, section: section %}
+
     {% if collection.products.size > 0 %}
       <div class="collection__grid" data-collection-grid>
         {% for product in collection.products %}

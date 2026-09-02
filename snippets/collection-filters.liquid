@@ -1,0 +1,187 @@
+{% doc %}
+  Faceted filter + sort form for the collection grid. Works via plain
+  GET submission (fully functional, accessible, indexable without JS)
+  — Task 3 layers an AJAX enhancement on top of this exact form, it
+  does not replace it. If JS fails to load, this form still filters
+  and sorts correctly via a full page reload.
+
+  @param {object} collection - The collection object being displayed.
+  @param {object} section - The parent section, used to scope element IDs.
+
+  @example
+  {% render 'collection-filters', collection: collection, section: section %}
+{% enddoc %}
+
+{% liquid
+  assign current_sort = collection.sort_by | default: collection.default_sort_by
+
+  assign has_active_filters = false
+  for filter in collection.filters
+    if filter.type == 'price_range'
+      if filter.min_value.value != nil or filter.max_value.value != nil
+        assign has_active_filters = true
+      endif
+    elsif filter.active_values.size > 0
+      assign has_active_filters = true
+    endif
+  endfor
+%}
+
+<form class="collection-filters" data-collection-filters method="get" action="{{ collection.url }}">
+  <div class="collection-filters__sort">
+    <label for="CollectionSortBy-{{ section.id }}">{{ 'collection.sort_by' | t }}</label>
+    <select name="sort_by" id="CollectionSortBy-{{ section.id }}" data-collection-sort>
+      {% for option in collection.sort_options %}
+        <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>
+          {{ option.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  {% if collection.filters.size > 0 %}
+    <div class="collection-filters__facets">
+      {% for filter in collection.filters %}
+        <fieldset class="collection-filters__facet">
+          <legend>{{ filter.label }}</legend>
+
+          {% case filter.type %}
+            {% when 'list' %}
+              <div class="collection-filters__values">
+                {% for value in filter.values %}
+                  <label class="collection-filters__value">
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                    >
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {% endfor %}
+              </div>
+            {% when 'boolean' %}
+              <div class="collection-filters__values">
+                <label class="collection-filters__value">
+                  <input
+                    type="checkbox"
+                    name="{{ filter.param_name }}"
+                    value="{{ filter.true_value.value }}"
+                    {% if filter.true_value.active %}checked{% endif %}
+                    {% if filter.true_value.count == 0 and filter.true_value.active == false %}disabled{% endif %}
+                  >
+                  {{ filter.true_value.label }} ({{ filter.true_value.count }})
+                </label>
+              </div>
+            {% when 'price_range' %}
+              {% liquid
+                assign range_max_plain = filter.range_max | money_without_currency | replace: ',', ''
+              %}
+              <div class="collection-filters__price-range">
+                <label>
+                  {{ 'collection.price_min' | t }}
+                  <input
+                    type="number"
+                    name="{{ filter.min_value.param_name }}"
+                    {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    placeholder="0"
+                    min="0"
+                    max="{{ range_max_plain }}"
+                  >
+                </label>
+                <label>
+                  {{ 'collection.price_max' | t }}
+                  <input
+                    type="number"
+                    name="{{ filter.max_value.param_name }}"
+                    {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    placeholder="{{ range_max_plain }}"
+                    min="0"
+                    max="{{ range_max_plain }}"
+                  >
+                </label>
+              </div>
+          {% endcase %}
+        </fieldset>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="collection-filters__actions">
+    <button type="submit" class="collection-filters__apply">{{ 'collection.apply_filters' | t }}</button>
+
+    {% if has_active_filters %}
+      <a href="{{ collection.url }}" class="collection-filters__clear">{{ 'collection.clear_filters' | t }}</a>
+    {% endif %}
+  </div>
+</form>
+
+{% stylesheet %}
+  .collection-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .collection-filters__sort {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .collection-filters__facets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4);
+    width: 100%;
+  }
+  @media (min-width: 750px) {
+    .collection-filters__facets {
+      width: auto;
+    }
+  }
+  .collection-filters__facet {
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-inputs);
+    padding: var(--space-3);
+    min-width: 10rem;
+  }
+  .collection-filters__values {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .collection-filters__value {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .collection-filters__price-range {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .collection-filters__price-range label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .collection-filters__price-range input {
+    width: 6rem;
+  }
+  .collection-filters__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+  }
+  @media (min-width: 750px) {
+    .collection-filters__actions {
+      width: auto;
+    }
+  }
+{% endstylesheet %}
