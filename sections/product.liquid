@@ -1,49 +1,92 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+  Main product section. Two-column layout: media gallery (left/top) and
+  a scrollable info column (right/bottom) containing every block a
+  merchant configures, all inside the ONE product form this section
+  owns. Blocks render via {% content_for 'blocks' %} (this theme's
+  established theme-blocks convention — see sections/footer.liquid for
+  the sibling pattern) — do NOT reintroduce the older
+  {% for block in section.blocks %}{% case block.type %} pattern.
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+  Gallery in this task is minimal (all media, first active) — Task 3
+  adds zoom and sticky-buy-box layout polish. Variant-driven live
+  updates (price, sold-out, gallery active image, URL) are Task 2.
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
-
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product, data-add-to-cart-form: true %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
+<div class="product full-width">
+  <div class="product__gallery">
+    {% if product.media.size > 0 %}
+      {% for media in product.media %}
+        <div class="product__gallery-item{% if forloop.first %} is-active{% endif %}" data-product-media-id="{{ media.id }}">
+          {% if media.media_type == 'image' %}
+            <img
+              src="{{ media | image_url: width: 1600 }}"
+              srcset="{{ media | image_url: width: 800 }} 800w, {{ media | image_url: width: 1600 }} 1600w"
+              sizes="(min-width: 750px) 50vw, 100vw"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+              alt="{{ media.alt | default: product.title | escape }}"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >
           {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
+        </div>
       {% endfor %}
-    </select>
+    {% else %}
+      <div class="product__gallery-item is-active product__gallery-item--placeholder"></div>
+    {% endif %}
+  </div>
 
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+  <div class="product__info">
+    {% form 'product', product, data-add-to-cart-form: true %}
+      {% content_for 'blocks' %}
+    {% endform %}
+  </div>
 </div>
+
+{% stylesheet %}
+  .product {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    display: grid;
+    gap: var(--space-6);
+  }
+  @media (min-width: 750px) {
+    .product {
+      padding-inline: var(--space-6);
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+  .product__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .product__gallery-item {
+    display: none;
+  }
+  .product__gallery-item.is-active {
+    display: block;
+  }
+  .product__gallery-item img {
+    width: 100%;
+    height: auto;
+  }
+  .product__gallery-item--placeholder {
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-background-alt);
+  }
+  .product__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.product",
+  "blocks": [{ "type": "@theme" }, { "type": "@app" }],
   "settings": [],
   "disabled_on": {
     "groups": ["header", "footer"]

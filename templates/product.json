@@ -11,6 +11,13 @@
   "sections": {
     "main": {
       "type": "product",
+      "blocks": {
+        "title": { "type": "product-title" },
+        "vendor": { "type": "product-vendor" },
+        "price": { "type": "product-price" },
+        "description": { "type": "product-description" }
+      },
+      "block_order": ["title", "vendor", "price", "description"],
       "settings": {}
     }
   },

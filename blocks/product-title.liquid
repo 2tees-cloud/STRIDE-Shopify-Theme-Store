@@ -1,0 +1,23 @@
+{% doc %}
+  Renders the product's title as the page's h1.
+
+  @example
+  {% content_for 'block', type: 'product-title', id: 'product-title' %}
+{% enddoc %}
+
+<h1 class="product-title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+{% stylesheet %}
+  .product-title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_title",
+  "settings": []
+}
+{% endschema %}

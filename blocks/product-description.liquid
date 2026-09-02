@@ -1,0 +1,35 @@
+{% doc %}
+  Renders the product's rich-text description. product.description is
+  already sanitized HTML from the admin rich-text editor — output
+  unescaped, matching how every Shopify reference theme handles it.
+
+  @example
+  {% content_for 'block', type: 'product-description', id: 'product-description' %}
+{% enddoc %}
+
+{% if product.description != blank %}
+  <div class="product-description" {{ block.shopify_attributes }}>
+    {{ product.description }}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .product-description {
+    color: var(--color-foreground);
+    line-height: 1.6;
+  }
+  .product-description :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-header--family);
+    margin: var(--space-4) 0 var(--space-2);
+  }
+  .product-description :is(ul, ol) {
+    padding-inline-start: var(--space-5);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_description",
+  "settings": []
+}
+{% endschema %}

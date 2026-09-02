@@ -1,0 +1,71 @@
+{% doc %}
+  Renders price, compare-at price, and unit price (when configured).
+  The data-* hooks here are read and updated live by
+  assets/product-variant-picker.js (added in Task 2) whenever the
+  selected variant changes — this task only needs to render the
+  correct INITIAL state from product.selected_or_first_available_variant.
+
+  @example
+  {% content_for 'block', type: 'product-price', id: 'product-price' %}
+{% enddoc %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+%}
+
+<div class="product-price" {{ block.shopify_attributes }}>
+  {% if current_variant.compare_at_price > current_variant.price %}
+    <span class="product-price__compare-at" data-product-compare-at-price>{{ current_variant.compare_at_price | money }}</span>
+    <span class="product-price__sale" data-product-price>{{ current_variant.price | money }}</span>
+    <span class="visually-hidden">{{ 'product.on_sale' | t }}</span>
+  {% else %}
+    <span class="product-price__regular" data-product-price>{{ current_variant.price | money }}</span>
+  {% endif %}
+
+  {% if current_variant.unit_price_measurement %}
+    <span class="product-price__unit" data-product-unit-price>
+      {{ current_variant.unit_price | money }}/{{ current_variant.unit_price_measurement.reference_value }}{{ current_variant.unit_price_measurement.reference_unit }}
+    </span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .product-price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    font-size: 1.25rem;
+  }
+  .product-price__compare-at {
+    text-decoration: line-through;
+    color: var(--color-foreground-muted);
+    font-size: 1rem;
+  }
+  .product-price__sale {
+    color: var(--color-urgency);
+    font-weight: 700;
+  }
+  .product-price__unit {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product_price",
+  "settings": []
+}
+{% endschema %}
