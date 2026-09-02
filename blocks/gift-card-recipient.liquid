@@ -19,15 +19,15 @@
     <div class="gift-card-recipient__fields" data-gift-card-recipient-fields hidden>
       <div class="gift-card-recipient__field">
         <label for="GiftCardRecipientEmail-{{ block.id }}">{{ 'product.gift_card_recipient_email' | t }}</label>
-        <input type="email" id="GiftCardRecipientEmail-{{ block.id }}" name="properties[Recipient email]">
+        <input type="email" id="GiftCardRecipientEmail-{{ block.id }}" name="properties[Recipient email]" disabled>
       </div>
       <div class="gift-card-recipient__field">
         <label for="GiftCardRecipientName-{{ block.id }}">{{ 'product.gift_card_recipient_name' | t }}</label>
-        <input type="text" id="GiftCardRecipientName-{{ block.id }}" name="properties[Recipient name]">
+        <input type="text" id="GiftCardRecipientName-{{ block.id }}" name="properties[Recipient name]" disabled>
       </div>
       <div class="gift-card-recipient__field">
         <label for="GiftCardRecipientMessage-{{ block.id }}">{{ 'product.gift_card_recipient_message' | t }}</label>
-        <textarea id="GiftCardRecipientMessage-{{ block.id }}" name="properties[Message]"></textarea>
+        <textarea id="GiftCardRecipientMessage-{{ block.id }}" name="properties[Message]" disabled></textarea>
       </div>
     </div>
   </div>
@@ -43,6 +43,14 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    min-height: 24px;
+    cursor: pointer;
+  }
+  .gift-card-recipient__checkbox input[type='checkbox'] {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
   }
   .gift-card-recipient__fields {
     display: flex;
@@ -68,9 +76,24 @@
       var fields = widget.querySelector('[data-gift-card-recipient-fields]');
       if (!toggle || !fields) return;
 
-      toggle.addEventListener('change', function () {
-        fields.hidden = !toggle.checked;
-      });
+      var inputs = fields.querySelectorAll('input, textarea');
+
+      // hidden alone only hides the fields visually — a hidden ancestor
+      // does not remove descendant form fields from FormData, so an
+      // unchecked (i.e. default, non-gift) add-to-cart would otherwise
+      // still submit three empty-string properties[...] values to the
+      // cart. Toggling disabled on the inputs themselves is what
+      // actually excludes them from the submitted form data.
+      function syncFields() {
+        var sendAsGift = toggle.checked;
+        fields.hidden = !sendAsGift;
+        inputs.forEach(function (input) {
+          input.disabled = !sendAsGift;
+        });
+      }
+
+      syncFields();
+      toggle.addEventListener('change', syncFields);
     });
   }
 

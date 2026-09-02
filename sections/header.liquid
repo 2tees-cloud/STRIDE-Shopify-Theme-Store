@@ -347,6 +347,41 @@
     window.__strideStickyObserver = observer;
   }
 
+  function initStickyHeaderHeightVar() {
+    var group = document.querySelector('.shopify-section-group-header-group');
+    if (!group) return;
+
+    function updateHeight() {
+      var height = group.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--sticky-header-height', height + 'px');
+    }
+
+    updateHeight();
+
+    // A ResizeObserver (rather than a one-time measurement) is required
+    // here, not optional: the pinned group's height isn't fixed. It grows
+    // when the announcement bar has blocks configured (zero height when
+    // empty, per announcement-bar.liquid's section.blocks.size guard),
+    // and it shrinks when initStickyHeader above toggles
+    // .header--condensed during scroll (padding-block changes from
+    // var(--space-4) to var(--space-2)). Other sections (sections/
+    // product.liquid's sticky buy-box) read --sticky-header-height to
+    // avoid sitting underneath this pinned group, so it must stay
+    // accurate through both of those changes, not just reflect the
+    // height at page load.
+    if (window.__strideHeaderHeightObserver) {
+      window.__strideHeaderHeightObserver.disconnect();
+    }
+
+    if (window.ResizeObserver) {
+      var resizeObserver = new ResizeObserver(updateHeight);
+      resizeObserver.observe(group);
+      window.__strideHeaderHeightObserver = resizeObserver;
+    } else {
+      window.addEventListener('resize', updateHeight);
+    }
+  }
+
   function initLocalizationForms(root) {
     root.querySelectorAll('[data-localization-form-submit]').forEach(function (select) {
       select.addEventListener('change', function () {
@@ -483,11 +518,13 @@
   }
 
   initStickyHeader(document);
+  initStickyHeaderHeightVar();
   initLocalizationForms(document);
   initMobileNav(document);
 
   document.addEventListener('shopify:section:load', function (event) {
     initStickyHeader(event.target);
+    initStickyHeaderHeightVar();
     initLocalizationForms(event.target);
     initMobileNav(event.target);
   });

@@ -67,25 +67,30 @@
     }
     .product__info {
       /*
-        top is intentionally NOT var(--space-4) (16px), despite that
-        being the plan's literal suggestion. sections/header.liquid's
-        sticky header (.shopify-section-group-header-group, top: 0,
+        top is NOT a hardcoded pixel/rem guess. sections/header.liquid's
+        sticky group (.shopify-section-group-header-group, top: 0,
         z-index: 10) is a separate sticky element that stays pinned to
-        the viewport for the whole page scroll. Its own rendered
-        height is ~4rem (64px) expanded (padding-block: var(--space-4)
-        = 32px combined + ~32px content row from the 2rem icon svgs)
-        and ~3rem (48px) condensed (padding-block: var(--space-2)).
-        A 16px sticky offset is smaller than either, so the top of
-        this panel would tuck in behind the opaque header instead of
-        resting below it. Using space-8 + space-2 (72px) clears the
-        worst case (expanded, 64px) with an 8px margin. This is a
-        static calculation, not a live-measured value — see the task
-        report for the live-verification gap.
+        the viewport for the whole page scroll, and its rendered height
+        isn't fixed: it grows when the announcement bar has blocks
+        configured (zero height when empty) and shrinks when the header
+        condenses on scroll. A static estimate would only be correct for
+        whichever of those states it happened to be tuned against.
+
+        Instead, sections/header.liquid measures the pinned group's real
+        height with a ResizeObserver and publishes it as
+        --sticky-header-height on :root (see its javascript block,
+        initStickyHeaderHeightVar). That keeps this offset correct
+        regardless of announcement-bar content or condensed state. The
+        calc(var(--space-8) + var(--space-2)) fallback only applies
+        before that JS has run its first measurement (e.g. first paint,
+        or JS disabled) — it's the same conservative worst-case-header
+        estimate used before this was made dynamic, not a value this
+        rule relies on in the steady state.
       */
       position: sticky;
-      top: calc(var(--space-8) + var(--space-2));
+      top: calc(var(--sticky-header-height, calc(var(--space-8) + var(--space-2))) + var(--space-4));
       align-self: start;
-      max-height: calc(100svh - var(--space-8) - var(--space-4));
+      max-height: calc(100svh - var(--sticky-header-height, calc(var(--space-8) + var(--space-2))) - var(--space-4) - var(--space-4));
       overflow-y: auto;
     }
   }
