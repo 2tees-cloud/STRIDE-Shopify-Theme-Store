@@ -145,6 +145,14 @@
       "settings": {
         "heading": "Shop the look"
       }
+    },
+    "newsletter-band": {
+      "type": "newsletter-band",
+      "settings": {
+        "heading": "Be first to know",
+        "subtext": "New drops, restocks, and members-only access — straight to your inbox.",
+        "success_message": "Thanks — you're on the list."
+      }
     }
   },
   "order": [
@@ -153,6 +161,7 @@
     "product-anatomy",
     "drop-countdown",
     "collection-index",
-    "shoppable-lookbook"
+    "shoppable-lookbook",
+    "newsletter-band"
   ]
 }
