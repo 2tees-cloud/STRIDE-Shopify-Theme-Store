@@ -29,6 +29,10 @@
     "note": "Order notes",
     "taxes_included": "Taxes included"
   },
+  "collection": {
+    "empty": "No products found in this collection.",
+    "pagination": "Pagination"
+  },
   "contact": {
     "form": {
       "name": "Name",
@@ -91,6 +95,7 @@
   },
   "product": {
     "on_sale": "On sale",
+    "price_from": "From {{ price }}",
     "quantity": "Quantity",
     "quantity_decrease": "Decrease quantity",
     "quantity_increase": "Increase quantity",

@@ -1,0 +1,108 @@
+{% doc %}
+  Renders one product card for a collection grid: image (natural aspect
+  ratio, not force-cropped — the grid must handle varying image aspect
+  ratios per spec), title, price, sale badge, unit price when
+  configured, and a sold-out indicator when the product has no
+  available variants.
+
+  @param {product} product - The product to render
+
+  @example
+  {% render 'product-card', product: product %}
+{% enddoc %}
+
+<a href="{{ product.url }}" class="product-card">
+  <div class="product-card__media">
+    {% if product.featured_image %}
+      {% render 'image', image: product.featured_image, class: 'product-card__image' %}
+    {% else %}
+      <div class="product-card__image product-card__image--placeholder"></div>
+    {% endif %}
+
+    {% if product.compare_at_price_max > product.price_max %}
+      <span class="product-card__badge product-card__badge--sale">{{ 'product.on_sale' | t }}</span>
+    {% elsif product.available == false %}
+      <span class="product-card__badge product-card__badge--sold-out">{{ 'product.sold_out' | t }}</span>
+    {% endif %}
+  </div>
+
+  <div class="product-card__content">
+    <h3 class="product-card__title">{{ product.title }}</h3>
+
+    <div class="product-card__price">
+      {% if product.price_varies %}
+        {% assign price_min_money = product.price_min | money %}
+        <span class="product-card__price-value">{{ 'product.price_from' | t: price: price_min_money }}</span>
+      {% elsif product.compare_at_price_max > product.price_max %}
+        <span class="product-card__price-compare-at">{{ product.compare_at_price_max | money }}</span>
+        <span class="product-card__price-value product-card__price-value--sale">{{ product.price_max | money }}</span>
+      {% else %}
+        <span class="product-card__price-value">{{ product.price_max | money }}</span>
+      {% endif %}
+    </div>
+
+    {% if product.selected_or_first_available_variant.unit_price_measurement %}
+      {% assign unit_variant = product.selected_or_first_available_variant %}
+      <span class="product-card__unit-price">
+        {{ unit_variant.unit_price | money }}/{{ unit_variant.unit_price_measurement.reference_value }}{{ unit_variant.unit_price_measurement.reference_unit }}
+      </span>
+    {% endif %}
+  </div>
+</a>
+
+{% stylesheet %}
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+  .product-card__media {
+    position: relative;
+  }
+  .product-card__image--placeholder {
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-background-alt);
+  }
+  .product-card__badge {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .product-card__badge--sale {
+    background-color: var(--color-urgency);
+    color: var(--color-on-accent);
+  }
+  .product-card__badge--sold-out {
+    background-color: var(--color-foreground-muted);
+    color: var(--color-background);
+  }
+  .product-card__title {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+  }
+  .product-card__price {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+  .product-card__price-compare-at {
+    text-decoration: line-through;
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+  .product-card__price-value--sale {
+    color: var(--color-urgency);
+    font-weight: 700;
+  }
+  .product-card__unit-price {
+    color: var(--color-foreground-muted);
+    font-size: 0.75rem;
+  }
+{% endstylesheet %}

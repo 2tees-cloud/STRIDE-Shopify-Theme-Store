@@ -1,41 +1,98 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Collection page: header (title/description/image), product grid,
+  empty-collection message, pagination. Faceted filtering and sorting
+  are added on top of this in Task 2 (a form above the grid) and
+  Task 3 (AJAX enhancement) — this task ships the fully-functional
+  base experience those build on.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
-
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+<div class="collection full-width">
+  <div class="collection__header">
+    {% if collection.image %}
+      <div class="collection__image">
+        {% render 'image', image: collection.image, class: 'collection__image-inner' %}
       </div>
-    {% endfor %}
+    {% endif %}
+    <h1 class="collection__title">{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="collection__description">{{ collection.description }}</div>
+    {% endif %}
+  </div>
 
-    {{ paginate | default_pagination }}
+  {% paginate collection.products by 24 %}
+    {% if collection.products.size > 0 %}
+      <div class="collection__grid" data-collection-grid>
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <nav class="collection__pagination" aria-label="{{ 'collection.pagination' | t }}">
+          {{ paginate | default_pagination }}
+        </nav>
+      {% endif %}
+    {% else %}
+      <p class="collection__empty">{{ 'collection.empty' | t }}</p>
+    {% endif %}
   {% endpaginate %}
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  .collection {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .collection {
+      padding-inline: var(--space-6);
+    }
+  }
+  .collection__header {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto var(--space-6);
+  }
+  .collection__image {
+    max-width: 20rem;
+    margin: 0 auto var(--space-4);
+  }
+  .collection__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-2);
+  }
+  .collection__description {
+    color: var(--color-foreground-muted);
+  }
+  .collection__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .collection__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+  }
+  .collection__pagination {
+    margin-top: var(--space-8);
+    display: flex;
+    justify-content: center;
+  }
+  .collection__pagination a {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+  }
+  .collection__empty {
+    text-align: center;
+    color: var(--color-foreground-muted);
+    padding-block: var(--space-8);
   }
 {% endstylesheet %}
 
