@@ -3,6 +3,20 @@
   customer form (no custom backend) — same mechanism as the footer's
   newsletter-signup block, reusing its locale keys, but presented at
   homepage-band scale rather than the footer's compact block size.
+
+  Known limitation: if the footer's newsletter-signup block is also
+  active on the same page, both it and this section use bare
+  {% form 'customer' %}. Shopify's form object populates
+  form.posted_successfully?/form.errors/form.email from which form TYPE
+  was submitted in the current request, not from which specific
+  {% form %}...{% endform %} instance rendered on the page — adding an
+  id: parameter to the form tag only customizes the rendered <form>
+  element's HTML id attribute, it does not scope this state per
+  instance. There is no documented native mechanism to distinguish
+  them. Practical effect: submitting either form will show
+  success/error state in BOTH places simultaneously. This is expected
+  native Shopify Liquid behavior when the same form type is used twice
+  on one page, not a bug in this theme's code.
 {% endcomment %}
 
 <div class="newsletter-band full-width">

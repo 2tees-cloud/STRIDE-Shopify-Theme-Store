@@ -99,6 +99,7 @@
     "color": "Swatch color",
     "color_name": "Color name",
     "product": "Linked product",
+    "look_product_info": "Each look is one photo with a single tagged product. To tag more products, add more Look blocks.",
     "speed": "Scroll speed",
     "target_date": "Target date and time",
     "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone).",

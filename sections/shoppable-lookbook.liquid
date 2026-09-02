@@ -28,7 +28,7 @@
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
               loading="lazy"
-              alt="{{ block.settings.image.alt | escape }}"
+              alt="{{ block.settings.image.alt | default: block.settings.product.title | default: section.settings.heading | escape }}"
             >
           {% endif %}
 
@@ -94,6 +94,7 @@
       grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: 14rem;
       gap: var(--space-4);
+      grid-auto-flow: dense;
     }
     .shoppable-lookbook__item:nth-child(3n+1) {
       grid-column: span 2;
@@ -102,7 +103,6 @@
   }
   .shoppable-lookbook__item {
     position: relative;
-    overflow: hidden;
     background-color: var(--color-background-alt);
   }
   .shoppable-lookbook__image {
@@ -129,7 +129,7 @@
     z-index: 1;
   }
   .shoppable-lookbook__hotspot:focus-visible {
-    outline: 2px solid var(--color-on-accent);
+    outline: 2px solid var(--color-foreground);
     outline-offset: 2px;
   }
   .shoppable-lookbook__popover {
@@ -268,7 +268,8 @@
         {
           "type": "product",
           "id": "product",
-          "label": "t:labels.product"
+          "label": "t:labels.product",
+          "info": "t:labels.look_product_info"
         },
         {
           "type": "range",
