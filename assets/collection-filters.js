@@ -98,6 +98,15 @@
         var newResults = doc.querySelector('[data-collection-results]');
         var newFiltersInner = doc.querySelector('[data-collection-filters]');
 
+        // Consistent with every other unexpected-shape case in this
+        // function (missing section param, non-OK response, missing
+        // section HTML): throw into the catch below and fall open to a
+        // real navigation, rather than silently skipping the swap while
+        // pushState/announce still run — that would leave the URL, the
+        // visible grid, and the live-region announcement all disagreeing
+        // with each other.
+        if (!newResults) throw new Error('data-collection-results missing from Section Rendering API response');
+
         // data-collection-results wraps the grid-or-empty-state AND the
         // pagination nav together (see sections/collection.liquid) and is
         // swapped as one unit — re-queried fresh from the live DOM rather
@@ -109,7 +118,7 @@
         // to fresh results whenever filtering/sorting changes the total
         // page count.
         var currentResults = root.querySelector('[data-collection-results]');
-        if (currentResults && newResults) {
+        if (currentResults) {
           currentResults.replaceWith(newResults);
         }
 
@@ -129,7 +138,13 @@
           window.history.pushState({}, '', url);
         }
 
-        var count = newResults ? newResults.querySelectorAll('.product-card').length : 0;
+        // The TRUE filtered total (paginate.items, server-rendered into
+        // data-results-total), not a count of rendered .product-card
+        // elements — the grid only ever renders the current page's worth
+        // (24, per {% paginate collection.products by 24 %} in
+        // sections/collection.liquid), so counting DOM nodes would cap
+        // every announcement at 24 regardless of the real filtered total.
+        var count = Number(newResults.dataset.resultsTotal) || 0;
         announce(root, count);
       })
       .catch(function (error) {

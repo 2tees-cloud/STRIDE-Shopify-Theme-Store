@@ -27,16 +27,27 @@
       (assets/collection-filters.js). Stays outside the swapped grid/empty
       subtree so it survives each AJAX swap intact; the JS only ever
       writes its textContent, never re-renders it. The translated
-      template is rendered server-side (count: '__COUNT__' is a literal
+      template is rendered server-side ('__COUNT__' is a literal
       placeholder token, not a real count) so the JS substitutes the
       actual count into an already-localized string instead of hardcoding
       English text in the .js file — same "data-*-text" pattern
-      blocks/buy-buttons.liquid uses for data-add-to-cart-text.
+      blocks/buy-buttons.liquid uses for data-add-to-cart-text. The `t`
+      filter is called with `results:`, not `count:` — `count` is a
+      reserved variable name the `t` filter uses to select pluralized
+      forms when a locale value is a `{"one": ..., "other": ...}` object;
+      collection.results_count is a flat string today, but passing a
+      literal placeholder string through a reserved-name argument is an
+      unnecessary, silently-failing-if-wrong risk (a mismatch would render
+      this attribute blank, and announce()'s `if (!template) return`
+      guard means the live region would then never announce anything,
+      with no error anywhere). Using `results:` avoids the reserved name
+      entirely instead of relying on flat-string interpolation happening
+      to tolerate a non-numeric value passed as `count:`.
     {% endcomment %}
     <div
       class="visually-hidden"
       data-collection-live-region
-      data-results-count-template="{{ 'collection.results_count' | t: count: '__COUNT__' | escape }}"
+      data-results-count-template="{{ 'collection.results_count' | t: results: '__COUNT__' | escape }}"
       role="status"
       aria-live="polite"
     ></div>
@@ -51,9 +62,27 @@
       alone would leave a stale pagination nav (wrong page links, or a
       nav still showing when the new result set no longer has multiple
       pages) sitting next to a freshly-swapped grid.
+
+      data-results-total="{{ paginate.items }}" carries the TRUE filtered
+      result count (confirmed via Shopify's paginate object docs:
+      "the total number of items to be paginated" — e.g. 120 across all
+      pages for a paginated set of 120, not the current page's size) so
+      Task 3's aria-live announcement reads the real total instead of
+      counting rendered .product-card elements, which would be capped at
+      the 24-per-page page_size below and wrongly announce "24" for any
+      filter matching 24 or more products.
     {% endcomment %}
-    <div data-collection-results>
+    <div data-collection-results data-results-total="{{ paginate.items }}">
       {% if collection.products.size > 0 %}
+        {% comment %}
+          data-collection-grid is unused by assets/collection-filters.js
+          today — the AJAX swap operates on the data-collection-results
+          wrapper above (see its comment), not this element directly.
+          Kept as a stable, documented hook on the grid itself (its
+          original purpose per Task 1) in case a future addition needs to
+          target the grid specifically without also touching pagination/
+          the empty state.
+        {% endcomment %}
         <div class="collection__grid" data-collection-grid>
           {% for product in collection.products %}
             {% render 'product-card', product: product %}
