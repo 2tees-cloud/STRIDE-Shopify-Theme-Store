@@ -196,10 +196,43 @@
     });
   }
 
+  // Lives here rather than in snippets/size-chart-modal.liquid's own
+  // {% javascript %} block — live verification found that shopify
+  // theme dev's local asset bundler doesn't correctly extract a
+  // snippet's {% javascript %} content (it dumped the raw comment/
+  // markup/stylesheet text ahead of the actual function body,
+  // producing a SyntaxError that silently broke the trigger). The
+  // equivalent block-level bundling (blocks/gift-card-recipient.liquid)
+  // extracts correctly, so this is specifically a snippet-bundling
+  // gap. The snippet is only ever rendered from
+  // blocks/variant-picker.liquid, which only exists on the product
+  // template where this file is already loaded, so this is a safe,
+  // already-proven-working home for it.
+  function initSizeChartModal(root) {
+    root.querySelectorAll('[data-size-chart-trigger]').forEach(function (trigger) {
+      var wrapper = trigger.parentElement;
+      var modal = wrapper ? wrapper.querySelector('[data-size-chart-modal]') : null;
+      if (!modal) return;
+
+      trigger.addEventListener('click', function () {
+        modal.showModal();
+      });
+
+      var closeButton = modal.querySelector('[data-size-chart-close]');
+      if (closeButton) {
+        closeButton.addEventListener('click', function () {
+          modal.close();
+        });
+      }
+    });
+  }
+
   initVariantPicker(document);
   initGalleryThumbnails(document);
+  initSizeChartModal(document);
   document.addEventListener('shopify:section:load', function (event) {
     initVariantPicker(event.target);
     initGalleryThumbnails(event.target);
+    initSizeChartModal(event.target);
   });
 })();

@@ -9,15 +9,29 @@
 
   This is the first live use of that convention: the critical.css hook
   was pre-wired in an earlier task, but no section/block had actually
-  rendered a <dialog scroll-lock> element until this snippet. It's
-  also this project's first snippet (as opposed to section/block file)
-  to use {% stylesheet %}/{% javascript %} tags — see the task report
-  for why that's confirmed safe (Shopify scopes/dedupes these tags per
-  source file regardless of render depth, same as CSS/JS on any other
-  section or block file; snippets/image.liquid already proves
-  {% stylesheet %} works when rendered from a snippet, and Shopify's
-  own docs for both tags describe them as valid in "sections and
-  blocks" without excluding snippets rendered from them).
+  rendered a <dialog scroll-lock> element until this snippet.
+
+  The open/close JS deliberately does not live in this file's own
+  javascript block. A prior task believed the javascript tag was safe
+  in snippets (the stylesheet tag above genuinely is — see
+  snippets/image.liquid), but live verification (the first real
+  browser session available after a long static-only stretch) found
+  that shopify theme dev's local asset bundler does not correctly
+  extract a snippet's javascript-tag content: the generated bundle for
+  this exact file included the file's other raw text ahead of the
+  actual function body, producing a syntax error that silently broke
+  the trigger for every visitor (confirmed by contrast: the equivalent
+  bundling for blocks/gift-card-recipient.liquid extracts correctly —
+  this is specifically a snippet-bundling gap, not a general theme-dev
+  limitation). Whether Shopify's production CDN bundler handles this
+  correctly is unconfirmed and beside the point: theme-dev is itself a
+  real environment merchants and Theme Store reviewers preview
+  through, so relying on behavior that's broken there isn't
+  acceptable regardless of production behavior. The open/close logic
+  now lives in assets/product-variant-picker.js (initSizeChartModal)
+  instead — already proven working, and this snippet is only ever
+  rendered from blocks/variant-picker.liquid, which only exists on the
+  product template where that script is already loaded.
 
   size_chart_placeholder is deliberately placeholder copy — this
   environment has no real sizing-chart content/data (same category of
@@ -68,29 +82,3 @@
     cursor: pointer;
   }
 {% endstylesheet %}
-
-{% javascript %}
-  function initSizeChartModal(root) {
-    root.querySelectorAll('[data-size-chart-trigger]').forEach(function (trigger) {
-      var wrapper = trigger.parentElement;
-      var modal = wrapper ? wrapper.querySelector('[data-size-chart-modal]') : null;
-      if (!modal) return;
-
-      trigger.addEventListener('click', function () {
-        modal.showModal();
-      });
-
-      var closeButton = modal.querySelector('[data-size-chart-close]');
-      if (closeButton) {
-        closeButton.addEventListener('click', function () {
-          modal.close();
-        });
-      }
-    });
-  }
-
-  initSizeChartModal(document);
-  document.addEventListener('shopify:section:load', function (event) {
-    initSizeChartModal(event.target);
-  });
-{% endjavascript %}
