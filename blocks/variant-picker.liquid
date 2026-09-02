@@ -23,7 +23,16 @@
     {% for option in product.options_with_values %}
       <fieldset class="variant-picker__option">
         <legend class="variant-picker__option-label">{{ option.name }}</legend>
-        <div class="variant-picker__values" role="radiogroup" aria-label="{{ option.name }}">
+        {% comment %}
+          No role="radiogroup"/aria-label here — the <fieldset>/<legend>
+          above already provides correct grouping+naming semantics.
+          These buttons use aria-pressed (toggle-button semantics), not
+          role="radio"/aria-checked (radio semantics), so wrapping them
+          in role="radiogroup" would be an ARIA pattern mismatch: a
+          labeled group of toggle buttons is the correct, simpler
+          pattern here, not a radio group.
+        {% endcomment %}
+        <div class="variant-picker__values">
           {% for value in option.values %}
             <button
               type="button"
@@ -38,15 +47,29 @@
                 style="--swatch-image: url('{{ value.swatch.image | image_url: width: 64 }}');"
               {% endif %}
             >
-              {% unless value.swatch %}{{ value.name }}{% endunless %}
-              <span class="visually-hidden">{{ value.name }}</span>
+              {% if value.swatch %}
+                {% comment %}
+                  The visually-hidden name is only needed here: a swatch
+                  value's visible content is just a color circle (no
+                  text), so screen readers need this to announce
+                  anything at all. A plain text pill already renders
+                  {{ value.name }} as its visible content — adding this
+                  span there too would announce the name twice
+                  ("Black Black").
+                {% endcomment %}
+                <span class="visually-hidden">{{ value.name }}</span>
+              {% else %}
+                {{ value.name }}
+              {% endif %}
             </button>
           {% endfor %}
         </div>
       </fieldset>
     {% endfor %}
 
-    {% render 'size-chart-modal' %}
+    {% if block.settings.show_size_chart %}
+      {% render 'size-chart-modal' %}
+    {% endif %}
 
     {% comment %}
       This script tag MUST be a descendant of [data-variant-picker],
@@ -68,7 +91,10 @@
             "price_formatted": {{ variant.price | money | json }},
             "compare_at_price": {{ variant.compare_at_price | json }},
             "compare_at_price_formatted": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
-            "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id | json }}{% else %}null{% endif %}
+            "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id | json }}{% else %}null{% endif %},
+            "unit_price": {% if variant.unit_price_measurement %}{{ variant.unit_price | money | json }}{% else %}null{% endif %},
+            "unit_price_measurement_reference_value": {% if variant.unit_price_measurement %}{{ variant.unit_price_measurement.reference_value | json }}{% else %}null{% endif %},
+            "unit_price_measurement_reference_unit": {% if variant.unit_price_measurement %}{{ variant.unit_price_measurement.reference_unit | json }}{% else %}null{% endif %}
           }{% unless forloop.last %},{% endunless %}
         {% endfor %}
       ]
@@ -91,6 +117,16 @@
     gap: var(--space-2);
   }
   .variant-picker__option-label {
+    /*
+      Not a flex `gap`-created space: a <fieldset>'s rendered <legend>
+      is not a flex item (browsers give it special out-of-flow-like
+      rendering within the fieldset), so it doesn't participate in
+      .variant-picker__option's flex gap above — the only actual flex
+      child is .variant-picker__values, meaning that gap would do
+      nothing between the legend and the pills row. This explicit
+      margin creates that spacing directly instead.
+    */
+    margin-block-end: var(--space-2);
     padding: 0;
     font-size: 0.875rem;
     font-weight: 700;
@@ -104,16 +140,34 @@
     min-width: 2.5rem;
     min-height: 2.5rem;
     padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--color-border);
+    /*
+      --color-border (#DDD8CE) on --color-background (#F7F5F1) measures
+      ~1.3:1, well under the 3:1 non-text-UI contrast threshold. Scoped
+      here to --color-foreground-muted (#6B665D on #F7F5F1 ≈ 5.23:1)
+      rather than changing the global --color-border token, following
+      this project's existing precedent of swapping a failing
+      --color-border usage for --color-foreground-muted on the specific
+      component rather than touching the shared token.
+    */
+    border: 1px solid var(--color-foreground-muted);
     background-color: var(--color-background);
     color: var(--color-foreground);
     cursor: pointer;
     font-size: 0.875rem;
   }
   .variant-picker__value.is-active {
+    /*
+      Deliberately border/box-shadow, not outline: outline here would
+      have specificity 0,2,0, which beats critical.css's global
+      :focus-visible outline (0,1,0) regardless of source order —
+      tabbing onto the currently-selected pill would then show no
+      visible focus change at all (WCAG 2.4.7). box-shadow doesn't
+      collide with the outline property, so :focus-visible's outline
+      can still render on top of/alongside this selected-state
+      indicator.
+    */
     border-color: var(--color-foreground);
-    outline: 2px solid var(--color-foreground);
-    outline-offset: -1px;
+    box-shadow: 0 0 0 2px var(--color-foreground) inset;
   }
   .variant-picker__value--swatch {
     min-width: 2.5rem;
@@ -133,22 +187,18 @@
     opacity: 0.4;
     cursor: not-allowed;
   }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.variant_picker",
-  "settings": []
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_size_chart",
+      "label": "t:labels.show_size_chart",
+      "default": false
+    }
+  ]
 }
 {% endschema %}

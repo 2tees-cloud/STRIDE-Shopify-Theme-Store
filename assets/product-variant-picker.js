@@ -35,7 +35,13 @@
     var compareAtEl = root.querySelector('[data-product-compare-at-price]');
     var saleLabelEl = root.querySelector('[data-product-price-on-sale-label]');
 
-    if (priceEl && variant.price_formatted) priceEl.textContent = variant.price_formatted;
+    // priceEl.textContent is always assigned (not just when
+    // price_formatted is truthy) so that an impossible/unmatched option
+    // combination — where the caller passes {} because
+    // findMatchingVariant returned nothing — clears the price instead
+    // of leaving the PREVIOUS variant's price on screen next to the
+    // "Unavailable" label.
+    if (priceEl) priceEl.textContent = variant.price_formatted || '';
 
     var showCompareAt = !!(variant.compare_at_price_formatted && variant.compare_at_price > variant.price);
     if (compareAtEl) {
@@ -44,6 +50,36 @@
     }
     if (saleLabelEl) saleLabelEl.hidden = !showCompareAt;
     if (container) container.toggleAttribute('data-is-sale', showCompareAt);
+  }
+
+  function updateUnitPrice(root, variant) {
+    // blocks/product-price.liquid always renders [data-product-unit-price]
+    // when the INITIAL variant has unit pricing, and never renders it
+    // otherwise — so on a variant switch we may need to either update its
+    // text, or hide it entirely (switching to a variant with no unit
+    // pricing), or reveal it again (switching back to one that has it).
+    // Since Liquid never creates the element for a variant that lacked
+    // unit pricing at initial render, this only ever toggles/updates an
+    // element that's already in the DOM, matching updatePrice's existing
+    // "never creates or removes elements" contract above.
+    var unitPriceEl = root.querySelector('[data-product-unit-price]');
+    if (!unitPriceEl) return;
+
+    var hasUnitPrice = !!(
+      variant &&
+      variant.unit_price &&
+      variant.unit_price_measurement_reference_value &&
+      variant.unit_price_measurement_reference_unit
+    );
+
+    if (!hasUnitPrice) {
+      unitPriceEl.hidden = true;
+      return;
+    }
+
+    unitPriceEl.textContent =
+      variant.unit_price + '/' + variant.unit_price_measurement_reference_value + variant.unit_price_measurement_reference_unit;
+    unitPriceEl.hidden = false;
   }
 
   function updateAvailability(root, variant) {
@@ -68,12 +104,38 @@
     if (input) input.value = variant ? variant.id : '';
   }
 
-  function updateGalleryImage(sectionRoot, variant) {
-    if (!variant || !variant.featured_media_id) return;
+  // Shared by both variant-driven gallery updates (updateGalleryImage
+  // below) and direct thumbnail clicks (initGalleryThumbnails below) —
+  // both are just "make the item with this media id the active one",
+  // triggered by a variant match in one case and direct user choice in
+  // the other. [data-product-media-id] is present on both the main
+  // .product__gallery-item elements AND the .product__gallery-thumbnail
+  // buttons (sections/product.liquid), so toggling by that shared
+  // attribute keeps the main image and the thumbnail strip's active
+  // state in sync in one pass.
+  function setActiveGalleryItem(sectionRoot, mediaId) {
+    if (!mediaId) return;
     var items = sectionRoot.querySelectorAll('[data-product-media-id]');
     items.forEach(function (item) {
-      var matches = String(item.dataset.productMediaId) === String(variant.featured_media_id);
+      var matches = String(item.dataset.productMediaId) === String(mediaId);
       item.classList.toggle('is-active', matches);
+    });
+  }
+
+  function updateGalleryImage(sectionRoot, variant) {
+    if (!variant || !variant.featured_media_id) return;
+    setActiveGalleryItem(sectionRoot, variant.featured_media_id);
+  }
+
+  function initGalleryThumbnails(root) {
+    root.querySelectorAll('[data-product-gallery-thumbnail]').forEach(function (thumbnail) {
+      thumbnail.addEventListener('click', function () {
+        // root is `document` on first load and a section DOM node on
+        // shopify:section:load — Document has no .closest(), so guard
+        // it (same pattern as initVariantPicker below).
+        var sectionRoot = (typeof thumbnail.closest === 'function' && thumbnail.closest('.shopify-section')) || root;
+        setActiveGalleryItem(sectionRoot, thumbnail.dataset.productMediaId);
+      });
     });
   }
 
@@ -123,6 +185,7 @@
 
         updateActiveButtons(picker, selectedOptions);
         updatePrice(sectionRoot, matchedVariant || {});
+        updateUnitPrice(sectionRoot, matchedVariant);
         updateAvailability(sectionRoot, matchedVariant);
         updateVariantId(sectionRoot, matchedVariant);
         updateGalleryImage(sectionRoot, matchedVariant);
@@ -132,7 +195,9 @@
   }
 
   initVariantPicker(document);
+  initGalleryThumbnails(document);
   document.addEventListener('shopify:section:load', function (event) {
     initVariantPicker(event.target);
+    initGalleryThumbnails(event.target);
   });
 })();

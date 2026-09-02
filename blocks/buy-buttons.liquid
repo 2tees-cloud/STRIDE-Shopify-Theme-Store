@@ -33,9 +33,9 @@
     type="submit"
     class="buy-buttons__add-to-cart"
     data-buy-buttons-submit
-    data-add-to-cart-text="{{ 'product.add_to_cart' | t }}"
-    data-sold-out-text="{{ 'product.sold_out' | t }}"
-    data-unavailable-text="{{ 'product.unavailable' | t }}"
+    data-add-to-cart-text="{{ 'product.add_to_cart' | t | escape }}"
+    data-sold-out-text="{{ 'product.sold_out' | t | escape }}"
+    data-unavailable-text="{{ 'product.unavailable' | t | escape }}"
     {% unless current_variant.available %}disabled{% endunless %}
   >
     <span data-buy-buttons-label>

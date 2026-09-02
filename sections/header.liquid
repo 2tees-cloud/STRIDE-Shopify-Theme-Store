@@ -348,7 +348,18 @@
   }
 
   function initStickyHeaderHeightVar() {
-    var group = document.querySelector('.shopify-section-group-header-group');
+    // Shopify's sections Liquid tag (used to render section groups) does
+    // NOT emit one shared wrapper around the whole group — it wraps EACH
+    // section in the group in its own .shopify-section-group-header-group
+    // element. header-group.json's order is ["announcement-bar",
+    // "header"], so a bare querySelector('.shopify-section-group-header-
+    // group') returns the announcement bar's wrapper (first in document
+    // order), not the header's. The :has() qualifier below is required
+    // to disambiguate and target the header's own wrapper specifically —
+    // this is also why the sticky positioning rule above is written as
+    // .shopify-section-group-header-group:has(header.header) rather than
+    // the bare class selector.
+    var group = document.querySelector('.shopify-section-group-header-group:has(header.header)');
     if (!group) return;
 
     function updateHeight() {
@@ -359,16 +370,14 @@
     updateHeight();
 
     // A ResizeObserver (rather than a one-time measurement) is required
-    // here, not optional: the pinned group's height isn't fixed. It grows
-    // when the announcement bar has blocks configured (zero height when
-    // empty, per announcement-bar.liquid's section.blocks.size guard),
-    // and it shrinks when initStickyHeader above toggles
-    // .header--condensed during scroll (padding-block changes from
-    // var(--space-4) to var(--space-2)). Other sections (sections/
-    // product.liquid's sticky buy-box) read --sticky-header-height to
-    // avoid sitting underneath this pinned group, so it must stay
-    // accurate through both of those changes, not just reflect the
-    // height at page load.
+    // here, not optional: the header wrapper's height isn't fixed — it
+    // shrinks when initStickyHeader above toggles .header--condensed
+    // during scroll (padding-block changes from var(--space-4) to
+    // var(--space-2)), which changes the wrapper's rendered height.
+    // Other sections (sections/product.liquid's sticky buy-box) read
+    // --sticky-header-height to avoid sitting underneath this pinned
+    // wrapper, so it must stay accurate through that transition, not
+    // just reflect the height at page load.
     if (window.__strideHeaderHeightObserver) {
       window.__strideHeaderHeightObserver.disconnect();
     }
@@ -378,6 +387,10 @@
       resizeObserver.observe(group);
       window.__strideHeaderHeightObserver = resizeObserver;
     } else {
+      if (window.__strideHeaderHeightResizeListener) {
+        window.removeEventListener('resize', window.__strideHeaderHeightResizeListener);
+      }
+      window.__strideHeaderHeightResizeListener = updateHeight;
       window.addEventListener('resize', updateHeight);
     }
   }

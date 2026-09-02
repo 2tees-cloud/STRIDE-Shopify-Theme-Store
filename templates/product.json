@@ -25,11 +25,11 @@
         "title",
         "vendor",
         "price",
-        "description",
         "variant-picker",
         "quantity-selector",
         "gift-card-recipient",
-        "buy-buttons"
+        "buy-buttons",
+        "description"
       ],
       "settings": {}
     }

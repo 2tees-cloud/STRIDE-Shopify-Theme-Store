@@ -15,8 +15,24 @@
 <div class="product full-width">
   <div class="product__gallery">
     {% if product.media.size > 0 %}
+      {% liquid
+        assign first_image_media_id = nil
+        for media in product.media
+          if media.media_type == 'image' and first_image_media_id == nil
+            assign first_image_media_id = media.id
+          endif
+        endfor
+      %}
       {% for media in product.media %}
-        <div class="product__gallery-item{% if forloop.first %} is-active{% endif %}" data-product-media-id="{{ media.id }}">
+        {% comment %}
+          is-active is only ever given to an IMAGE media item — the
+          markup below only ever renders an <img> for media_type ==
+          'image', so marking a non-image item (e.g. a future video/3D
+          item) active would show a blank active slot. Rich media types
+          are out of scope for this plan (see Self-Review Notes); this
+          just avoids that specific correctness trap once they land.
+        {% endcomment %}
+        <div class="product__gallery-item{% if media.id == first_image_media_id %} is-active{% endif %}" data-product-media-id="{{ media.id }}">
           {% if media.media_type == 'image' %}
             <img
               src="{{ media | image_url: width: 1600 }}"
@@ -25,11 +41,49 @@
               width="{{ media.width }}"
               height="{{ media.height }}"
               alt="{{ media.alt | default: product.title | escape }}"
-              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              loading="{% if media.id == first_image_media_id %}eager{% else %}lazy{% endif %}"
             >
           {% endif %}
         </div>
       {% endfor %}
+
+      {% comment %}
+        Thumbnail strip: the main gallery above only ever shows one
+        media item (.is-active) with no other way to reach the rest —
+        without this, photos not tied to a variant's featured_media are
+        completely unreachable (spec §5.1). Clicking a thumbnail does
+        the same is-active class toggle that a variant change does via
+        assets/product-variant-picker.js's updateGalleryImage /
+        setActiveGalleryItem (reusing the same data-product-media-id
+        hook, not a second parallel mechanism) — only triggered by
+        direct user choice instead of a variant match. Only image media
+        get a thumbnail since only image media render visible content
+        in the main gallery above (see comment on media.media_type
+        check there).
+      {% endcomment %}
+      {% if product.media.size > 1 %}
+        <div class="product__gallery-thumbnails" data-product-gallery-thumbnails>
+          {% for media in product.media %}
+            {% if media.media_type == 'image' %}
+              <button
+                type="button"
+                class="product__gallery-thumbnail{% if media.id == first_image_media_id %} is-active{% endif %}"
+                data-product-gallery-thumbnail
+                data-product-media-id="{{ media.id }}"
+                aria-label="{{ 'product.view_image' | t: index: forloop.index | escape }}"
+              >
+                <img
+                  src="{{ media | image_url: width: 160 }}"
+                  alt=""
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                >
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
     {% else %}
       <div class="product__gallery-item is-active product__gallery-item--placeholder"></div>
     {% endif %}
@@ -68,13 +122,12 @@
     .product__info {
       /*
         top is NOT a hardcoded pixel/rem guess. sections/header.liquid's
-        sticky group (.shopify-section-group-header-group, top: 0,
-        z-index: 10) is a separate sticky element that stays pinned to
-        the viewport for the whole page scroll, and its rendered height
-        isn't fixed: it grows when the announcement bar has blocks
-        configured (zero height when empty) and shrinks when the header
-        condenses on scroll. A static estimate would only be correct for
-        whichever of those states it happened to be tuned against.
+        sticky group (.shopify-section-group-header-group:has(header.
+        header), top: 0, z-index: 10) is a separate sticky element that
+        stays pinned to the viewport for the whole page scroll, and its
+        rendered height isn't fixed: it shrinks when the header condenses
+        on scroll. A static estimate would only be correct for whichever
+        of those states it happened to be tuned against.
 
         Instead, sections/header.liquid measures the pinned group's real
         height with a ResizeObserver and publishes it as
@@ -113,7 +166,54 @@
     aspect-ratio: 1 / 1;
     background-color: var(--color-background-alt);
   }
+  .product__gallery-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .product__gallery-thumbnail {
+    display: block;
+    width: 4rem;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0;
+    /*
+      --color-border on --color-background measures ~1.3:1, well under
+      the 3:1 non-text-UI contrast threshold (see I5 in the fix-round-1
+      review). This is a new component added by this same fix round, so
+      it's scoped to --color-foreground-muted (~5.23:1) from the start
+      rather than shipping a fresh instance of the same failing pairing.
+    */
+    border: 1px solid var(--color-foreground-muted);
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+  }
+  .product__gallery-thumbnail.is-active {
+    border-color: var(--color-foreground);
+    border-width: 2px;
+  }
+  .product__gallery-thumbnail img {
+    width: 100%;
+    height: auto;
+  }
   .product__info {
+    /*
+      display:flex/gap here used to be applied directly to this element,
+      but its only direct child is the form rendered further down this
+      file (the form Liquid tag that wraps content_for 'blocks') — all
+      8 blocks render as children of that form, not as direct children
+      of .product__info. A flex `gap` only applies between direct
+      children, so with exactly one child it did nothing: every block
+      rendered flush against the next with zero spacing. The flex/gap
+      responsibility now lives on `.product__info > form` below, where
+      the blocks are the actual flex children; .product__info itself
+      keeps only the sticky/scroll layout properties set above.
+    */
+    display: flex;
+    flex-direction: column;
+  }
+  .product__info > form {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);

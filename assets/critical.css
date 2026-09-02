@@ -125,3 +125,21 @@ body {
   height: 4rem;
   pointer-events: none;
 }
+
+/*
+ * Shared accessible-only-to-screen-readers utility. Previously defined
+ * separately in blocks/product-price.liquid and
+ * blocks/variant-picker.liquid with no shared/global definition; moved
+ * here since critical.css loads on every page.
+ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

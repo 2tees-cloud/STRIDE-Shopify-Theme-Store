@@ -99,6 +99,7 @@
     "unavailable": "Unavailable",
     "size_chart": "Size chart",
     "size_chart_placeholder": "Size chart content coming soon.",
+    "view_image": "View image {{ index }}",
     "close": "Close",
     "gift_card_send_as_gift": "Send as a gift",
     "gift_card_recipient_email": "Recipient email",
