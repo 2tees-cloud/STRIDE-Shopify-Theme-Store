@@ -22,21 +22,53 @@
   {% paginate collection.products by 24 %}
     {% render 'collection-filters', collection: collection, section: section %}
 
-    {% if collection.products.size > 0 %}
-      <div class="collection__grid" data-collection-grid>
-        {% for product in collection.products %}
-          {% render 'product-card', product: product %}
-        {% endfor %}
-      </div>
+    {% comment %}
+      Result-count announcement for Task 3's AJAX enhancement
+      (assets/collection-filters.js). Stays outside the swapped grid/empty
+      subtree so it survives each AJAX swap intact; the JS only ever
+      writes its textContent, never re-renders it. The translated
+      template is rendered server-side (count: '__COUNT__' is a literal
+      placeholder token, not a real count) so the JS substitutes the
+      actual count into an already-localized string instead of hardcoding
+      English text in the .js file — same "data-*-text" pattern
+      blocks/buy-buttons.liquid uses for data-add-to-cart-text.
+    {% endcomment %}
+    <div
+      class="visually-hidden"
+      data-collection-live-region
+      data-results-count-template="{{ 'collection.results_count' | t: count: '__COUNT__' | escape }}"
+      role="status"
+      aria-live="polite"
+    ></div>
 
-      {% if paginate.pages > 1 %}
-        <nav class="collection__pagination" aria-label="{{ 'collection.pagination' | t }}">
-          {{ paginate | default_pagination }}
-        </nav>
+    {% comment %}
+      data-collection-results wraps the grid/empty-state AND the
+      pagination nav together, and is what Task 3's AJAX enhancement
+      actually swaps as a single unit on each fetch — not just
+      data-collection-grid on its own. Filtering/sorting can change the
+      total page count (paginate.pages), so the pagination nav has to be
+      replaced in lockstep with the grid; swapping data-collection-grid
+      alone would leave a stale pagination nav (wrong page links, or a
+      nav still showing when the new result set no longer has multiple
+      pages) sitting next to a freshly-swapped grid.
+    {% endcomment %}
+    <div data-collection-results>
+      {% if collection.products.size > 0 %}
+        <div class="collection__grid" data-collection-grid>
+          {% for product in collection.products %}
+            {% render 'product-card', product: product %}
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <nav class="collection__pagination" aria-label="{{ 'collection.pagination' | t }}">
+            {{ paginate | default_pagination }}
+          </nav>
+        {% endif %}
+      {% else %}
+        <p class="collection__empty">{{ 'collection.empty' | t }}</p>
       {% endif %}
-    {% else %}
-      <p class="collection__empty">{{ 'collection.empty' | t }}</p>
-    {% endif %}
+    </div>
   {% endpaginate %}
 </div>
 

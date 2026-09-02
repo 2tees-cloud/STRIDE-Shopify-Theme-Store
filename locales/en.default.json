@@ -36,6 +36,7 @@
     "pagination": "Pagination",
     "price_max": "Max price",
     "price_min": "Min price",
+    "results_count": "{{ count }} products found",
     "sort_by": "Sort by"
   },
   "contact": {

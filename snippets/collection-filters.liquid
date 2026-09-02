@@ -27,7 +27,25 @@
   endfor
 %}
 
-<form class="collection-filters" data-collection-filters method="get" action="{{ collection.url }}">
+{% comment %}
+  data-section-id renders `section.id` server-side so Task 3's AJAX
+  enhancement (assets/collection-filters.js) can read the exact Section
+  Rendering API section ID directly off the form via
+  `form.dataset.sectionId`, rather than parsing it back out of the
+  auto-generated `id="shopify-section-<id>"` wrapper Shopify adds around
+  the whole section. Confirmed against Shopify's Section Rendering API
+  docs: "Read the rendered section ID from the section element rather
+  than hardcoding a filename" — this is that pattern applied one level
+  up (on this form, which already receives `section` as a param) instead
+  of re-deriving it from the wrapper's DOM id.
+{% endcomment %}
+<form
+  class="collection-filters"
+  data-collection-filters
+  data-section-id="{{ section.id | escape }}"
+  method="get"
+  action="{{ collection.url }}"
+>
   <div class="collection-filters__sort">
     <label for="CollectionSortBy-{{ section.id }}">{{ 'collection.sort_by' | t }}</label>
     <select class="collection-filters__select" name="sort_by" id="CollectionSortBy-{{ section.id }}" data-collection-sort>

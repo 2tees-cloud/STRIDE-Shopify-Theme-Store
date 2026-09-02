@@ -58,5 +58,17 @@
     {% if template == 'product' %}
       <script src="{{ 'product-variant-picker.js' | asset_url }}" defer></script>
     {% endif %}
+
+    {% comment %}
+      collection-filters.js only has work to do on the collection template,
+      so it's gated here for the exact same reason product-variant-picker.js
+      is above: loading it from the layout (not from sections/collection.liquid)
+      guarantees it executes exactly once per full page load, so its
+      module-scope popstate listener never risks double-registering on a
+      theme-editor shopify:section:load re-render.
+    {% endcomment %}
+    {% if template == 'collection' %}
+      <script src="{{ 'collection-filters.js' | asset_url }}" defer></script>
+    {% endif %}
   </body>
 </html>
