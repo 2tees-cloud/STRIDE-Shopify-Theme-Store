@@ -41,5 +41,22 @@
     {% section 'cart-drawer' %}
 
     <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+
+    {% comment %}
+      product-variant-picker.js only has work to do on the product
+      template, so it's gated here rather than loading globally. It's
+      loaded from the layout (not from sections/product.liquid) so it
+      always executes exactly once per full page load, the same
+      guarantee cart-drawer.js relies on above — sections/product.liquid
+      is inside the theme editor's Section Rendering API hot-reload
+      path (shopify:section:load), and an embedded <script src> there
+      would be a candidate for re-executing on every editor reload,
+      double-registering this script's module-scope
+      shopify:section:load listener. Loading from the layout sidesteps
+      that entirely.
+    {% endcomment %}
+    {% if template == 'product' %}
+      <script src="{{ 'product-variant-picker.js' | asset_url }}" defer></script>
+    {% endif %}
   </body>
 </html>
