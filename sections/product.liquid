@@ -119,6 +119,36 @@
       gap: var(--space-8);
       align-items: start;
     }
+    .product__gallery {
+      /*
+        Without a min-height here, this column is only as tall as its
+        own content — one active image plus a thumbnail row, often
+        shorter than the info column once a real description is
+        present. Since .product__info's sticky "travel range" is
+        bounded by how much taller this grid ROW is than info's own
+        (viewport-capped) height, a short gallery leaves almost no room
+        for the sticky buy-box to actually stay pinned: it stops
+        sticking after a few dozen pixels of scroll and then visually
+        slides underneath the sticky header for the rest of the page —
+        confirmed live, not a theoretical concern (a first attempt at
+        this fix used a min-height that came out slightly SHORTER than
+        .product__info's own max-height below — arithmetically the
+        opposite of what's needed, since the sticky travel range is
+        `row height − info's own height`, and a shorter gallery still
+        yields ~zero room. This formula intentionally exceeds info's
+        max-height by an extra 50vh, live-verified against real
+        scrolling, not just computed on paper.)
+
+        Description text scrolls INSIDE .product__info's own
+        overflow-y:auto box (it does not push info's rendered height
+        past its max-height cap), so this buffer only needs to cover
+        realistic scroll distance while the buy box is meant to stay
+        visible — it does not need to match an unbounded description
+        length.
+      */
+      min-height: calc(100svh - var(--sticky-header-height, calc(var(--space-8) + var(--space-2))) - var(--space-4) + 100vh);
+      justify-content: center;
+    }
     .product__info {
       /*
         top is NOT a hardcoded pixel/rem guess. sections/header.liquid's
