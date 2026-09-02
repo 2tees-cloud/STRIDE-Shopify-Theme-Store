@@ -1,0 +1,77 @@
+{% doc %}
+  Add-to-cart button + accelerated checkout. Renders inside the
+  section's shared {% form 'product' %} (see sections/product.liquid) —
+  the hidden variant-id input here is the exact hook
+  assets/product-variant-picker.js updates on every variant change.
+  Add-to-cart AJAX itself is handled entirely by the already-shipped
+  assets/cart-drawer.js (document-wide submit listener on
+  [data-add-to-cart-form]) — this block must NOT add its own submit
+  handler.
+
+  Note: the accelerated-checkout button ({{ form | payment_button }})
+  is NOT rendered here. Live-verified that the block-scoped `form`
+  variable opened by {% form 'product', product %} in
+  sections/product.liquid does NOT stay in scope across the
+  {% content_for 'blocks' %} boundary — referencing `form` in this
+  file renders silently empty (theme-check also flags it statically:
+  UndefinedObject, "Unknown object 'form' used"). The payment button
+  is rendered directly in sections/product.liquid instead, inside the
+  same {% form %}...{% endform %} tags, after {% content_for 'blocks' %}.
+
+  @example
+  {% content_for 'block', type: 'buy-buttons', id: 'buy-buttons' %}
+{% enddoc %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+%}
+
+<div class="buy-buttons" data-buy-buttons {{ block.shopify_attributes }}>
+  <input type="hidden" name="id" value="{{ current_variant.id }}" data-buy-buttons-variant-id>
+
+  <button
+    type="submit"
+    class="buy-buttons__add-to-cart"
+    data-buy-buttons-submit
+    data-add-to-cart-text="{{ 'product.add_to_cart' | t }}"
+    data-sold-out-text="{{ 'product.sold_out' | t }}"
+    data-unavailable-text="{{ 'product.unavailable' | t }}"
+    {% unless current_variant.available %}disabled{% endunless %}
+  >
+    <span data-buy-buttons-label>
+      {% if current_variant.available %}
+        {{ 'product.add_to_cart' | t }}
+      {% else %}
+        {{ 'product.sold_out' | t }}
+      {% endif %}
+    </span>
+  </button>
+</div>
+
+{% stylesheet %}
+  .buy-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .buy-buttons__add-to-cart {
+    min-height: 24px;
+    padding: var(--space-3) var(--space-5);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .buy-buttons__add-to-cart[disabled] {
+    background-color: var(--color-foreground-muted);
+    cursor: not-allowed;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.buy_buttons",
+  "settings": []
+}
+{% endschema %}

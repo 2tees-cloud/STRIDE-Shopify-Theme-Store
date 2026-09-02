@@ -6,6 +6,7 @@
     "block": "Block",
     "blog": "Blog",
     "body_font": "Body font",
+    "buy_buttons": "Buy buttons",
     "callout": "Callout",
     "cart": "Cart",
     "cart_drawer": "Cart drawer",
@@ -45,6 +46,7 @@
     "product_price": "Price",
     "product_title": "Product title",
     "product_vendor": "Vendor",
+    "quantity_selector": "Quantity selector",
     "row": "Row",
     "search": "Search",
     "secondary": "Secondary",
@@ -55,7 +57,8 @@
     "social_media": "Social media",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "variant_picker": "Variant picker"
   },
   "labels": {
     "alignment": "Alignment",

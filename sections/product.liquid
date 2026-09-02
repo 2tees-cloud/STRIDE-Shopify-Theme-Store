@@ -38,9 +38,20 @@
   <div class="product__info">
     {% form 'product', product, data-add-to-cart-form: true %}
       {% content_for 'blocks' %}
+      {% comment %}
+        {{ form | payment_button }} must be called here, not inside
+        blocks/buy-buttons.liquid — the form tag's block-scoped `form`
+        variable does not stay in scope across the content_for 'blocks'
+        boundary into a theme-block file (verified live: it silently
+        renders empty there, and theme-check flags it statically as
+        an UndefinedObject).
+      {% endcomment %}
+      {{ form | payment_button }}
     {% endform %}
   </div>
 </div>
+
+<script src="{{ 'product-variant-picker.js' | asset_url }}" defer></script>
 
 {% stylesheet %}
   .product {

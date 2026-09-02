@@ -90,7 +90,13 @@
     "enter": "Enter"
   },
   "product": {
-    "on_sale": "On sale"
+    "on_sale": "On sale",
+    "quantity": "Quantity",
+    "quantity_decrease": "Decrease quantity",
+    "quantity_increase": "Increase quantity",
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable"
   },
   "search": {
     "title": "Search",

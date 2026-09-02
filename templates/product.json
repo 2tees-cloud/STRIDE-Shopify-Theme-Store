@@ -15,9 +15,20 @@
         "title": { "type": "product-title" },
         "vendor": { "type": "product-vendor" },
         "price": { "type": "product-price" },
-        "description": { "type": "product-description" }
+        "description": { "type": "product-description" },
+        "variant-picker": { "type": "variant-picker" },
+        "quantity-selector": { "type": "quantity-selector" },
+        "buy-buttons": { "type": "buy-buttons" }
       },
-      "block_order": ["title", "vendor", "price", "description"],
+      "block_order": [
+        "title",
+        "vendor",
+        "price",
+        "description",
+        "variant-picker",
+        "quantity-selector",
+        "buy-buttons"
+      ],
       "settings": {}
     }
   },

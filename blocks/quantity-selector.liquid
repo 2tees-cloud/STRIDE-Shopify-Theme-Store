@@ -1,0 +1,100 @@
+{% doc %}
+  Quantity stepper: a number input plus +/- buttons. No network call —
+  purely local DOM state until the form is submitted.
+
+  @example
+  {% content_for 'block', type: 'quantity-selector', id: 'quantity-selector' %}
+{% enddoc %}
+
+<div class="quantity-selector" data-quantity-selector {{ block.shopify_attributes }}>
+  <label for="Quantity-{{ block.id }}" class="quantity-selector__label">{{ 'product.quantity' | t }}</label>
+  <div class="quantity-selector__control">
+    <button type="button" class="quantity-selector__step" data-quantity-decrease aria-label="{{ 'product.quantity_decrease' | t }}">&minus;</button>
+    <input
+      type="number"
+      name="quantity"
+      id="Quantity-{{ block.id }}"
+      class="quantity-selector__input"
+      min="1"
+      value="1"
+      inputmode="numeric"
+      data-quantity-input
+    >
+    <button type="button" class="quantity-selector__step" data-quantity-increase aria-label="{{ 'product.quantity_increase' | t }}">&plus;</button>
+  </div>
+</div>
+
+{% stylesheet %}
+  .quantity-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: flex-start;
+  }
+  .quantity-selector__label {
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  .quantity-selector__control {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--color-border);
+  }
+  .quantity-selector__step {
+    min-width: 24px;
+    min-height: 24px;
+    width: 2.5rem;
+    background-color: var(--color-background);
+    border: none;
+    cursor: pointer;
+    font-size: 1.125rem;
+  }
+  .quantity-selector__input {
+    width: 3rem;
+    min-height: 24px;
+    border: none;
+    border-inline: 1px solid var(--color-border);
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  .quantity-selector__input::-webkit-outer-spin-button,
+  .quantity-selector__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  function initQuantitySelector(root) {
+    root.querySelectorAll('[data-quantity-selector]').forEach(function (widget) {
+      var input = widget.querySelector('[data-quantity-input]');
+      var decrease = widget.querySelector('[data-quantity-decrease]');
+      var increase = widget.querySelector('[data-quantity-increase]');
+      if (!input || !decrease || !increase) return;
+
+      decrease.addEventListener('click', function () {
+        var value = Math.max(1, parseInt(input.value, 10) - 1);
+        input.value = value;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+
+      increase.addEventListener('click', function () {
+        var value = Math.max(1, parseInt(input.value, 10) + 1);
+        input.value = value;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+  }
+
+  initQuantitySelector(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initQuantitySelector(event.target);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.quantity_selector",
+  "settings": []
+}
+{% endschema %}
