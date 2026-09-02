@@ -5,22 +5,38 @@
   selected variant changes — this task only needs to render the
   correct INITIAL state from product.selected_or_first_available_variant.
 
+  Both the compare-at element and the price element are ALWAYS present
+  in the DOM, regardless of whether the initial variant is on sale.
+  Task 2's JS only ever queries for and mutates existing elements — it
+  never creates new ones — so a Liquid {% if %}/{% else %} that emits
+  one shape or the other at render time would leave no compare-at
+  element to reveal (or no way to fall back to the regular shape) once
+  the shopper picks a different variant client-side. Sale state is
+  therefore expressed as a toggleable data-is-sale attribute on the
+  container plus hidden on the elements that shouldn't show initially;
+  Task 2 flips both when the selected variant changes.
+
   @example
   {% content_for 'block', type: 'product-price', id: 'product-price' %}
 {% enddoc %}
 
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign is_sale = false
+  if current_variant.compare_at_price > current_variant.price
+    assign is_sale = true
+  endif
 %}
 
-<div class="product-price" {{ block.shopify_attributes }}>
-  {% if current_variant.compare_at_price > current_variant.price %}
-    <span class="product-price__compare-at" data-product-compare-at-price>{{ current_variant.compare_at_price | money }}</span>
-    <span class="product-price__sale" data-product-price>{{ current_variant.price | money }}</span>
-    <span class="visually-hidden">{{ 'product.on_sale' | t }}</span>
-  {% else %}
-    <span class="product-price__regular" data-product-price>{{ current_variant.price | money }}</span>
-  {% endif %}
+<div
+  class="product-price"
+  data-product-price-container
+  {% if is_sale %}data-is-sale{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <span class="product-price__compare-at" data-product-compare-at-price {% unless is_sale %}hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</span>
+  <span class="product-price__value" data-product-price>{{ current_variant.price | money }}</span>
+  <span class="visually-hidden" data-product-price-on-sale-label {% unless is_sale %}hidden{% endunless %}>{{ 'product.on_sale' | t }}</span>
 
   {% if current_variant.unit_price_measurement %}
     <span class="product-price__unit" data-product-unit-price>
@@ -42,7 +58,7 @@
     color: var(--color-foreground-muted);
     font-size: 1rem;
   }
-  .product-price__sale {
+  .product-price[data-is-sale] .product-price__value {
     color: var(--color-urgency);
     font-weight: 700;
   }
