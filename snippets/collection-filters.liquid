@@ -127,10 +127,16 @@
   {% endif %}
 
   <div class="collection-filters__actions">
-    <button type="submit" class="collection-filters__apply">{{ 'collection.apply_filters' | t }}</button>
+    <button type="submit" class="collection-filters__apply" id="CollectionApplyFilters-{{ section.id }}">
+      {%- if collection.filters.size > 0 -%}
+        {{ 'collection.apply_filters' | t }}
+      {%- else -%}
+        {{ 'collection.apply' | t }}
+      {%- endif -%}
+    </button>
 
     {% if has_active_filters %}
-      <a href="{{ collection.url }}" class="collection-filters__clear">{{ 'collection.clear_filters' | t }}</a>
+      <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="collection-filters__clear">{{ 'collection.clear_filters' | t }}</a>
     {% endif %}
   </div>
 </form>

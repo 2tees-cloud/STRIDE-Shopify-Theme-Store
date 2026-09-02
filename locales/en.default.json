@@ -30,9 +30,11 @@
     "taxes_included": "Taxes included"
   },
   "collection": {
+    "apply": "Apply",
     "apply_filters": "Apply filters",
     "clear_filters": "Clear filters",
     "empty": "No products found in this collection.",
+    "empty_filtered": "No products match your filters. Try removing some to see more results.",
     "pagination": "Pagination",
     "price_max": "Max price",
     "price_min": "Min price",
@@ -102,6 +104,8 @@
   "product": {
     "on_sale": "On sale",
     "price_from_html": "From {{ price }}",
+    "regular_price": "Regular price",
+    "sale_price": "Sale price",
     "quantity": "Quantity",
     "quantity_decrease": "Decrease quantity",
     "quantity_increase": "Increase quantity",

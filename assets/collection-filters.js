@@ -53,16 +53,25 @@
     latestRequestId += 1;
     var requestId = latestRequestId;
 
-    // Only the sort <select> has a stable id across swaps
-    // (CollectionSortBy-{{ section.id }}, unchanged since it's the same
-    // section instance) and only it auto-submits without the user
-    // deliberately leaving the form (unlike the Apply button, whose click
-    // is itself a "submit this form" action, so losing focus afterward
-    // matches what a native full-page-reload submit already does).
-    // Restoring focus after form.innerHTML replaces the sort <select> with
-    // a freshly-rendered one avoids silently dropping keyboard focus back
-    // to <body> right after a change the user didn't expect to be
-    // "form-submission-like".
+    // Both the sort <select> (id="CollectionSortBy-{{ section.id }}") and
+    // the Apply button (id="CollectionApplyFilters-{{ section.id }}") have
+    // stable ids across swaps, unchanged since it's the same section
+    // instance. This capture is intentionally generic — keyed on
+    // document.activeElement.id, not on element type — so it works for
+    // whichever of the two the user just interacted with: the sort select
+    // auto-submits via `change` (see the listener below) without the user
+    // deliberately leaving the form, and the Apply button's click is
+    // itself a "submit this form" action, but losing focus afterward would
+    // still be a WCAG 2.4.3 focus-order defect the native full-page-reload
+    // submit doesn't have (a real navigation keeps the browser's own
+    // focus-restoration behavior; this AJAX swap replaces the DOM node
+    // under the user's focus without navigating, so nothing restores focus
+    // unless this code does). Restoring focus after form.innerHTML
+    // replaces either control with a freshly-rendered one avoids silently
+    // dropping keyboard focus back to <body>. Buttons are natively
+    // focusable (no tabindex needed), so the same `.focus()` call below
+    // that already worked for the <select> works unchanged for the
+    // <button> too.
     var focusId = null;
     if (document.activeElement && form.contains(document.activeElement) && document.activeElement.id) {
       focusId = document.activeElement.id;

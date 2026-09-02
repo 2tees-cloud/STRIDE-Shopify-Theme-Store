@@ -6,6 +6,28 @@
   base experience those build on.
 {% endcomment %}
 
+{% liquid
+  # Same "any filter currently active" detection Task 2's
+  # snippets/collection-filters.liquid already computes for its own
+  # "Clear filters" link visibility (has_active_filters there) —
+  # duplicated here rather than shared because Liquid has no cross-file
+  # variable passing, but the logic itself is identical on purpose: a
+  # price_range filter counts as active only when either bound is set,
+  # any other filter type counts as active when it has active_values.
+  # Used below to pick between the genuinely-empty-collection message
+  # and the filtered-to-zero-results message.
+  assign has_active_filters = false
+  for filter in collection.filters
+    if filter.type == 'price_range'
+      if filter.min_value.value != nil or filter.max_value.value != nil
+        assign has_active_filters = true
+      endif
+    elsif filter.active_values.size > 0
+      assign has_active_filters = true
+    endif
+  endfor
+%}
+
 <div class="collection full-width">
   <div class="collection__header">
     {% if collection.image %}
@@ -95,7 +117,13 @@
           </nav>
         {% endif %}
       {% else %}
-        <p class="collection__empty">{{ 'collection.empty' | t }}</p>
+        <p class="collection__empty">
+          {%- if has_active_filters -%}
+            {{ 'collection.empty_filtered' | t }}
+          {%- else -%}
+            {{ 'collection.empty' | t }}
+          {%- endif -%}
+        </p>
       {% endif %}
     </div>
   {% endpaginate %}
