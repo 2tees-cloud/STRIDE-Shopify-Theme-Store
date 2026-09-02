@@ -30,9 +30,9 @@
 <form class="collection-filters" data-collection-filters method="get" action="{{ collection.url }}">
   <div class="collection-filters__sort">
     <label for="CollectionSortBy-{{ section.id }}">{{ 'collection.sort_by' | t }}</label>
-    <select name="sort_by" id="CollectionSortBy-{{ section.id }}" data-collection-sort>
+    <select class="collection-filters__select" name="sort_by" id="CollectionSortBy-{{ section.id }}" data-collection-sort>
       {% for option in collection.sort_options %}
-        <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>
+        <option value="{{ option.value | escape }}" {% if option.value == current_sort %}selected{% endif %}>
           {{ option.name }}
         </option>
       {% endfor %}
@@ -52,8 +52,8 @@
                   <label class="collection-filters__value">
                     <input
                       type="checkbox"
-                      name="{{ value.param_name }}"
-                      value="{{ value.value }}"
+                      name="{{ value.param_name | escape }}"
+                      value="{{ value.value | escape }}"
                       {% if value.active %}checked{% endif %}
                       {% if value.count == 0 and value.active == false %}disabled{% endif %}
                     >
@@ -66,8 +66,8 @@
                 <label class="collection-filters__value">
                   <input
                     type="checkbox"
-                    name="{{ filter.param_name }}"
-                    value="{{ filter.true_value.value }}"
+                    name="{{ filter.param_name | escape }}"
+                    value="{{ filter.true_value.value | escape }}"
                     {% if filter.true_value.active %}checked{% endif %}
                     {% if filter.true_value.count == 0 and filter.true_value.active == false %}disabled{% endif %}
                   >
@@ -76,15 +76,15 @@
               </div>
             {% when 'price_range' %}
               {% liquid
-                assign range_max_plain = filter.range_max | money_without_currency | replace: ',', ''
+                assign range_max_plain = filter.range_max | money_without_currency | replace: ',', '' | escape
               %}
               <div class="collection-filters__price-range">
                 <label>
                   {{ 'collection.price_min' | t }}
                   <input
                     type="number"
-                    name="{{ filter.min_value.param_name }}"
-                    {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    name="{{ filter.min_value.param_name | escape }}"
+                    {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | escape }}"{% endif %}
                     placeholder="0"
                     min="0"
                     max="{{ range_max_plain }}"
@@ -94,8 +94,8 @@
                   {{ 'collection.price_max' | t }}
                   <input
                     type="number"
-                    name="{{ filter.max_value.param_name }}"
-                    {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                    name="{{ filter.max_value.param_name | escape }}"
+                    {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | escape }}"{% endif %}
                     placeholder="{{ range_max_plain }}"
                     min="0"
                     max="{{ range_max_plain }}"
@@ -143,7 +143,16 @@
     }
   }
   .collection-filters__facet {
-    border: 1px solid var(--color-border);
+    /*
+      --color-border (#DDD8CE) on --color-background (#F7F5F1) measures
+      ~1.3:1, well under the 3:1 non-text-UI contrast threshold. Scoped
+      here to --color-foreground-muted (#6B665D on #F7F5F1 ≈ 5.24:1)
+      rather than changing the global --color-border token, following
+      this project's existing precedent of swapping a failing
+      --color-border usage for --color-foreground-muted on the specific
+      component rather than touching the shared token.
+    */
+    border: 1px solid var(--color-foreground-muted);
     border-radius: var(--style-border-radius-inputs);
     padding: var(--space-3);
     min-width: 10rem;
@@ -158,6 +167,12 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    min-width: 24px;
+    min-height: 24px;
+  }
+  .collection-filters__select {
+    min-width: 24px;
+    min-height: 24px;
   }
   .collection-filters__price-range {
     display: flex;
@@ -178,6 +193,14 @@
     align-items: center;
     gap: var(--space-4);
     width: 100%;
+  }
+  .collection-filters__apply,
+  .collection-filters__clear {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   @media (min-width: 750px) {
     .collection-filters__actions {
