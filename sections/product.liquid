@@ -65,6 +65,29 @@
       gap: var(--space-8);
       align-items: start;
     }
+    .product__info {
+      /*
+        top is intentionally NOT var(--space-4) (16px), despite that
+        being the plan's literal suggestion. sections/header.liquid's
+        sticky header (.shopify-section-group-header-group, top: 0,
+        z-index: 10) is a separate sticky element that stays pinned to
+        the viewport for the whole page scroll. Its own rendered
+        height is ~4rem (64px) expanded (padding-block: var(--space-4)
+        = 32px combined + ~32px content row from the 2rem icon svgs)
+        and ~3rem (48px) condensed (padding-block: var(--space-2)).
+        A 16px sticky offset is smaller than either, so the top of
+        this panel would tuck in behind the opaque header instead of
+        resting below it. Using space-8 + space-2 (72px) clears the
+        worst case (expanded, 64px) with an 8px margin. This is a
+        static calculation, not a live-measured value — see the task
+        report for the live-verification gap.
+      */
+      position: sticky;
+      top: calc(var(--space-8) + var(--space-2));
+      align-self: start;
+      max-height: calc(100svh - var(--space-8) - var(--space-4));
+      overflow-y: auto;
+    }
   }
   .product__gallery {
     display: flex;

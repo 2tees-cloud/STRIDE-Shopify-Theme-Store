@@ -1,0 +1,96 @@
+{% comment %}
+  Size chart modal, rendered from within blocks/variant-picker.liquid.
+  Uses this theme's native <dialog scroll-lock> convention
+  (assets/critical.css already handles body-scroll-lock and the base
+  dialog color tokens globally via the
+  html:has(dialog[scroll-lock][open]) rule) rather than a hand-rolled
+  focus trap — <dialog> gives us focus containment and Escape-to-close
+  natively via showModal().
+
+  This is the first live use of that convention: the critical.css hook
+  was pre-wired in an earlier task, but no section/block had actually
+  rendered a <dialog scroll-lock> element until this snippet. It's
+  also this project's first snippet (as opposed to section/block file)
+  to use {% stylesheet %}/{% javascript %} tags — see the task report
+  for why that's confirmed safe (Shopify scopes/dedupes these tags per
+  source file regardless of render depth, same as CSS/JS on any other
+  section or block file; snippets/image.liquid already proves
+  {% stylesheet %} works when rendered from a snippet, and Shopify's
+  own docs for both tags describe them as valid in "sections and
+  blocks" without excluding snippets rendered from them).
+
+  size_chart_placeholder is deliberately placeholder copy — this
+  environment has no real sizing-chart content/data (same category of
+  gap as missing product photography elsewhere in this project).
+{% endcomment %}
+
+<button type="button" class="size-chart-trigger" data-size-chart-trigger>
+  {{ 'product.size_chart' | t }}
+</button>
+
+<dialog class="size-chart-modal" scroll-lock data-size-chart-modal aria-label="{{ 'product.size_chart' | t }}">
+  <button type="button" class="size-chart-modal__close" data-size-chart-close aria-label="{{ 'product.close' | t }}">&times;</button>
+  <div class="size-chart-modal__content">
+    {{ 'product.size_chart_placeholder' | t }}
+  </div>
+</dialog>
+
+{% stylesheet %}
+  .size-chart-trigger {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    color: var(--color-foreground);
+    cursor: pointer;
+    font-size: 0.875rem;
+    min-height: 24px;
+  }
+  .size-chart-modal {
+    max-width: 32rem;
+    width: calc(100% - var(--space-6));
+    border: none;
+    padding: var(--space-6);
+  }
+  .size-chart-modal::backdrop {
+    background: rgb(0 0 0 / 50%);
+  }
+  .size-chart-modal__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    min-width: 24px;
+    min-height: 24px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  function initSizeChartModal(root) {
+    root.querySelectorAll('[data-size-chart-trigger]').forEach(function (trigger) {
+      var wrapper = trigger.parentElement;
+      var modal = wrapper ? wrapper.querySelector('[data-size-chart-modal]') : null;
+      if (!modal) return;
+
+      trigger.addEventListener('click', function () {
+        modal.showModal();
+      });
+
+      var closeButton = modal.querySelector('[data-size-chart-close]');
+      if (closeButton) {
+        closeButton.addEventListener('click', function () {
+          modal.close();
+        });
+      }
+    });
+  }
+
+  initSizeChartModal(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initSizeChartModal(event.target);
+  });
+{% endjavascript %}

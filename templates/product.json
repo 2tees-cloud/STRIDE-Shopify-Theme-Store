@@ -18,6 +18,7 @@
         "description": { "type": "product-description" },
         "variant-picker": { "type": "variant-picker" },
         "quantity-selector": { "type": "quantity-selector" },
+        "gift-card-recipient": { "type": "gift-card-recipient" },
         "buy-buttons": { "type": "buy-buttons" }
       },
       "block_order": [
@@ -27,6 +28,7 @@
         "description",
         "variant-picker",
         "quantity-selector",
+        "gift-card-recipient",
         "buy-buttons"
       ],
       "settings": {}

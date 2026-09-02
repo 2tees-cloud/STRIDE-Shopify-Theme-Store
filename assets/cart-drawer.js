@@ -104,13 +104,32 @@
 
   function addToCart(form) {
     var formData = new FormData(form);
+
+    // Forward any name="properties[X]" fields (e.g. blocks/gift-card-recipient.liquid)
+    // as a nested properties object, per the documented cart/add.js AJAX contract
+    // (https://shopify.dev/docs/api/ajax/reference/cart#post-locale-cart-add-js).
+    // Without this, line-item properties typed into the product form would be
+    // silently dropped: this handler intercepts every [data-add-to-cart-form]
+    // submit and replaces the native (form-encoded) POST with this fetch, so
+    // properties[X] fields never get a chance to reach Shopify any other way.
+    var properties = {};
+    formData.forEach(function (value, key) {
+      var match = key.match(/^properties\[(.+)\]$/);
+      if (match) {
+        properties[match[1]] = value;
+      }
+    });
+
+    var item = {
+      id: formData.get('id'),
+      quantity: formData.get('quantity') || 1
+    };
+    if (Object.keys(properties).length > 0) {
+      item.properties = properties;
+    }
+
     var body = JSON.stringify({
-      items: [
-        {
-          id: formData.get('id'),
-          quantity: formData.get('quantity') || 1
-        }
-      ]
+      items: [item]
     });
 
     return fetch(routeRoot + 'cart/add.js', {

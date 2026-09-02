@@ -1,0 +1,88 @@
+{% doc %}
+  Recipient email/name/message fields for gift-card products. Only
+  renders when the product actually is a gift card
+  (product.gift_card?) — a merchant adding this block to a regular
+  product's template sees nothing, which is correct (this block has no
+  meaning outside gift-card products).
+
+  @example
+  {% content_for 'block', type: 'gift-card-recipient', id: 'gift-card-recipient' %}
+{% enddoc %}
+
+{% if product.gift_card? %}
+  <div class="gift-card-recipient" data-gift-card-recipient {{ block.shopify_attributes }}>
+    <label class="gift-card-recipient__checkbox">
+      <input type="checkbox" data-gift-card-recipient-toggle>
+      {{ 'product.gift_card_send_as_gift' | t }}
+    </label>
+
+    <div class="gift-card-recipient__fields" data-gift-card-recipient-fields hidden>
+      <div class="gift-card-recipient__field">
+        <label for="GiftCardRecipientEmail-{{ block.id }}">{{ 'product.gift_card_recipient_email' | t }}</label>
+        <input type="email" id="GiftCardRecipientEmail-{{ block.id }}" name="properties[Recipient email]">
+      </div>
+      <div class="gift-card-recipient__field">
+        <label for="GiftCardRecipientName-{{ block.id }}">{{ 'product.gift_card_recipient_name' | t }}</label>
+        <input type="text" id="GiftCardRecipientName-{{ block.id }}" name="properties[Recipient name]">
+      </div>
+      <div class="gift-card-recipient__field">
+        <label for="GiftCardRecipientMessage-{{ block.id }}">{{ 'product.gift_card_recipient_message' | t }}</label>
+        <textarea id="GiftCardRecipientMessage-{{ block.id }}" name="properties[Message]"></textarea>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .gift-card-recipient {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .gift-card-recipient__checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .gift-card-recipient__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .gift-card-recipient__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .gift-card-recipient__field input,
+  .gift-card-recipient__field textarea {
+    border: 1px solid var(--color-border);
+    padding: var(--space-2);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  function initGiftCardRecipient(root) {
+    root.querySelectorAll('[data-gift-card-recipient]').forEach(function (widget) {
+      var toggle = widget.querySelector('[data-gift-card-recipient-toggle]');
+      var fields = widget.querySelector('[data-gift-card-recipient-fields]');
+      if (!toggle || !fields) return;
+
+      toggle.addEventListener('change', function () {
+        fields.hidden = !toggle.checked;
+      });
+    });
+  }
+
+  initGiftCardRecipient(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initGiftCardRecipient(event.target);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.gift_card_recipient",
+  "settings": []
+}
+{% endschema %}

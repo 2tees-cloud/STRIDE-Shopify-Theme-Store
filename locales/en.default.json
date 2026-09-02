@@ -96,7 +96,14 @@
     "quantity_increase": "Increase quantity",
     "add_to_cart": "Add to cart",
     "sold_out": "Sold out",
-    "unavailable": "Unavailable"
+    "unavailable": "Unavailable",
+    "size_chart": "Size chart",
+    "size_chart_placeholder": "Size chart content coming soon.",
+    "close": "Close",
+    "gift_card_send_as_gift": "Send as a gift",
+    "gift_card_recipient_email": "Recipient email",
+    "gift_card_recipient_name": "Recipient name (optional)",
+    "gift_card_recipient_message": "Message (optional)"
   },
   "search": {
     "title": "Search",
