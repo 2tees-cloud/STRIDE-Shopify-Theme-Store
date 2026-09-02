@@ -32,7 +32,7 @@
     <div class="product-card__price">
       {% if product.price_varies %}
         {% assign price_min_money = product.price_min | money %}
-        <span class="product-card__price-value">{{ 'product.price_from' | t: price: price_min_money }}</span>
+        <span class="product-card__price-value">{{ 'product.price_from_html' | t: price: price_min_money }}</span>
       {% elsif product.compare_at_price_max > product.price_max %}
         <span class="product-card__price-compare-at">{{ product.compare_at_price_max | money }}</span>
         <span class="product-card__price-value product-card__price-value--sale">{{ product.price_max | money }}</span>
