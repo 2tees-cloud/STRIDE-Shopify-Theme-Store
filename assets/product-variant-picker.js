@@ -53,15 +53,17 @@
   }
 
   function updateUnitPrice(root, variant) {
-    // blocks/product-price.liquid always renders [data-product-unit-price]
-    // when the INITIAL variant has unit pricing, and never renders it
-    // otherwise — so on a variant switch we may need to either update its
-    // text, or hide it entirely (switching to a variant with no unit
-    // pricing), or reveal it again (switching back to one that has it).
-    // Since Liquid never creates the element for a variant that lacked
-    // unit pricing at initial render, this only ever toggles/updates an
-    // element that's already in the DOM, matching updatePrice's existing
-    // "never creates or removes elements" contract above.
+    // [data-product-unit-price] is ALWAYS present in the DOM (see
+    // blocks/product-price.liquid), hidden via the `hidden` attribute
+    // rather than omitted via Liquid {% if %}/{% else %}, even when the
+    // INITIAL variant has no unit_price_measurement — the same
+    // never-omit-the-element contract updatePrice's compare-at element
+    // already follows above. That's what lets this function correctly
+    // REVEAL the element on a later switch to a variant that DOES have
+    // unit pricing: if the element were only rendered when the initial
+    // variant had unit pricing, this querySelector would find nothing
+    // for a product whose initial variant lacked it, and the unit price
+    // could never appear no matter which variant is selected afterward.
     var unitPriceEl = root.querySelector('[data-product-unit-price]');
     if (!unitPriceEl) return;
 

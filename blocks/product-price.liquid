@@ -16,6 +16,17 @@
   container plus hidden on the elements that shouldn't show initially;
   Task 2 flips both when the selected variant changes.
 
+  The unit-price element follows this exact same contract and for the
+  exact same reason: it's ALWAYS present in the DOM (hidden via the
+  `hidden` attribute, not omitted via an {% if %}/{% else %}), even
+  when the INITIAL/selected variant has no unit_price_measurement.
+  Gating the whole element on {% if %} would mean
+  assets/product-variant-picker.js's updateUnitPrice could never reveal
+  it after a later switch to a variant that DOES have unit pricing —
+  its `if (!unitPriceEl) return;` guard would find nothing to update,
+  silently and permanently, exactly the bug this contract exists to
+  prevent for the price/compare-at elements above.
+
   @example
   {% content_for 'block', type: 'product-price', id: 'product-price' %}
 {% enddoc %}
@@ -38,11 +49,11 @@
   <span class="product-price__value" data-product-price>{{ current_variant.price | money }}</span>
   <span class="visually-hidden" data-product-price-on-sale-label {% unless is_sale %}hidden{% endunless %}>{{ 'product.on_sale' | t }}</span>
 
-  {% if current_variant.unit_price_measurement %}
-    <span class="product-price__unit" data-product-unit-price>
+  <span class="product-price__unit" data-product-unit-price {% unless current_variant.unit_price_measurement %}hidden{% endunless %}>
+    {% if current_variant.unit_price_measurement %}
       {{ current_variant.unit_price | money }}/{{ current_variant.unit_price_measurement.reference_value }}{{ current_variant.unit_price_measurement.reference_unit }}
-    </span>
-  {% endif %}
+    {% endif %}
+  </span>
 </div>
 
 {% stylesheet %}

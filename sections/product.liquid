@@ -125,15 +125,18 @@
         sticky group (.shopify-section-group-header-group:has(header.
         header), top: 0, z-index: 10) is a separate sticky element that
         stays pinned to the viewport for the whole page scroll, and its
-        rendered height isn't fixed: it shrinks when the header condenses
-        on scroll. A static estimate would only be correct for whichever
-        of those states it happened to be tuned against.
+        rendered height isn't fixed: it shrinks when initStickyHeader
+        toggles .header--condensed during scroll (padding-block changes
+        from var(--space-4) to var(--space-2)), which changes the
+        wrapper's rendered height. A static estimate would only be
+        correct for whichever of those two states it happened to be
+        tuned against.
 
         Instead, sections/header.liquid measures the pinned group's real
         height with a ResizeObserver and publishes it as
         --sticky-header-height on :root (see its javascript block,
         initStickyHeaderHeightVar). That keeps this offset correct
-        regardless of announcement-bar content or condensed state. The
+        through the condense/expand transition. The
         calc(var(--space-8) + var(--space-2)) fallback only applies
         before that JS has run its first measurement (e.g. first paint,
         or JS disabled) — it's the same conservative worst-case-header
