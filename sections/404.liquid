@@ -1,19 +1,82 @@
 {% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+  This section is used in the 404 template to render page shown when
+  customers enter an invalid store URL. Styled per spec section 5.6:
+  a centered message, the theme's existing predictive-search bar
+  (snippets/predictive-search.liquid, reused as-is rather than a new
+  one-off search form), and a link back to shopping. There is no other
+  content on this page, so the section root spans the full viewport
+  with its own block padding for vertical centering, matching the
+  pattern already used on sections/search.liquid.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
-<h1>{{ '404.title' | t }}</h1>
+<div class="not-found full-width">
+  <div class="not-found__content">
+    <h1 class="not-found__title">{{ '404.title' | t }}</h1>
+    <p class="not-found__message">{{ '404.not_found' | t }}</p>
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+    <div class="not-found__search">
+      {% render 'predictive-search', id_prefix: '404Search' %}
+    </div>
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+    <a href="{{ routes.all_products_collection_url }}" class="not-found__link">
+      {{ '404.back_to_shopping' | t }}
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    text-align: center;
+  }
+  @media (min-width: 750px) {
+    .not-found {
+      padding-inline: var(--space-6);
+    }
+  }
+  .not-found__content {
+    max-width: 28rem;
+    width: 100%;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+  }
+  .not-found__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin: 0;
+  }
+  .not-found__message {
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .not-found__search {
+    width: 100%;
+    text-align: left;
+  }
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    border: 1px solid var(--color-foreground);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: var(--space-3) var(--space-5);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--style-border-radius-inputs);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
