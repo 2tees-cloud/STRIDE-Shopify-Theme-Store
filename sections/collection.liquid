@@ -107,7 +107,7 @@
         {% endcomment %}
         <div class="collection__grid" data-collection-grid>
           {% for product in collection.products %}
-            {% render 'product-card', product: product %}
+            {% render 'product-card', product: product, priority: forloop.first %}
           {% endfor %}
         </div>
 

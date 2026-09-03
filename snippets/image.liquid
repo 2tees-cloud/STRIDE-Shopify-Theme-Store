@@ -19,6 +19,11 @@
     image -- that image's own alt text describes the product, not the
     collection it's standing in for). Defaults to the image's own alt text
     when omitted.
+  @param {boolean} [priority] - Marks this image as the page's likely
+    Largest Contentful Paint element (e.g. the first card in a grid): loads
+    eagerly with fetchpriority="high" instead of the default lazy loading.
+    Only pass this for the single highest-priority image on a page -- most
+    calls should omit it and keep the default lazy behavior.
 
   @example
   {% render 'image', image: product.featured_image %}
@@ -31,6 +36,7 @@
     height: 800,
     crop: 'center',
   %}
+  {% render 'image', image: product.featured_image, priority: true %}
 {% enddoc %}
 
 {% liquid
@@ -53,7 +59,11 @@
     href="{{ url }}"
   {% endif %}
 >
-  {{ image | image_url: width: width, height: height, crop: crop | image_tag: alt: resolved_alt }}
+  {% if priority %}
+    {{ image | image_url: width: width, height: height, crop: crop | image_tag: alt: resolved_alt, loading: 'eager', fetchpriority: 'high' }}
+  {% else %}
+    {{ image | image_url: width: width, height: height, crop: crop | image_tag: alt: resolved_alt }}
+  {% endif %}
 </{{ wrapper }}>
 
 {% stylesheet %}

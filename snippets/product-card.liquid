@@ -6,15 +6,20 @@
   available variants.
 
   @param {product} product - The product to render
+  @param {boolean} [priority] - Marks this card's image as the page's
+    likely Largest Contentful Paint element (e.g. the first card in a
+    grid): loads eagerly with high fetch priority instead of the default
+    lazy loading. Only pass this for the first card in a grid/list.
 
   @example
   {% render 'product-card', product: product %}
+  {% render 'product-card', product: product, priority: true %}
 {% enddoc %}
 
 <a href="{{ product.url }}" class="product-card">
   <div class="product-card__media">
     {% if product.featured_image %}
-      {% render 'image', image: product.featured_image, class: 'product-card__image' %}
+      {% render 'image', image: product.featured_image, class: 'product-card__image', priority: priority %}
     {% else %}
       <div class="product-card__image product-card__image--placeholder"></div>
     {% endif %}

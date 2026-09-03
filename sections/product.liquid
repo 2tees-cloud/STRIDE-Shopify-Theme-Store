@@ -42,6 +42,9 @@
               height="{{ media.height }}"
               alt="{{ media.alt | default: product.title | escape }}"
               loading="{% if media.id == first_image_media_id %}eager{% else %}lazy{% endif %}"
+              {% if media.id == first_image_media_id %}
+                fetchpriority="high"
+              {% endif %}
             >
           {% endif %}
         </div>
