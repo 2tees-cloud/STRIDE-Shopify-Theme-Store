@@ -27,7 +27,8 @@
     "free_shipping_remaining_html": "You're {{ amount }} away from free shipping",
     "free_shipping_unlocked": "You've unlocked free shipping!",
     "note": "Order notes",
-    "taxes_included": "Taxes included"
+    "taxes_included": "Taxes included",
+    "quantity": "Quantity"
   },
   "collection": {
     "apply": "Apply",
