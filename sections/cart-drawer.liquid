@@ -54,9 +54,9 @@
 
             <div class="cart-drawer__item-details">
               <a href="{{ item.url }}" class="cart-drawer__item-title">{{ item.product.title }}</a>
-              {% if item.variant.title != 'Default Title' %}
+              {% unless item.product.has_only_default_variant %}
                 <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
-              {% endif %}
+              {% endunless %}
               <p class="cart-drawer__item-price">{{ item.final_price | money }}</p>
 
               <div class="cart-drawer__item-quantity">
@@ -87,16 +87,34 @@
         <textarea name="note" id="CartDrawerNote" class="cart-drawer__note">{{ cart.note }}</textarea>
       </div>
 
-      <div class="cart-drawer__subtotal">
-        <span>{{ 'cart.subtotal' | t }}</span>
-        <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+      <div class="cart-drawer__totals">
+        <div class="cart-drawer__subtotal">
+          <span>{{ 'cart.subtotal' | t }}</span>
+          <span data-cart-subtotal>{{ cart.items_subtotal_price | money }}</span>
+        </div>
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <ul class="cart-drawer__discounts">
+            {% for discount_application in cart.cart_level_discount_applications %}
+              <li class="cart-drawer__discount">
+                <span>{{ discount_application.title }}</span>
+                <span>-{{ discount_application.total_allocated_amount | money }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <div class="cart-drawer__total">
+          <span>{{ 'cart.total' | t }}</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        {% if cart.taxes_included %}
+          <p class="cart-drawer__tax-note">{{ 'cart.taxes_included' | t }}</p>
+        {% endif %}
       </div>
-      {% if cart.taxes_included %}
-        <p class="cart-drawer__tax-note">{{ 'cart.taxes_included' | t }}</p>
-      {% endif %}
 
       <button type="submit" name="checkout" class="cart-drawer__checkout">{{ 'cart.checkout' | t }}</button>
-      {{ content_for_additional_checkout_buttons }}
+      {% if additional_checkout_buttons %}
+        {{ content_for_additional_checkout_buttons }}
+      {% endif %}
     </form>
   {% endif %}
 </aside>
@@ -274,15 +292,40 @@
     padding: var(--space-2);
     font: inherit;
   }
-  .cart-drawer__tax-note {
-    margin: 0;
-    font-size: 0.75rem;
-    color: var(--color-foreground-muted);
+  .cart-drawer__totals {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
   .cart-drawer__subtotal {
     display: flex;
     justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--color-foreground-muted);
+  }
+  .cart-drawer__discounts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .cart-drawer__discount {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--color-urgency);
+  }
+  .cart-drawer__total {
+    display: flex;
+    justify-content: space-between;
     font-weight: 700;
+  }
+  .cart-drawer__tax-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
   }
   .cart-drawer__checkout {
     display: flex;

@@ -17,14 +17,29 @@
           <li class="cart-page__item">
             {% if item.image %}
               {% render 'image', class: 'cart-page__item-image', image: item.image, url: item.url, width: 200, height: 200, crop: 'center' %}
+            {% else %}
+              <div class="cart-page__item-image cart-page__item-image--placeholder"></div>
             {% endif %}
 
             <div class="cart-page__item-details">
               <a href="{{ item.url }}" class="cart-page__item-title">{{ item.product.title }}</a>
-              {% if item.variant.title != 'Default Title' %}
+              {% unless item.product.has_only_default_variant %}
                 <p class="cart-page__item-variant">{{ item.variant.title }}</p>
-              {% endif %}
-              <p class="cart-page__item-price">{{ item.final_price | money }}</p>
+              {% endunless %}
+              <div class="cart-page__item-price">
+                {% if item.line_level_discount_allocations.size > 0 %}
+                  <span class="cart-page__item-price-compare-at">
+                    <span class="visually-hidden">{{ 'product.regular_price' | t }}</span>
+                    {{ item.original_price | money }}
+                  </span>
+                  <span class="cart-page__item-price-value cart-page__item-price-value--sale">
+                    <span class="visually-hidden">{{ 'product.sale_price' | t }}</span>
+                    {{ item.final_price | money }}
+                  </span>
+                {% else %}
+                  <span class="cart-page__item-price-value">{{ item.final_price | money }}</span>
+                {% endif %}
+              </div>
               {% if item.unit_price_measurement %}
                 <p class="cart-page__item-unit-price">
                   {{ item.unit_price | money }}/{{ item.unit_price_measurement.reference_value }}{{ item.unit_price_measurement.reference_unit }}
@@ -55,7 +70,15 @@
               >
             </div>
 
-            <p class="cart-page__item-line-total">{{ item.final_line_price | money }}</p>
+            <p class="cart-page__item-line-total">
+              {% if item.line_level_discount_allocations.size > 0 %}
+                <span class="cart-page__item-line-total-compare-at">
+                  <span class="visually-hidden">{{ 'product.regular_price' | t }}</span>
+                  {{ item.original_line_price | money }}
+                </span>
+              {% endif %}
+              <span class="cart-page__item-line-total-value">{{ item.final_line_price | money }}</span>
+            </p>
 
             <a href="{{ item.url_to_remove }}" class="cart-page__item-remove">{{ 'cart.remove' | t }}</a>
           </li>
@@ -94,8 +117,12 @@
       <div class="cart-page__actions">
         <button type="submit" name="update" class="cart-page__update">{{ 'cart.update' | t }}</button>
         <button type="submit" name="checkout" class="cart-page__checkout">{{ 'cart.checkout' | t }}</button>
-        {{ content_for_additional_checkout_buttons }}
       </div>
+      {% if additional_checkout_buttons %}
+        <div class="cart-page__additional-checkout-buttons">
+          {{ content_for_additional_checkout_buttons }}
+        </div>
+      {% endif %}
     </form>
   {% else %}
     <div class="cart-page__empty">
@@ -107,6 +134,7 @@
 
 {% stylesheet %}
   .cart-page {
+    width: 100%;
     padding-block: var(--space-8);
     padding-inline: var(--space-4);
     max-width: 60rem;
@@ -132,27 +160,65 @@
   }
   .cart-page__item {
     display: grid;
-    grid-template-columns: 5rem 1fr auto auto;
+    grid-template-columns: 5rem 1fr;
+    grid-template-areas:
+      'image details'
+      'image quantity'
+      'image total'
+      'image remove';
     gap: var(--space-3);
     align-items: start;
     padding-block: var(--space-3);
     border-bottom: 1px solid var(--color-foreground-muted);
   }
+  @media (min-width: 600px) {
+    .cart-page__item {
+      grid-template-columns: 5rem 1fr auto auto;
+      grid-template-areas:
+        'image details quantity total'
+        'image details remove   remove';
+    }
+  }
   .cart-page__item-image {
+    grid-area: image;
     width: 5rem;
+  }
+  .cart-page__item-image--placeholder {
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-background-alt);
+  }
+  .cart-page__item-details {
+    grid-area: details;
+    min-width: 0;
   }
   .cart-page__item-title {
     color: var(--color-foreground);
     text-decoration: none;
     font-weight: 600;
+    overflow-wrap: anywhere;
   }
   .cart-page__item-variant,
-  .cart-page__item-price,
   .cart-page__item-unit-price,
   .cart-page__item-selling-plan {
     color: var(--color-foreground-muted);
     font-size: 0.875rem;
     margin: var(--space-1) 0 0;
+  }
+  .cart-page__item-price {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: baseline;
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    margin: var(--space-1) 0 0;
+  }
+  .cart-page__item-price-compare-at {
+    text-decoration: line-through;
+  }
+  .cart-page__item-price-value--sale {
+    color: var(--color-urgency);
+    font-weight: 700;
   }
   .cart-page__item-discounts {
     list-style: none;
@@ -166,6 +232,9 @@
     color: var(--color-urgency);
     font-size: 0.875rem;
   }
+  .cart-page__item-quantity {
+    grid-area: quantity;
+  }
   .cart-page__item-quantity-input {
     width: 4rem;
     min-height: 24px;
@@ -176,10 +245,22 @@
     text-align: center;
   }
   .cart-page__item-line-total {
+    grid-area: total;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: baseline;
     font-weight: 700;
     margin: 0;
   }
+  .cart-page__item-line-total-compare-at {
+    text-decoration: line-through;
+    font-weight: 400;
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
   .cart-page__item-remove {
+    grid-area: remove;
     color: var(--color-foreground-muted);
     font-size: 0.875rem;
     min-height: 24px;
@@ -247,9 +328,15 @@
   }
   @media (min-width: 480px) {
     .cart-page__actions {
-      flex-direction: row-reverse;
-      justify-content: flex-start;
+      flex-direction: row;
+      justify-content: flex-end;
     }
+  }
+  .cart-page__additional-checkout-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
   }
   .cart-page__update,
   .cart-page__checkout {
