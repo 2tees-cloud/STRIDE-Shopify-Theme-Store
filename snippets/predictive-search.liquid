@@ -1,0 +1,187 @@
+{% doc %}
+  Predictive search: a text input that becomes a live, keyboard-navigable
+  results dropdown once assets/predictive-search.js loads. Falls back to
+  a plain full-page search submission (routes.search_url) if JS never
+  loads or a fetch fails -- this form must be fully functional without
+  JS, same discipline as every other form in this theme.
+
+  Rendered from BOTH sections/header.liquid (as a trigger + panel) and
+  sections/search.liquid (as a progressive enhancement over the page's
+  own search box) -- one snippet, one JS file, no duplicated logic.
+
+  The results dropdown's actual markup is fetched at runtime from
+  sections/predictive-search.liquid via Shopify's Predictive Search API
+  (routes.predictive_search_url, confirmed against
+  https://shopify.dev/docs/api/liquid/objects/routes) -- see that
+  section file's own comment for why the CSS for the fetched markup
+  lives here instead of in a stylesheet tag on that file.
+
+  @param {string} [id_prefix] - Unique prefix for this instance's element IDs, since this snippet may render more than once per page (header + search page)
+
+  @example
+  {% render 'predictive-search', id_prefix: 'HeaderSearch' %}
+{% enddoc %}
+
+<div class="predictive-search" data-predictive-search data-predictive-search-url="{{ routes.predictive_search_url }}">
+  <form
+    action="{{ routes.search_url }}"
+    method="get"
+    role="search"
+    class="predictive-search__form"
+    data-predictive-search-form
+  >
+    <label for="{{ id_prefix }}-Input" class="visually-hidden">{{ 'search.title' | t }}</label>
+    <input
+      type="search"
+      name="q"
+      id="{{ id_prefix }}-Input"
+      class="predictive-search__input"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'search.placeholder' | t }}"
+      autocomplete="off"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="{{ id_prefix }}-Results"
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
+      data-predictive-search-input
+    >
+    <button type="submit" class="predictive-search__submit">
+      <span class="visually-hidden">{{ 'search.submit' | t }}</span>
+      {{ 'icon-search.svg' | inline_asset_content }}
+    </button>
+  </form>
+
+  <div
+    id="{{ id_prefix }}-Results"
+    class="predictive-search__results"
+    data-predictive-search-results
+    hidden
+    role="listbox"
+    aria-label="{{ 'search.title' | t }}"
+  ></div>
+</div>
+
+{% stylesheet %}
+  .predictive-search {
+    position: relative;
+  }
+  .predictive-search__form {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-foreground-muted);
+  }
+  .predictive-search__input {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: var(--space-2) var(--space-3);
+    font: inherit;
+    color: var(--color-foreground);
+    min-height: 24px;
+  }
+  .predictive-search__submit {
+    background: none;
+    border: none;
+    cursor: pointer;
+    min-width: 24px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-foreground);
+    padding: var(--space-2);
+  }
+  .predictive-search__results {
+    position: absolute;
+    top: calc(100% + var(--space-1));
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-foreground-muted);
+    max-height: 24rem;
+    overflow-y: auto;
+    z-index: 15;
+  }
+  .predictive-search__results[hidden] {
+    display: none;
+  }
+
+  /* The rules below style markup fetched from sections/predictive-search.liquid
+     and injected into [data-predictive-search-results] by
+     assets/predictive-search.js -- that section file has no stylesheet tag
+     of its own (see its comment for why), so these class names are the
+     shared contract between the two files. */
+  .predictive-search__group + .predictive-search__group {
+    border-top: 1px solid var(--color-foreground-muted);
+  }
+  .predictive-search__group-title {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+  .predictive-search__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .predictive-search__result {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    text-decoration: none;
+    color: var(--color-foreground);
+    min-height: 24px;
+  }
+  .predictive-search__result:hover,
+  .predictive-search__result.is-active {
+    background-color: var(--color-background-alt);
+  }
+  .predictive-search__result-media {
+    flex-shrink: 0;
+    display: block;
+    width: 3rem;
+  }
+  .predictive-search__result-image {
+    display: block;
+    width: 3rem;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  .predictive-search__result-image--placeholder {
+    background-color: var(--color-background-alt);
+  }
+  .predictive-search__result-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+  .predictive-search__result-title {
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .predictive-search__result-price {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+  .predictive-search__view-all {
+    display: block;
+    padding: var(--space-3);
+    text-align: center;
+    color: var(--color-foreground);
+    font-weight: 700;
+    border-top: 1px solid var(--color-foreground-muted);
+  }
+  .predictive-search__empty {
+    margin: 0;
+    padding: var(--space-3);
+    color: var(--color-foreground-muted);
+  }
+{% endstylesheet %}

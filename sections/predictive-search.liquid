@@ -1,0 +1,126 @@
+{% comment %}
+  Predictive search results fragment.
+
+  This file is NEVER statically included anywhere in the theme (no
+  section tag, no section group, no template reference) and deliberately
+  has no schema tag -- it is rendered exclusively, in isolation, by
+  Shopify's Predictive Search API whenever assets/predictive-search.js
+  fetches routes.predictive_search_url with a section_id=predictive-search
+  query parameter. Confirmed against real documentation before writing
+  this file, not assumed:
+
+  - routes.predictive_search_url is a real, documented Liquid route
+    object (resolves to /search/suggest):
+    https://shopify.dev/docs/api/liquid/objects/routes
+  - The predictive_search object (performed / resources / terms / types
+    below) only populates "when being referenced inside a section that's
+    been rendered using the Predictive Search API and the Section
+    Rendering API" -- it is blank everywhere else:
+    https://shopify.dev/docs/api/liquid/objects/predictive_search
+  - The API's response is pre-rendered HTML for this section (not raw
+    JSON) -- Shopify's own reference implementation (Dawn's
+    sections/predictive-search.liquid) parses the response with
+    DOMParser and extracts #shopify-section-predictive-search, and
+    ships with no schema tag of its own, which this file mirrors:
+    https://shopify.dev/docs/storefronts/themes/navigation-search/search/predictive-search
+  - resources[type] query param values / defaults / limit range are
+    documented at:
+    https://shopify.dev/docs/api/ajax/reference/predictive-search
+
+  Because this section is never rendered through a real section tag,
+  a stylesheet tag here would never be included in content_for_header
+  on a normal page load -- so all styling for the markup below lives in
+  snippets/predictive-search.liquid's own stylesheet tag instead, and the
+  class names here are the shared contract with that file. That's also
+  why ValidScopedCSSClass is disabled for this whole file below: every
+  class used here is intentionally defined in that sibling file, not
+  missing.
+{% endcomment %}
+{% # theme-check-disable ValidScopedCSSClass %}
+{% liquid
+  assign has_results = false
+  if predictive_search.resources.products.size > 0 or predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0
+    assign has_results = true
+  endif
+%}
+
+{% if has_results %}
+  {% if predictive_search.resources.products.size > 0 %}
+    <div class="predictive-search__group">
+      <h3 class="predictive-search__group-title">{{ 'search.predictive_results_products' | t }}</h3>
+      <ul class="predictive-search__list" role="presentation">
+        {% for product in predictive_search.resources.products %}
+          <li role="presentation">
+            <a href="{{ product.url }}" class="predictive-search__result" role="option" aria-selected="false">
+              <span class="predictive-search__result-media">
+                {% if product.featured_image %}
+                  {{ product.featured_image | image_url: width: 96, height: 96, crop: 'center' | image_tag: class: 'predictive-search__result-image', alt: product.featured_image.alt, loading: 'lazy' }}
+                {% else %}
+                  <span class="predictive-search__result-image predictive-search__result-image--placeholder"></span>
+                {% endif %}
+              </span>
+              <span class="predictive-search__result-content">
+                <span class="predictive-search__result-title">{{ product.title }}</span>
+                <span class="predictive-search__result-price">
+                  {% if product.price_varies %}
+                    {% assign price_min_money = product.price_min | money %}
+                    {{ 'product.price_from_html' | t: price: price_min_money }}
+                  {% else %}
+                    {{ product.price_max | money }}
+                  {% endif %}
+                </span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if predictive_search.resources.articles.size > 0 %}
+    <div class="predictive-search__group">
+      <h3 class="predictive-search__group-title">{{ 'search.predictive_results_articles' | t }}</h3>
+      <ul class="predictive-search__list" role="presentation">
+        {% for article in predictive_search.resources.articles %}
+          <li role="presentation">
+            <a href="{{ article.url }}" class="predictive-search__result" role="option" aria-selected="false">
+              <span class="predictive-search__result-media">
+                {% if article.image %}
+                  {{ article.image | image_url: width: 96, height: 96, crop: 'center' | image_tag: class: 'predictive-search__result-image', alt: article.image.alt, loading: 'lazy' }}
+                {% else %}
+                  <span class="predictive-search__result-image predictive-search__result-image--placeholder"></span>
+                {% endif %}
+              </span>
+              <span class="predictive-search__result-content">
+                <span class="predictive-search__result-title">{{ article.title }}</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if predictive_search.resources.pages.size > 0 %}
+    <div class="predictive-search__group">
+      <h3 class="predictive-search__group-title">{{ 'search.predictive_results_pages' | t }}</h3>
+      <ul class="predictive-search__list" role="presentation">
+        {% for page in predictive_search.resources.pages %}
+          <li role="presentation">
+            <a href="{{ page.url }}" class="predictive-search__result" role="option" aria-selected="false">
+              <span class="predictive-search__result-content">
+                <span class="predictive-search__result-title">{{ page.title }}</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}" class="predictive-search__view-all">
+    {{ 'search.view_all_results_html' | t: terms: predictive_search.terms }}
+  </a>
+{% else %}
+  <p class="predictive-search__empty">{{ 'search.no_results_html' | t: terms: predictive_search.terms }}</p>
+{% endif %}

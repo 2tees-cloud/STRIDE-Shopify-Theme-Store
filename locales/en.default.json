@@ -137,6 +137,10 @@
     "result_type_product": "Product",
     "result_type_article": "Article",
     "result_type_page": "Page",
-    "pagination": "Search results pagination"
+    "pagination": "Search results pagination",
+    "predictive_results_products": "Products",
+    "predictive_results_articles": "Articles",
+    "predictive_results_pages": "Pages",
+    "view_all_results_html": "See all results for {{ terms }}"
   }
 }

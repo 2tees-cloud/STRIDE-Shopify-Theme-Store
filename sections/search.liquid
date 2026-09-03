@@ -37,16 +37,7 @@
 <div class="search full-width">
   <div class="search__header">
     <h1 class="search__title">{{ 'search.title' | t }}</h1>
-    <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
-      <input
-        type="search"
-        name="q"
-        value="{{ search.terms | escape }}"
-        placeholder="{{ 'search.placeholder' | t }}"
-        class="search__input"
-      >
-      <button type="submit" class="search__submit">{{ 'search.submit' | t }}</button>
-    </form>
+    {% render 'predictive-search', id_prefix: 'SearchPageSearch' %}
   </div>
 
   {% if search.performed %}
@@ -124,13 +115,8 @@
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     margin: 0 0 var(--space-4);
   }
-  .search__form {
-    display: flex;
-    gap: var(--space-2);
-  }
-  .search__input {
-    flex: 1;
-    padding: var(--space-2) var(--space-3);
+  .search__header .predictive-search {
+    text-align: left;
   }
   .search__count {
     color: var(--color-foreground-muted);

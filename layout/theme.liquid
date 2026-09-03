@@ -43,6 +43,15 @@
     <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
 
     {% comment %}
+      predictive-search.js drives the search trigger rendered inside
+      sections/header.liquid, which is present on every page (same
+      reasoning as cart-drawer.js immediately above), so it loads
+      globally here too rather than being template-gated like
+      product-variant-picker.js/collection-filters.js below.
+    {% endcomment %}
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
+
+    {% comment %}
       product-variant-picker.js only has work to do on the product
       template, so it's gated here rather than loading globally. It's
       loaded from the layout (not from sections/product.liquid) so it
