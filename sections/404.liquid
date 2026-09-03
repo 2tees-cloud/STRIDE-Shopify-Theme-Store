@@ -3,7 +3,9 @@
   customers enter an invalid store URL. Styled per spec section 5.6:
   a centered message, the theme's existing predictive-search bar
   (snippets/predictive-search.liquid, reused as-is rather than a new
-  one-off search form), and a link back to shopping. There is no other
+  one-off search form), and a link back to the homepage (routes.root_url,
+  the spec's actual requirement -- not the storefront's all-products
+  collection). There is no other
   content on this page, so the section root spans the full viewport
   with its own block padding for vertical centering, matching the
   pattern already used on sections/search.liquid.
@@ -20,8 +22,8 @@
       {% render 'predictive-search', id_prefix: '404Search' %}
     </div>
 
-    <a href="{{ routes.all_products_collection_url }}" class="not-found__link">
-      {{ '404.back_to_shopping' | t }}
+    <a href="{{ routes.root_url }}" class="not-found__link">
+      {{ '404.back_to_homepage' | t }}
     </a>
   </div>
 </div>

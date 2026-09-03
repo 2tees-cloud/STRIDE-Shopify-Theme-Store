@@ -24,6 +24,12 @@
   first-product fallback image whenever a collection has none of its own —
   there is no separate collection.products.first.featured_image lookup to
   write, and that path was never the documented way to reach this value.
+  The card below explicitly passes alt: collection.title into
+  snippets/image.liquid rather than relying on that snippet's own
+  image.alt default -- when the fallback kicks in, the rendered image's
+  own alt text describes the member product it was borrowed from, not
+  the collection this card represents, which would otherwise announce
+  the wrong name to screen reader users.
 
   Untruncated collection.title is carried forward unchanged (no truncate
   filter applied), matching spec section 5.10's explicit requirement.
@@ -57,7 +63,8 @@
                   class: 'collection-card__image',
                   width: 600,
                   height: 600,
-                  crop: 'center'
+                  crop: 'center',
+                  alt: collection.title
                 %}
               {% else %}
                 <div class="collection-card__image collection-card__image--placeholder"></div>
@@ -181,7 +188,7 @@
       "max": 50,
       "step": 5,
       "unit": "px",
-      "default": 10
+      "default": 30
     }
   ],
   "presets": [{ "name": "t:general.collections_grid" }]
