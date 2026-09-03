@@ -5,7 +5,7 @@
   card layout that matches the theme's established card conventions instead
   of the previous unstyled grid.
 
-  Pagination follows the exact {% paginate %} tag pattern already used
+  Pagination follows the exact paginate tag pattern already used
   identically in sections/blog.liquid, sections/search.liquid, and
   sections/collection.liquid — same default_pagination filter, same
   aria-label convention, no new pagination component invented. 24 per page
@@ -20,7 +20,7 @@
   available, then Shopify falls back to the featured image of the first
   product in the collection. If the first product in the collection doesn't
   have a featured image, then nil is returned." So the existing
-  {% if collection.featured_image %} check below already renders the
+  featured_image conditional below already renders the
   first-product fallback image whenever a collection has none of its own —
   there is no separate collection.products.first.featured_image lookup to
   write, and that path was never the documented way to reach this value.
