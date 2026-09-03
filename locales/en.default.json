@@ -83,6 +83,7 @@
     "card": "Gift card",
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
+    "qr_code_alt": "QR code for this gift card",
     "use_at_checkout": "Use this gift card at checkout"
   },
   "hero": {
