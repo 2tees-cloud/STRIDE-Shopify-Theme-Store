@@ -25,6 +25,21 @@
                 <p class="cart-page__item-variant">{{ item.variant.title }}</p>
               {% endif %}
               <p class="cart-page__item-price">{{ item.final_price | money }}</p>
+              {% if item.unit_price_measurement %}
+                <p class="cart-page__item-unit-price">
+                  {{ item.unit_price | money }}/{{ item.unit_price_measurement.reference_value }}{{ item.unit_price_measurement.reference_unit }}
+                </p>
+              {% endif %}
+              {% if item.selling_plan_allocation %}
+                <p class="cart-page__item-selling-plan">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+              {% endif %}
+              {% if item.line_level_discount_allocations.size > 0 %}
+                <ul class="cart-page__item-discounts">
+                  {% for discount_allocation in item.line_level_discount_allocations %}
+                    <li class="cart-page__item-discount">{{ discount_allocation.discount_application.title }}: -{{ discount_allocation.amount | money }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </div>
 
             <div class="cart-page__item-quantity">
@@ -55,6 +70,20 @@
       <div class="cart-page__totals">
         <div class="cart-page__subtotal">
           <span>{{ 'cart.subtotal' | t }}</span>
+          <span>{{ cart.items_subtotal_price | money }}</span>
+        </div>
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <ul class="cart-page__discounts">
+            {% for discount_application in cart.cart_level_discount_applications %}
+              <li class="cart-page__discount">
+                <span>{{ discount_application.title }}</span>
+                <span>-{{ discount_application.total_allocated_amount | money }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <div class="cart-page__total">
+          <span>{{ 'cart.total' | t }}</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
         {% if cart.taxes_included %}
@@ -65,6 +94,7 @@
       <div class="cart-page__actions">
         <button type="submit" name="update" class="cart-page__update">{{ 'cart.update' | t }}</button>
         <button type="submit" name="checkout" class="cart-page__checkout">{{ 'cart.checkout' | t }}</button>
+        {{ content_for_additional_checkout_buttons }}
       </div>
     </form>
   {% else %}
@@ -117,10 +147,24 @@
     font-weight: 600;
   }
   .cart-page__item-variant,
-  .cart-page__item-price {
+  .cart-page__item-price,
+  .cart-page__item-unit-price,
+  .cart-page__item-selling-plan {
     color: var(--color-foreground-muted);
     font-size: 0.875rem;
     margin: var(--space-1) 0 0;
+  }
+  .cart-page__item-discounts {
+    list-style: none;
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .cart-page__item-discount {
+    color: var(--color-urgency);
+    font-size: 0.875rem;
   }
   .cart-page__item-quantity-input {
     width: 4rem;
@@ -164,11 +208,32 @@
     gap: var(--space-1);
     margin-bottom: var(--space-4);
   }
-  .cart-page__subtotal {
+  .cart-page__subtotal,
+  .cart-page__total {
     display: flex;
     gap: var(--space-4);
+  }
+  .cart-page__subtotal {
+    font-size: 1rem;
+    color: var(--color-foreground-muted);
+  }
+  .cart-page__total {
     font-size: 1.25rem;
     font-weight: 700;
+  }
+  .cart-page__discounts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .cart-page__discount {
+    display: flex;
+    gap: var(--space-4);
+    font-size: 0.875rem;
+    color: var(--color-urgency);
   }
   .cart-page__tax-note {
     margin: 0;

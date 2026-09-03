@@ -22,6 +22,7 @@
     "empty": "Your cart is empty",
     "continue_shopping": "Continue shopping",
     "subtotal": "Subtotal",
+    "total": "Total",
     "decrease_quantity": "Decrease quantity",
     "increase_quantity": "Increase quantity",
     "free_shipping_remaining_html": "You're {{ amount }} away from free shipping",
