@@ -11,7 +11,12 @@
     "comment_form_email": "Email",
     "comment_form_name": "Name",
     "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "comment_form_title": "Add a comment",
+    "comment_success": "Your comment has been posted.",
+    "comment_success_moderated": "Thanks for your comment! It's awaiting approval and will appear once it's been reviewed.",
+    "comments_empty": "Be the first to comment.",
+    "empty": "No articles have been published yet.",
+    "pagination": "Pagination"
   },
   "cart": {
     "checkout": "Checkout",

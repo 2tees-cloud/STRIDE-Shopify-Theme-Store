@@ -1,64 +1,257 @@
 {% comment %}
-  This section is used in the article template to render the article page, which
-  displays the full content of the blog post and can optionally include a
-  comments section for customers (not shown in this example).
+  Article detail page: header (image/title/date/author), full content
+  (rich-text typography reuses blocks/product-description.liquid's
+  conventions), paginated comment list, and a comment form with real
+  success/error messaging.
+
+  form.posted_successfully? was confirmed against Shopify's Liquid docs
+  (objects/form): it's a general `form` object property, not called out
+  as exclusive to any particular form type the way form.name or
+  form.password_needed are, so it applies to the new_comment form the
+  same way it already does to the customer/contact forms elsewhere in
+  this theme (blocks/newsletter-signup.liquid, sections/page-contact.liquid).
+
+  Per spec: "a working comment submit flow (success/error messaging)
+  without requiring moderation to function." That's about the FORM
+  working regardless of the blog's moderation setting, not about
+  moderation being off — so when blog.moderated? is true, the success
+  message says the comment is awaiting approval instead of implying it's
+  live immediately.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/article
 {% endcomment %}
 
-{% if article.image %}
-  {{ article.image | image_url: width: 1000 | image_tag }}
-{% endif %}
+<div class="article full-width">
+  <header class="article__header">
+    {% if article.image %}
+      <div class="article__hero">
+        {% render 'image', image: article.image, class: 'article__hero-image', width: 1600 %}
+      </div>
+    {% endif %}
+    <h1 class="article__title">{{ article.title }}</h1>
+    {% assign date = article.published_at | time_tag: format: 'date' %}
+    <p class="article__meta">{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
+  </header>
 
-<h1>{{ article.title }}</h1>
-
-{% assign date = article.published_at | time_tag: format: 'date' %}
-<p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-
-{{ article.content }}
-
-{% if blog.comments_enabled? %}
-  <h2>{{ 'blog.article_comments' | t }}</h2>
-
-  <div id="comments">
-    {% paginate article.comments by 10 %}
-      {% for comment in article.comments %}
-        <div>
-          <p>{{ comment.author }}</p>
-          <p>
-            {{- comment.created_at | time_tag: format: 'date' -}}
-          </p>
-          <p>{{ comment.content }}</p>
-        </div>
-      {% endfor %}
-
-      {{ paginate | default_pagination: anchor: 'comments' }}
-    {% endpaginate %}
+  <div class="article__content">
+    {{ article.content }}
   </div>
 
-  {% form 'new_comment', article %}
-    <h2>{{ 'blog.comment_form_title' | t }}</h2>
+  {% if blog.comments_enabled? %}
+    <section class="article-comments" id="comments">
+      <h2 class="article-comments__heading">{{ 'blog.article_comments' | t }}</h2>
 
-    {{ form.errors | default_errors }}
+      {% paginate article.comments by 10 %}
+        {% if article.comments.size > 0 %}
+          <ul class="article-comments__list">
+            {% for comment in article.comments %}
+              <li class="article-comments__item">
+                <p class="article-comments__author">{{ comment.author }}</p>
+                <p class="article-comments__date">{{ comment.created_at | time_tag: format: 'date' }}</p>
+                <p class="article-comments__body">{{ comment.content }}</p>
+              </li>
+            {% endfor %}
+          </ul>
 
-    <div>
-      <label for="author">{{ 'blog.comment_form_name' | t }}</label>
-      <input type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
-    </div>
+          {% if paginate.pages > 1 %}
+            <nav class="article-comments__pagination" aria-label="{{ 'blog.pagination' | t }}">
+              {{ paginate | default_pagination: anchor: 'comments' }}
+            </nav>
+          {% endif %}
+        {% else %}
+          <p class="article-comments__empty">{{ 'blog.comments_empty' | t }}</p>
+        {% endif %}
+      {% endpaginate %}
 
-    <div>
-      <label for="email">{{ 'blog.comment_form_email' | t }}</label>
-      <input type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
-    </div>
+      {% form 'new_comment', article, class: 'article-comments__form' %}
+        {% if form.posted_successfully? %}
+          {% if blog.moderated? %}
+            <p class="article-comments__success">{{ 'blog.comment_success_moderated' | t }}</p>
+          {% else %}
+            <p class="article-comments__success">{{ 'blog.comment_success' | t }}</p>
+          {% endif %}
+        {% else %}
+          <h3 class="article-comments__form-title">{{ 'blog.comment_form_title' | t }}</h3>
 
-    <div>
-      <label for="body">{{ 'blog.comment_form_body' | t }}</label>
-      <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
-    </div>
+          {% if form.errors %}
+            <div class="article-comments__errors">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
 
-    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
-  {% endform %}
-{% endif %}
+          <div class="article-comments__field">
+            <label for="CommentAuthor">{{ 'blog.comment_form_name' | t }}</label>
+            <input
+              type="text"
+              name="comment[author]"
+              id="CommentAuthor"
+              autocomplete="name"
+              value="{% if form.author %}{{ form.author | escape }}{% endif %}"
+              required
+            >
+          </div>
+
+          <div class="article-comments__field">
+            <label for="CommentEmail">{{ 'blog.comment_form_email' | t }}</label>
+            <input
+              type="email"
+              name="comment[email]"
+              id="CommentEmail"
+              autocomplete="email"
+              value="{% if form.email %}{{ form.email | escape }}{% endif %}"
+              required
+            >
+          </div>
+
+          <div class="article-comments__field">
+            <label for="CommentBody">{{ 'blog.comment_form_body' | t }}</label>
+            <textarea name="comment[body]" id="CommentBody" rows="5" required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <button type="submit" class="article-comments__submit">{{ 'blog.comment_form_submit' | t }}</button>
+        {% endif %}
+      {% endform %}
+    </section>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .article {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 750px) {
+    .article {
+      padding-inline: var(--space-6);
+    }
+  }
+  .article__header {
+    margin-bottom: var(--space-6);
+  }
+  .article__hero {
+    margin: 0 0 var(--space-6);
+  }
+  .article__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-2);
+  }
+  .article__meta {
+    color: var(--color-foreground-muted);
+    margin: 0;
+  }
+  .article__content {
+    color: var(--color-foreground);
+    line-height: 1.6;
+  }
+  .article__content :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-header--family);
+    margin: var(--space-4) 0 var(--space-2);
+  }
+  .article__content :is(ul, ol) {
+    padding-inline-start: var(--space-5);
+  }
+  .article__content p {
+    margin: 0 0 var(--space-4);
+  }
+  .article__content img {
+    max-width: 100%;
+    height: auto;
+  }
+  .article-comments {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .article-comments__heading {
+    font-family: var(--font-header--family);
+    font-size: 1.5rem;
+    margin: 0 0 var(--space-4);
+  }
+  .article-comments__list {
+    list-style: none;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .article-comments__item {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .article-comments__author {
+    font-weight: 700;
+    margin: 0;
+  }
+  .article-comments__date {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    margin: 0 0 var(--space-2);
+  }
+  .article-comments__body {
+    margin: 0;
+  }
+  .article-comments__empty {
+    color: var(--color-foreground-muted);
+    margin: 0 0 var(--space-6);
+  }
+  .article-comments__pagination {
+    margin: 0 0 var(--space-6);
+    display: flex;
+    justify-content: center;
+  }
+  .article-comments__pagination a {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+  }
+  .article-comments__form-title {
+    font-family: var(--font-header--family);
+    font-size: 1.125rem;
+    margin: 0 0 var(--space-4);
+  }
+  .article-comments__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 32rem;
+  }
+  .article-comments__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .article-comments__field input,
+  .article-comments__field textarea {
+    border: 1px solid var(--color-foreground-muted);
+    background-color: var(--color-surface);
+    color: var(--color-foreground);
+    padding: var(--space-2);
+    font-family: inherit;
+  }
+  .article-comments__submit {
+    align-self: flex-start;
+    border: 1px solid var(--color-foreground);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    min-height: 24px;
+  }
+  .article-comments__success {
+    color: var(--color-foreground);
+    font-weight: 700;
+  }
+  .article-comments__errors {
+    color: var(--color-urgency);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

@@ -1,31 +1,145 @@
 {% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
+  Blog listing page: card grid of articles (image, title, excerpt, date,
+  author), reusing snippets/product-card.liquid's visual conventions
+  (media + content stack, --space-* gaps, an image-placeholder fallback)
+  so the card style matches the rest of the theme instead of inventing a
+  new one, plus pagination.
+
+  article.excerpt_or_content is used for the excerpt (confirmed against
+  Shopify's Liquid docs: it returns the manual excerpt if the merchant
+  wrote one, otherwise the full article content — unlike article.excerpt,
+  which returns nothing when no manual excerpt exists). The returned
+  value can be raw article body HTML when there's no manual excerpt, so
+  it's piped through strip_html for card display; visual truncation is
+  done with CSS line-clamp rather than the `truncate` filter so the full
+  text still exists in the DOM (untruncated per spec) even though only a
+  few lines are shown.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
 {% endcomment %}
 
-<h1>{{ blog.title }}</h1>
+<div class="blog full-width">
+  <div class="blog__header">
+    <h1 class="blog__title">{{ blog.title }}</h1>
+  </div>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
+  {% paginate blog.articles by 12 %}
+    {% if blog.articles.size > 0 %}
+      <div class="blog__grid">
+        {% for article in blog.articles %}
+          <a href="{{ article.url }}" class="article-card">
+            <div class="article-card__media">
+              {% if article.image %}
+                {% render 'image', image: article.image, class: 'article-card__image', width: 800 %}
+              {% else %}
+                <div class="article-card__image article-card__image--placeholder"></div>
+              {% endif %}
+            </div>
+            <div class="article-card__content">
+              <h2 class="article-card__title">{{ article.title }}</h2>
+              {% assign date = article.published_at | time_tag: format: 'date' %}
+              <p class="article-card__meta">{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
+              {% if article.excerpt_or_content != blank %}
+                <p class="article-card__excerpt">{{ article.excerpt_or_content | strip_html }}</p>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <nav class="blog__pagination" aria-label="{{ 'blog.pagination' | t }}">
+          {{ paginate | default_pagination }}
+        </nav>
       {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
-    </div>
-  {% endfor %}
+    {% else %}
+      <p class="blog__empty">{{ 'blog.empty' | t }}</p>
+    {% endif %}
+  {% endpaginate %}
+</div>
 
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
+{% stylesheet %}
+  .blog {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .blog {
+      padding-inline: var(--space-6);
+    }
+  }
+  .blog__header {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto var(--space-6);
+  }
+  .blog__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0;
+  }
+  .blog__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 750px) {
+    .blog__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+  .article-card__media {
+    position: relative;
+  }
+  .article-card__image--placeholder {
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-background-alt);
+  }
+  .article-card__title {
+    font-family: var(--font-header--family);
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin: 0;
+  }
+  .article-card__meta {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .article-card__excerpt {
+    color: var(--color-foreground);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .blog__pagination {
+    margin-top: var(--space-8);
+    display: flex;
+    justify-content: center;
+  }
+  .blog__pagination a {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+  }
+  .blog__empty {
+    text-align: center;
+    color: var(--color-foreground-muted);
+    padding-block: var(--space-8);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
