@@ -218,6 +218,21 @@
         modal.showModal();
       });
 
+      // A native <dialog> fires its own 'close' event regardless of HOW
+      // it closed -- the close button below, or the browser's built-in
+      // Escape-to-dismiss default action, which never runs any of this
+      // file's own JS. Restoring focus here (rather than only inside the
+      // close button's click handler) is what covers both paths: without
+      // it, closing via Escape leaves document.activeElement pointing at
+      // the now-display:none close button, which is unreachable by Tab
+      // from that point on (confirmed live -- focus does not move on
+      // subsequent Tab presses), a real keyboard trap. This mirrors the
+      // lastFocusedElement-restore pattern already used for the mobile
+      // nav panel and header search panel elsewhere in this file/theme.
+      modal.addEventListener('close', function () {
+        trigger.focus();
+      });
+
       var closeButton = modal.querySelector('[data-size-chart-close]');
       if (closeButton) {
         closeButton.addEventListener('click', function () {
