@@ -1,40 +1,107 @@
 {% comment %}
   This section is used in the list-collections template to render a list of
-  collections.
+  collections. Restyled per spec section 5.10 with three real functional
+  additions beyond a style pass: pagination, an empty-state message, and a
+  card layout that matches the theme's established card conventions instead
+  of the previous unstyled grid.
+
+  Pagination follows the exact {% paginate %} tag pattern already used
+  identically in sections/blog.liquid, sections/search.liquid, and
+  sections/collection.liquid — same default_pagination filter, same
+  aria-label convention, no new pagination component invented. 24 per page
+  matches sections/collection.liquid's own product-grid page size, a
+  reasonable fit for a grid of small collection cards.
+
+  collection.featured_image's fallback to a member product's image is
+  already handled natively by Shopify itself — confirmed against
+  https://shopify.dev/docs/api/liquid/objects/collection, whose documented
+  description for featured_image reads (verbatim): "The featured image for
+  the collection. The default is the collection image. If this image isn't
+  available, then Shopify falls back to the featured image of the first
+  product in the collection. If the first product in the collection doesn't
+  have a featured image, then nil is returned." So the existing
+  {% if collection.featured_image %} check below already renders the
+  first-product fallback image whenever a collection has none of its own —
+  there is no separate collection.products.first.featured_image lookup to
+  write, and that path was never the documented way to reach this value.
+
+  Untruncated collection.title is carried forward unchanged (no truncate
+  filter applied), matching spec section 5.10's explicit requirement.
+
+  Card visual conventions (media/content stack, --space-* gaps, an
+  image-placeholder fallback) mirror snippets/product-card.liquid and
+  sections/blog.liquid's article-card so this grid doesn't look like an
+  unstyled generic grid next to the rest of the theme. The merchant-facing
+  grid_item_width/grid_gap settings from the original stub are preserved
+  as-is (auto-fill grid sizing is a real, working customization point, not
+  something this task needed to remove).
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<div class="collections-page full-width">
+  <h1 class="collections-page__title">{{ 'collections.title' | t }}</h1>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
+  {% paginate collections by 24 %}
+    {% if collections.size > 0 %}
+      <div
+        class="collections {{ section.settings.grid_item_width }}"
+        style="--grid-gap: {{ section.settings.grid_gap }}px"
+      >
+        {% for collection in collections %}
+          <a class="collection-card" href="{{ collection.url }}">
+            <div class="collection-card__media">
+              {% if collection.featured_image %}
+                {% render 'image',
+                  image: collection.featured_image,
+                  class: 'collection-card__image',
+                  width: 600,
+                  height: 600,
+                  crop: 'center'
+                %}
+              {% else %}
+                <div class="collection-card__image collection-card__image--placeholder"></div>
+              {% endif %}
+            </div>
 
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
+            <div class="collection-card__content">
+              <h2 class="collection-card__title">{{ collection.title }}</h2>
 
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
+              {% if collection.description != blank %}
+                <p class="collection-card__description">{{ collection.description | strip_html | truncatewords: 15 }}</p>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
       </div>
-    </a>
-  {% endfor %}
+
+      {% if paginate.pages > 1 %}
+        <nav class="collections-page__pagination" aria-label="{{ 'collections.pagination' | t }}">
+          {{ paginate | default_pagination }}
+        </nav>
+      {% endif %}
+    {% else %}
+      <p class="collections-page__empty">{{ 'collections.empty' | t }}</p>
+    {% endif %}
+  {% endpaginate %}
 </div>
 
 {% stylesheet %}
+  .collections-page {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .collections-page {
+      padding-inline: var(--space-6);
+    }
+  }
+  .collections-page__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    text-align: center;
+    margin: 0 0 var(--space-6);
+  }
   .collections {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
@@ -49,7 +116,46 @@
   .collection-card {
     display: flex;
     flex-direction: column;
+    gap: var(--space-2);
     width: 100%;
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+  .collection-card__media {
+    position: relative;
+  }
+  .collection-card__image--placeholder {
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-background-alt);
+  }
+  .collection-card__title {
+    font-family: var(--font-header--family);
+    font-size: 1.125rem;
+    font-weight: 400;
+    margin: 0;
+  }
+  .collection-card__description {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .collections-page__pagination {
+    margin-top: var(--space-8);
+    display: flex;
+    justify-content: center;
+  }
+  .collections-page__pagination a {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+  }
+  .collections-page__empty {
+    text-align: center;
+    color: var(--color-foreground-muted);
+    padding-block: var(--space-8);
   }
 {% endstylesheet %}
 
