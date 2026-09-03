@@ -109,13 +109,25 @@
 
       resultsEl.innerHTML = section.innerHTML;
 
-      // Options come back from the shared sections/predictive-search.liquid
-      // fragment with no ids of their own (that section has no knowledge
-      // of which instance -- header or search page -- fetched it). IDs
-      // are assigned here, scoped to resultsEl's own already-unique id
-      // (id_prefix-Results, rendered by snippets/predictive-search.liquid),
-      // so aria-activedescendant always references a real, unique element
-      // even when both instances are on the page at once.
+      // Options and group headings come back from the shared
+      // sections/predictive-search.liquid fragment with no ids of their
+      // own (that section has no knowledge of which instance -- header or
+      // search page -- fetched it). IDs are assigned here, scoped to
+      // resultsEl's own already-unique id (id_prefix-Results, rendered by
+      // snippets/predictive-search.liquid), so aria-activedescendant and
+      // aria-labelledby always reference real, unique elements even when
+      // both instances are on the page at once.
+      Array.prototype.forEach.call(
+        resultsEl.querySelectorAll('.predictive-search__group'),
+        function (group, groupIndex) {
+          var title = group.querySelector('.predictive-search__group-title');
+          if (!title) return;
+          title.id = resultsEl.id + '-Group-' + groupIndex;
+          group.setAttribute('role', 'group');
+          group.setAttribute('aria-labelledby', title.id);
+        }
+      );
+
       getOptions().forEach(function (option, index) {
         option.id = resultsEl.id + '-Option-' + index;
         option.setAttribute('tabindex', '-1');
