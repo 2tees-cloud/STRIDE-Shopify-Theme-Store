@@ -133,6 +133,10 @@
     "placeholder": "Search articles, pages, or products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "results_for_html": "{{ count }} results found for {{ terms }}",
+    "result_type_product": "Product",
+    "result_type_article": "Article",
+    "result_type_page": "Page",
+    "pagination": "Search results pagination"
   }
 }

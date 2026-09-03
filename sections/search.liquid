@@ -1,64 +1,224 @@
 {% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
+  Search results page: search form, result count, mixed-type result grid
+  (products/articles/pages), pagination, empty state.
+
+  search.results is polymorphic — each `result` can be a product, an
+  article, or a page object. `result.object_type` is a real Shopify Liquid
+  property (confirmed via https://shopify.dev/docs/api/liquid/objects/search,
+  independent of trained-knowledge assumptions) that returns 'article' or
+  'page'; when it's neither, the docs' own example comments confirm the item
+  is a full product object ("'item' is a product. All product object
+  properties can be accessed.") — so branching mirrors that doc example's
+  if/elsif/else shape (explicit 'article'/'page' checks, else assumed
+  product) rather than asserting the literal string 'product', which the
+  docs never spell out directly.
+
+  Because a product-type result is confirmed to be the actual product
+  object (not a stripped-down subset), it exposes every property
+  snippets/product-card.liquid needs (.featured_image, .price_min,
+  .compare_at_price_max, .available, .price_varies, etc.), so product
+  results reuse that snippet directly instead of a hand-rolled substitute —
+  matching the collection page's product grid exactly, per spec. Article
+  and page results have no product-card equivalent, so they get a simpler
+  unified card following the same visual conventions (media/content stack,
+  --space-* gaps, image-placeholder fallback) as blog.liquid's article-card
+  and collection.liquid's product-card. Page results have no image property
+  at all (confirmed via https://shopify.dev/docs/api/liquid/objects/page —
+  its property list has no image field), so the page card is text-only.
+
+  Each result gets a visible `.search-result__type` label (spec §5.5) built
+  from dedicated locale keys (search.result_type_product/_article/_page)
+  rather than `result.object_type | capitalize` directly, so the copy stays
+  translatable/customizable independent of the raw Shopify value.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
 
-<h1>{{ 'search.title' | t }}</h1>
+<div class="search full-width">
+  <div class="search__header">
+    <h1 class="search__title">{{ 'search.title' | t }}</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+        class="search__input"
+      >
+      <button type="submit" class="search__submit">{{ 'search.submit' | t }}</button>
+    </form>
+  </div>
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
+  {% if search.performed %}
+    {% if search.results_count == 0 %}
+      <p class="search__empty">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+    {% else %}
+      <p class="search__count">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
 
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-    <div class="search-results">
       {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
+        <div class="search__grid">
+          {% for result in search.results %}
+            {% if result.object_type == 'article' %}
+              <a href="{{ result.url }}" class="search-result search-result--article">
+                <div class="search-result__media">
+                  {% if result.image %}
+                    {% render 'image', image: result.image, class: 'search-result__image', width: 400 %}
+                  {% else %}
+                    <div class="search-result__image search-result__image--placeholder"></div>
+                  {% endif %}
+                  <span class="search-result__type">{{ 'search.result_type_article' | t }}</span>
+                </div>
+                <div class="search-result__content">
+                  <h3 class="search-result__title">{{ result.title }}</h3>
+                  {% if result.excerpt_or_content != blank %}
+                    <p class="search-result__excerpt">{{ result.excerpt_or_content | strip_html | truncatewords: 40 }}</p>
+                  {% endif %}
+                </div>
+              </a>
+            {% elsif result.object_type == 'page' %}
+              <a href="{{ result.url }}" class="search-result search-result--page">
+                <div class="search-result__content search-result__content--page">
+                  <span class="search-result__type">{{ 'search.result_type_page' | t }}</span>
+                  <h3 class="search-result__title">{{ result.title }}</h3>
+                  {% if result.content != blank %}
+                    <p class="search-result__excerpt">{{ result.content | strip_html | truncatewords: 40 }}</p>
+                  {% endif %}
+                </div>
+              </a>
+            {% else %}
+              <div class="search-result search-result--product">
+                <span class="search-result__type">{{ 'search.result_type_product' | t }}</span>
+                {% render 'product-card', product: result %}
+              </div>
             {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
-            </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
 
-        {{ paginate | default_pagination }}
+        {% if paginate.pages > 1 %}
+          <nav class="search__pagination" aria-label="{{ 'search.pagination' | t }}">
+            {{ paginate | default_pagination }}
+          </nav>
+        {% endif %}
       {% endpaginate %}
-    </div>
+    {% endif %}
   {% endif %}
-{% endif %}
+</div>
 
 {% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  .search {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
   }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
+  @media (min-width: 750px) {
+    .search {
+      padding-inline: var(--space-6);
+    }
+  }
+  .search__header {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto var(--space-6);
+  }
+  .search__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-4);
+  }
+  .search__form {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .search__input {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+  }
+  .search__count {
+    color: var(--color-foreground-muted);
+    margin: 0 0 var(--space-6);
+    text-align: center;
+  }
+  .search__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .search__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+  }
+  .search-result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-foreground);
+    position: relative;
+  }
+  .search-result__media {
+    position: relative;
+  }
+  .search-result__image--placeholder {
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-background-alt);
+  }
+  .search-result--product .search-result__type {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    z-index: 1;
+  }
+  .search-result__type {
+    display: inline-block;
+    align-self: flex-start;
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--color-background-alt);
+    color: var(--color-foreground-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .search-result--article .search-result__type {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+  }
+  .search-result__content--page {
+    padding-block: var(--space-2);
+  }
+  .search-result__title {
+    font-family: var(--font-header--family);
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+  }
+  .search-result__excerpt {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .search__pagination {
+    margin-top: var(--space-8);
+    display: flex;
+    justify-content: center;
+  }
+  .search__pagination a {
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+  }
+  .search__empty {
+    text-align: center;
+    color: var(--color-foreground-muted);
+    padding-block: var(--space-8);
   }
 {% endstylesheet %}
 
