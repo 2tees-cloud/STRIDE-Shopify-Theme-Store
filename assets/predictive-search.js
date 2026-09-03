@@ -42,6 +42,7 @@
     var form = container.querySelector('[data-predictive-search-form]');
     var input = container.querySelector('[data-predictive-search-input]');
     var resultsEl = container.querySelector('[data-predictive-search-results]');
+    var statusEl = container.querySelector('[data-predictive-search-status]');
     if (!baseUrl || !form || !input || !resultsEl) return;
 
     // Scoped to THIS instance only -- see the file-level comment above.
@@ -78,6 +79,7 @@
       input.removeAttribute('aria-activedescendant');
       activeIndex = -1;
       closeResultsListeners();
+      if (statusEl) statusEl.textContent = '';
     }
 
     function setActive(index) {
@@ -132,6 +134,22 @@
         option.id = resultsEl.id + '-Option-' + index;
         option.setAttribute('tabindex', '-1');
       });
+
+      // The result-count/no-results text is rendered server-side (so it
+      // stays correctly localized) into role="presentation" elements --
+      // presentation keeps them out of the ARIA ownership model for this
+      // role="listbox" (which may only own option/group children) without
+      // hiding the no-results message from sighted users. Copy the text
+      // into the persistent status region so it's actually announced, and
+      // discard the hidden, success-case-only copy (.predictive-search__empty
+      // stays in the DOM -- it's real visible UI, not just an AT artifact).
+      var announcement =
+        resultsEl.querySelector('[data-predictive-search-announcement]') ||
+        resultsEl.querySelector('.predictive-search__empty');
+      if (statusEl) statusEl.textContent = announcement ? announcement.textContent.trim() : '';
+
+      var hiddenAnnouncement = resultsEl.querySelector('[data-predictive-search-announcement]');
+      if (hiddenAnnouncement) hiddenAnnouncement.remove();
 
       activeIndex = -1;
       resultsEl.hidden = false;

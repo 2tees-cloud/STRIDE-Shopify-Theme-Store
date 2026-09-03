@@ -60,6 +60,16 @@
     role="listbox"
     aria-label="{{ 'search.title' | t }}"
   ></div>
+
+  {% comment %}
+    A persistent live region, present from the initial page render rather
+    than injected fresh on every fetch -- some screen readers only reliably
+    announce aria-live updates on nodes that already existed in the DOM
+    before their text changed. assets/predictive-search.js copies the
+    result-count/no-results text rendered by sections/predictive-search.liquid
+    into this element on every response.
+  {% endcomment %}
+  <div class="visually-hidden" role="status" aria-live="polite" data-predictive-search-status></div>
 </div>
 
 {% stylesheet %}
@@ -138,7 +148,9 @@
     min-height: 24px;
   }
   .predictive-search__result:hover,
-  .predictive-search__result.is-active {
+  .predictive-search__result.is-active,
+  .predictive-search__view-all:hover,
+  .predictive-search__view-all.is-active {
     background-color: var(--color-background-alt);
   }
   .predictive-search__result-media {

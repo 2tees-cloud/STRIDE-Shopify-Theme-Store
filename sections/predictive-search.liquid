@@ -38,13 +38,23 @@
 {% endcomment %}
 {% # theme-check-disable ValidScopedCSSClass %}
 {% liquid
+  assign result_count = predictive_search.resources.products.size | plus: predictive_search.resources.articles.size | plus: predictive_search.resources.pages.size
   assign has_results = false
-  if predictive_search.resources.products.size > 0 or predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0
+  if result_count > 0
     assign has_results = true
   endif
 %}
 
 {% if has_results %}
+  {% comment %}
+    role="presentation" keeps this out of the ARIA ownership model for the
+    role="listbox" container this markup is injected into (a listbox may
+    only own option/group children) -- its text is copied into the
+    persistent, always-present status region in snippets/predictive-search.liquid
+    by assets/predictive-search.js, which is what actually gets announced.
+  {% endcomment %}
+  <p class="visually-hidden" role="presentation" data-predictive-search-announcement>{{ 'search.results_for_html' | t: terms: predictive_search.terms, count: result_count }}</p>
+
   {% if predictive_search.resources.products.size > 0 %}
     <div class="predictive-search__group">
       <h3 class="predictive-search__group-title">{{ 'search.predictive_results_products' | t }}</h3>
@@ -118,9 +128,10 @@
     </div>
   {% endif %}
 
-  <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}" class="predictive-search__view-all">
+  <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}" class="predictive-search__view-all" role="option" aria-selected="false">
     {{ 'search.view_all_results_html' | t: terms: predictive_search.terms }}
   </a>
 {% else %}
-  <p class="predictive-search__empty">{{ 'search.no_results_html' | t: terms: predictive_search.terms }}</p>
+  {% comment %} role="presentation" -- see the comment above the announcement paragraph. {% endcomment %}
+  <p class="predictive-search__empty" role="presentation">{{ 'search.no_results_html' | t: terms: predictive_search.terms }}</p>
 {% endif %}
