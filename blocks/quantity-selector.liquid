@@ -60,7 +60,10 @@
     width: 3rem;
     min-height: 24px;
     border: none;
-    border-inline: 1px solid var(--color-border);
+    /* Same --color-border contrast failure as .quantity-selector__control
+       above (~1.3:1 on --color-background) -- scoped to
+       --color-foreground-muted for the same reason. */
+    border-inline: 1px solid var(--color-foreground-muted);
     text-align: center;
     -moz-appearance: textfield;
   }
