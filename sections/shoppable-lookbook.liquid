@@ -71,6 +71,11 @@
   .shoppable-lookbook {
     padding-block: var(--space-8);
     padding-inline: var(--space-4);
+    /* Below-the-fold on the homepage: skip layout/paint work until the
+       section nears the viewport. The intrinsic-size estimate avoids a
+       scroll-position jump once it's measured for real. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 700px;
   }
   @media (min-width: 750px) {
     .shoppable-lookbook {

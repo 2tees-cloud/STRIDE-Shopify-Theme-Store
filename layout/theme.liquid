@@ -17,6 +17,16 @@
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
+    {% comment %}
+      Preconnect to the origin Shopify's own platform scripts (accelerated
+      checkout, portable wallets, shop-js) load from via the
+      content-for-header output below. That output itself can't be touched,
+      but opening this connection early — before the browser parses that
+      markup — shaves the TCP+TLS handshake off cdn.shopify.com, which is
+      where the largest of those platform scripts are served from.
+    {% endcomment %}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 

@@ -91,6 +91,12 @@
     color: var(--color-background);
     padding-block: var(--space-8);
     padding-inline: var(--space-4);
+    /* Below-the-fold on every template that includes this section: skip
+       layout/paint work until the section nears the viewport. The
+       intrinsic-size estimate avoids a scroll-position jump once it's
+       measured for real. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
   }
   @media (min-width: 750px) {
     .drop-countdown {
