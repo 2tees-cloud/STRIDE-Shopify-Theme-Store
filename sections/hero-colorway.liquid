@@ -66,6 +66,7 @@
               data-product-url="{% if block.settings.product %}{{ block.settings.product.url | escape }}{% endif %}"
               aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
               aria-label="{{ 'hero.view_in' | t: color: block.settings.color_name }}"
+              {{ block.shopify_attributes }}
             ></button>
           {% endfor %}
         </div>
