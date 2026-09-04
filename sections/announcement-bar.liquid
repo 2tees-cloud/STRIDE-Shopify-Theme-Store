@@ -61,25 +61,31 @@
 {% endstylesheet %}
 
 {% javascript %}
+  var announcementBarInstances = [];
+
   function initAnnouncementBar(root) {
     root.querySelectorAll('[data-announcement-bar]').forEach(function (bar) {
       var items = Array.from(bar.querySelectorAll('.announcement-bar__item'));
       if (items.length < 2) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var interval = parseFloat(bar.dataset.interval) * 1000 || 5000;
       var index = 0;
       var timer;
 
-      function next() {
+      function show(newIndex) {
         items[index].classList.remove('is-active');
-        index = (index + 1) % items.length;
+        index = newIndex;
         items[index].classList.add('is-active');
+      }
+
+      function next() {
+        show((index + 1) % items.length);
       }
 
       function start() {
         stop();
-        timer = setInterval(next, interval);
+        if (!reduceMotion) timer = setInterval(next, interval);
       }
 
       function stop() {
@@ -91,12 +97,40 @@
       bar.addEventListener('mouseleave', start);
       bar.addEventListener('focusin', stop);
       bar.addEventListener('focusout', start);
+
+      announcementBarInstances.push({ bar: bar, items: items, show: show, start: start, stop: stop });
     });
   }
 
   initAnnouncementBar(document);
   document.addEventListener('shopify:section:load', function (event) {
     initAnnouncementBar(event.target);
+  });
+
+  // Editor-only in practice (never dispatched outside theme preview/design
+  // mode): a rotated-out message is invisible (opacity:0) on the storefront,
+  // so selecting its block here also pauses rotation and forces that
+  // specific message into view -- otherwise a merchant editing message #3
+  // would have no way to actually see it while auto-rotation keeps cycling
+  // past it. Mirrors Dawn's own shopify:block:select handling for its
+  // slideshow (pause + scroll the selected slide into view).
+  document.addEventListener('shopify:block:select', function (event) {
+    var instance = announcementBarInstances.filter(function (i) {
+      return i.bar.contains(event.target);
+    })[0];
+    if (!instance) return;
+    instance.stop();
+    var targetIndex = instance.items.findIndex(function (item) {
+      return item === event.target || item.contains(event.target);
+    });
+    if (targetIndex > -1) instance.show(targetIndex);
+  });
+
+  document.addEventListener('shopify:block:deselect', function (event) {
+    var instance = announcementBarInstances.filter(function (i) {
+      return i.bar.contains(event.target);
+    })[0];
+    if (instance) instance.start();
   });
 {% endjavascript %}
 

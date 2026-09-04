@@ -183,29 +183,34 @@
 {% endstylesheet %}
 
 {% javascript %}
+  function activateColorway(hero, blockId) {
+    var targetSwatch = null;
+
+    hero.querySelectorAll('[data-hero-swatch]').forEach(function (s) {
+      var isActive = s.dataset.blockId === blockId;
+      if (isActive) targetSwatch = s;
+      s.classList.toggle('is-active', isActive);
+      s.setAttribute('aria-pressed', isActive);
+    });
+
+    hero.querySelectorAll('[data-hero-image]').forEach(function (img) {
+      var isActive = img.dataset.blockId === blockId;
+      img.classList.toggle('is-active', isActive);
+      img.toggleAttribute('aria-hidden', !isActive);
+    });
+
+    var cta = hero.querySelector('[data-hero-cta]');
+    if (cta && targetSwatch) {
+      cta.setAttribute('href', targetSwatch.dataset.productUrl || cta.dataset.defaultHref);
+    }
+  }
+
   function initHero(root) {
     root.querySelectorAll('[data-hero-swatch]').forEach(function (swatch) {
       swatch.addEventListener('click', function () {
-        var blockId = swatch.dataset.blockId;
         var hero = swatch.closest('.hero');
         if (!hero) return;
-
-        hero.querySelectorAll('[data-hero-swatch]').forEach(function (s) {
-          var isActive = s === swatch;
-          s.classList.toggle('is-active', isActive);
-          s.setAttribute('aria-pressed', isActive);
-        });
-
-        hero.querySelectorAll('[data-hero-image]').forEach(function (img) {
-          var isActive = img.dataset.blockId === blockId;
-          img.classList.toggle('is-active', isActive);
-          img.toggleAttribute('aria-hidden', !isActive);
-        });
-
-        var cta = hero.querySelector('[data-hero-cta]');
-        if (cta) {
-          cta.setAttribute('href', swatch.dataset.productUrl || cta.dataset.defaultHref);
-        }
+        activateColorway(hero, swatch.dataset.blockId);
       });
     });
   }
@@ -213,6 +218,22 @@
   initHero(document);
   document.addEventListener('shopify:section:load', function (event) {
     initHero(event.target);
+  });
+
+  // Editor-only in practice (this event is never dispatched outside theme
+  // preview/design mode): when a merchant selects a colorway BLOCK -- via
+  // the sidebar block list or by clicking its swatch/image in the preview
+  // -- force that colorway to become the visibly active one. Without this,
+  // selecting a currently-inactive colorway opens its settings panel but
+  // the preview keeps showing whichever colorway was active before,
+  // making it look like the block's own fields (Image, Product, etc.)
+  // aren't there or aren't taking effect. Mirrors the same
+  // shopify:block:select handling Dawn's own slideshow section uses to
+  // scroll a non-visible slide into view when its block is selected.
+  document.addEventListener('shopify:block:select', function (event) {
+    var hero = event.target.closest('.hero');
+    if (!hero) return;
+    activateColorway(hero, event.detail.blockId);
   });
 {% endjavascript %}
 
