@@ -13,32 +13,15 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "blocks": {
-        "message_TBaXDj": {
-          "type": "message",
-          "settings": {
-            "text": "Free shipping on orders over $100",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "message_TBaXDj"
-      ],
-      "settings": {
-        "rotation_speed": 5
-      }
+      "settings": {}
     },
     "header": {
       "type": "header",
-      "settings": {
-        "menu": "ai-dropshipping-catalog",
-        "customer_account_menu": "customer-account-main-menu"
-      }
+      "settings": {}
     }
   },
   "order": [
     "announcement-bar",
     "header"
-  ]
+  ],
 }

@@ -14,45 +14,35 @@
       "blocks": {
         "title": {
           "type": "product-title",
-          "settings": {},
-          "blocks": {}
+          "settings": {}
         },
         "vendor": {
           "type": "product-vendor",
-          "settings": {},
-          "blocks": {}
+          "settings": {}
         },
         "price": {
           "type": "product-price",
-          "settings": {},
-          "blocks": {}
-        },
-        "variant-picker": {
-          "type": "variant-picker",
-          "settings": {
-            "show_size_chart": false
-          },
-          "blocks": {}
-        },
-        "quantity-selector": {
-          "type": "quantity-selector",
-          "settings": {},
-          "blocks": {}
-        },
-        "gift-card-recipient": {
-          "type": "gift-card-recipient",
-          "settings": {},
-          "blocks": {}
-        },
-        "buy-buttons": {
-          "type": "buy-buttons",
-          "settings": {},
-          "blocks": {}
+          "settings": {}
         },
         "description": {
           "type": "product-description",
-          "settings": {},
-          "blocks": {}
+          "settings": {}
+        },
+        "variant-picker": {
+          "type": "variant-picker",
+          "settings": {}
+        },
+        "quantity-selector": {
+          "type": "quantity-selector",
+          "settings": {}
+        },
+        "gift-card-recipient": {
+          "type": "gift-card-recipient",
+          "settings": {}
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {}
         }
       },
       "block_order": [
@@ -66,18 +56,9 @@
         "description"
       ],
       "settings": {}
-    },
-    "collections_aEpRXM": {
-      "type": "collections",
-      "name": "t:general.collections_grid",
-      "settings": {
-        "grid_item_width": "collections--full",
-        "grid_gap": 30
-      }
     }
   },
   "order": [
-    "main",
-    "collections_aEpRXM"
+    "main"
   ]
 }
