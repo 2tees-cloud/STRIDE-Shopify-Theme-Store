@@ -1,12 +1,16 @@
 {% comment %}
-  Generic swipeable row of image + text slides. CSS scroll-snap does the
-  actual scrolling/snapping (works via touch/trackpad with zero JS); the
-  javascript block below wires the two arrow buttons to scrollBy one
-  slide's width (looping past the last/first slide) and, when Autoplay
-  is on, advances on a timer -- paused on hover/focus per WCAG 2.2.2 and
-  skipped entirely under prefers-reduced-motion, matching this theme's
-  existing motion-reduction handling elsewhere (e.g. sections/hero-
-  colorway.liquid's own reduced-motion media query).
+  Full-width, one-slide-at-a-time image + text slideshow (not several
+  cards peeking side by side -- that layout doesn't reliably overflow
+  once the slide count is small enough to fit a wide screen at once,
+  which left Autoplay and the arrows with nothing to actually scroll;
+  see the .carousel__track comment below). CSS scroll-snap does the
+  actual scrolling/snapping (works via touch/trackpad with zero JS);
+  the javascript block below wires the two arrow buttons to scrollBy
+  one slide's width (looping past the last/first slide) and, when
+  Autoplay is on, advances on a timer -- paused on hover/focus per WCAG
+  2.2.2 and skipped entirely under prefers-reduced-motion, matching
+  this theme's existing motion-reduction handling elsewhere (e.g.
+  sections/hero-colorway.liquid's own reduced-motion media query).
 
   IMPORTANT: never spell out the literal stylesheet/javascript/schema
   tag delimiters inside a comment in this file (or any section file) --
@@ -25,7 +29,7 @@
       <h2 class="carousel__heading">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="carousel__viewport" {% if section.settings.autoplay %}data-autoplay="{{ section.settings.autoplay_speed }}"{% endif %}>
+    <div class="carousel__viewport" {% if section.settings.autoplay and section.blocks.size > 1 %}data-autoplay="{{ section.settings.autoplay_speed }}"{% endif %}>
       <div class="carousel__track" data-carousel-track>
         {% for block in section.blocks %}
           <div class="carousel__slide" {{ block.shopify_attributes }}>
@@ -86,37 +90,69 @@
   .carousel__viewport {
     /*
       .carousel itself is full-width (spans the entire browser
-      viewport, not just the page's normal content column), but the
-      track's slides have a fixed max width (min(20rem, 80vw) each) and
-      don't grow to fill leftover space -- with only 3-4 slides on a
-      wide screen, that left a lot of empty space between the last
-      slide and .carousel__viewport's own right edge, which is exactly
-      where the next-arrow's position: absolute anchors, so it rendered
-      far from the actual visible content instead of hugging it
-      (confirmed live via a screenshot: the arrows sat at the browser's
-      edges with ~200px of dead space next to the real cards). Matches
+      viewport, not just the page's normal content column) -- matches
       every other section's own constrained content width instead of
-      genuinely spanning the raw viewport.
+      genuinely spanning the raw viewport, which is also what keeps the
+      arrows (position: absolute against this element) anchored next to
+      the actual slides instead of the far edges of a wide screen.
     */
     position: relative;
     max-width: 64rem;
     margin-inline: auto;
   }
   .carousel__track {
+    /*
+      One full-width slide per view, not several peeking side by side:
+      a multi-up "peek" row (each slide a fixed ~20rem regardless of
+      viewport) doesn't overflow at all once there are only as many
+      slides as comfortably fit a wide screen -- 3 slides at that width
+      fit entirely inside this now-constrained 64rem viewport with
+      nothing left to scroll to, so Autoplay and the arrows had nothing
+      to actually move (confirmed live: a merchant's real 3-slide
+      carousel just sat static). Every slide being 100% of the track's
+      own width guarantees real, scrollable content the moment there
+      are 2+ slides, independent of viewport width or block count.
+    */
+    /*
+      scroll-behavior here, not the JS scrollBy/scrollTo calls' own
+      `behavior: 'smooth'` option -- confirmed live that passing
+      behavior:'smooth' in the JS call on a scroll-snap-type: x
+      mandatory container silently does nothing at all (scrollLeft
+      never changes, not even after waiting seconds), while the exact
+      same scrollBy call with NO behavior option, on an element that
+      has this CSS property instead, animates correctly. The JS below
+      relies on that split: plain scrollBy() calls inherit smooth from
+      here, and the one place that needs an instant (non-animated) jump
+      explicitly overrides behavior to 'instant' rather than getting it
+      from this property.
+    */
     display: flex;
-    gap: var(--space-4);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding-bottom: var(--space-2);
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__track {
+      scroll-behavior: auto;
+    }
   }
   .carousel__slide {
     position: relative;
-    flex: 0 0 min(20rem, 80vw);
+    flex: 0 0 100%;
     scroll-snap-align: start;
   }
   .carousel__image {
+    /*
+      A fixed aspect-ratio (rather than height:auto) keeps every slide
+      the same height regardless of that slide's own image proportions
+      -- with one full-width slide visible at a time, differently
+      shaped images would otherwise change the carousel's height as it
+      advances, shifting the page content below it on every autoplay
+      tick.
+    */
     width: 100%;
-    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     display: block;
   }
   .carousel__slide-heading {
@@ -153,12 +189,22 @@
     .carousel__arrow svg {
       width: 1rem;
     }
+    /*
+      Inset over the slide image itself, not protruding outside the
+      viewport's edges -- that outside-the-edge positioning was for the
+      old multi-slide "peek" row, where the arrows sat in the gap
+      between the track and the constrained viewport's own boundary.
+      With one full-bleed slide filling the whole viewport, there is no
+      such gap to sit in; overlaying the arrows on the image (the
+      conventional slideshow pattern) is what actually places them next
+      to visible content now.
+    */
     .carousel__arrow--prev {
-      left: calc(-1.25rem - var(--space-2));
+      left: var(--space-4);
       transform: translateY(-50%) rotate(180deg);
     }
     .carousel__arrow--next {
-      right: calc(-1.25rem - var(--space-2));
+      right: var(--space-4);
     }
   }
 {% endstylesheet %}
@@ -176,15 +222,33 @@
       // cycle, which is what "autoplay" is expected to do. The
       // prev/next buttons loop the same way for consistency, not just
       // because autoplay needs it.
+      //
+      // Absolute index math, not a relative scrollBy(distance *
+      // direction): a manual click restarts autoplay's timer (see
+      // startAutoplay() below), so a click landing right as an autoplay
+      // tick was also about to fire can call this twice in close
+      // succession -- if the first call's smooth animation hadn't
+      // settled yet, a second relative scrollBy would add its delta to
+      // whatever mid-animation position scrollLeft happened to be at
+      // that instant, not the intended slide, drifting further off with
+      // every overlap. Recomputing the CURRENT slide index from
+      // scrollLeft on every call (rounding to the nearest one) instead
+      // self-corrects back to a real slide position each time, however
+      // unsettled scrollLeft was when this ran.
       function scrollByOneSlide(direction) {
-        var slide = track.querySelector('.carousel__slide');
-        if (!slide) return;
-        var distance = slide.getBoundingClientRect().width + 16;
-        var maxScroll = track.scrollWidth - track.clientWidth;
+        var distance = track.clientWidth;
+        var slideCount = Math.round(track.scrollWidth / distance);
+        var currentIndex = Math.round(track.scrollLeft / distance);
+        var nextIndex = currentIndex + direction;
+        var isWrap = nextIndex < 0 || nextIndex >= slideCount;
 
-        // The wrap-around jump is instant (behavior left at its 'auto'
-        // default), not smooth: confirmed live that a smooth scrollTo
-        // spanning the whole track fights this track's own
+        if (nextIndex < 0) nextIndex = slideCount - 1;
+        if (nextIndex >= slideCount) nextIndex = 0;
+
+        // The wrap-around jump explicitly forces behavior: 'instant',
+        // overriding the smooth scroll-behavior set on .carousel__track
+        // in CSS: confirmed live that animating all the way back across
+        // the whole track fights this element's own
         // scroll-snap-type: x mandatory (a snap container "settling"
         // across every intermediate snap point on one long smooth
         // animation, rather than jumping straight to the target) and
@@ -193,15 +257,16 @@
         // instant reset avoids that fight, and is the standard UX for
         // an infinite carousel's wrap point anyway (no theme smooth-
         // scrolls all the way back across every slide just to loop).
-        if (direction > 0 && track.scrollLeft >= maxScroll - 1) {
-          track.scrollTo({ left: 0 });
-          return;
-        }
-        if (direction < 0 && track.scrollLeft <= 1) {
-          track.scrollTo({ left: maxScroll });
-          return;
-        }
-        track.scrollBy({ left: distance * direction, behavior: 'smooth' });
+        //
+        // Every non-wrap jump has no behavior option, on purpose --
+        // it inherits smooth from .carousel__track's own CSS
+        // scroll-behavior (passing behavior: 'smooth' directly in this
+        // call instead silently does nothing on this scroll-snap
+        // container, confirmed live).
+        track.scrollTo({
+          left: nextIndex * distance,
+          behavior: isWrap ? 'instant' : undefined
+        });
       }
 
       // autoplaySeconds comes from the Autoplay speed setting, rendered
