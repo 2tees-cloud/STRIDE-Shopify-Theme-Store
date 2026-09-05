@@ -9,91 +9,102 @@
   not currently have. Same content-width constraint (48rem, centered) as
   article.liquid, since both are long-form-text pages.
 
+  The root class is "page-body", not the bare "page" its own template name
+  would suggest -- a section's {% stylesheet %} is bundled theme-wide, not
+  scoped to this section's own markup, and Shopify's `default_pagination`
+  filter (used by collection.liquid, article.liquid, search.liquid, etc.)
+  emits its own numbered links as <span class="page"> / <span class="page
+  current">. A bare ".page" rule here landed on every one of those spans
+  site-wide, giving each pagination number this section's own padding-block/
+  max-width/margin-inline (confirmed live: 64px block padding and a
+  768px max-width on the collection page's page-number spans, which is why
+  they rendered as an oversized, wrapped, off-grid mess instead of a row).
+
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<div class="page full-width">
-  <h1 class="page__title">{{ page.title }}</h1>
+<div class="page-body full-width">
+  <h1 class="page-body__title">{{ page.title }}</h1>
 
-  <div class="page__content">
+  <div class="page-body__content">
     {{ page.content }}
   </div>
 </div>
 
 {% stylesheet %}
-  .page {
+  .page-body {
     padding-block: var(--space-8);
     padding-inline: var(--space-4);
     max-width: 48rem;
     margin-inline: auto;
   }
   @media (min-width: 750px) {
-    .page {
+    .page-body {
       padding-inline: var(--space-6);
     }
   }
-  .page__title {
+  .page-body__title {
     font-family: var(--font-header--family);
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     margin: 0 0 var(--space-6);
   }
-  .page__content {
+  .page-body__content {
     color: var(--color-foreground);
     line-height: 1.6;
   }
-  .page__content > :first-child {
+  .page-body__content > :first-child {
     margin-top: 0;
   }
-  .page__content > :last-child {
+  .page-body__content > :last-child {
     margin-bottom: 0;
   }
-  .page__content :is(h1, h2, h3, h4, h5, h6) {
+  .page-body__content :is(h1, h2, h3, h4, h5, h6) {
     font-family: var(--font-header--family);
     line-height: 1.25;
     margin: var(--space-6) 0 var(--space-2);
   }
-  .page__content h1 {
+  .page-body__content h1 {
     font-size: 2rem;
   }
-  .page__content h2 {
+  .page-body__content h2 {
     font-size: 1.75rem;
   }
-  .page__content h3 {
+  .page-body__content h3 {
     font-size: 1.5rem;
   }
-  .page__content h4 {
+  .page-body__content h4 {
     font-size: 1.25rem;
   }
-  .page__content h5 {
+  .page-body__content h5 {
     font-size: 1.125rem;
   }
-  .page__content h6 {
+  .page-body__content h6 {
     font-size: 1rem;
   }
-  .page__content p {
+  .page-body__content p {
     margin: 0 0 var(--space-4);
   }
-  .page__content :is(ul, ol) {
+  .page-body__content :is(ul, ol) {
     padding-inline-start: var(--space-5);
     margin: 0 0 var(--space-4);
   }
-  .page__content li {
+  .page-body__content li {
     margin-bottom: var(--space-1);
   }
-  .page__content blockquote {
+  .page-body__content blockquote {
     margin: var(--space-4) 0;
     padding-inline-start: var(--space-4);
     border-inline-start: 3px solid var(--color-border);
     color: var(--color-foreground-muted);
     font-style: italic;
   }
-  .page__content blockquote p:last-child {
+  .page-body__content blockquote p:last-child {
     margin-bottom: 0;
   }
-  .page__content a {
+  .page-body__content a {
     color: var(--color-foreground);
   }
-  .page__content img {
+  .page-body__content img {
     max-width: 100%;
     height: auto;
   }
