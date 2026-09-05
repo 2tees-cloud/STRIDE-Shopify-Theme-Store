@@ -163,6 +163,15 @@
     gap: 1rem;
     flex-shrink: 0;
   }
+  /* <shopify-account>'s default trigger button renders at ~44px --
+     taller than every other 32px icon in this row. Shopify documents
+     --shopify-account-avatar-size specifically to control this (it's a
+     shadow-DOM component; ordinary selectors can't reach inside it),
+     so this is the supported way to match it to the rest of the row
+     rather than leaving it as an unstyled platform default. */
+  header shopify-account {
+    --shopify-account-avatar-size: 32px;
+  }
   /* Shopify's own customer-accounts runtime injects an empty, invisible
      <shopify-store> element as a sibling of <shopify-account> (carries
      store-domain/country/language data attributes, renders nothing) --
