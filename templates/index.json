@@ -15,23 +15,29 @@
         "colorway-1": {
           "type": "colorway",
           "settings": {
-            "color": "#B5502D",
+            "image": "shopify://shop_images/photo-1603808033192-082d6919d3e1.jpg",
+            "color": "#b5502d",
             "color_name": "Clay",
-            "image": "shopify://shop_images/photo-1603808033192-082d6919d3e1.jpg"
+            "product": ""
           }
         },
         "colorway-2": {
           "type": "colorway",
           "settings": {
-            "color": "#3B3A36",
+            "image": "shopify://shop_images/photo-1656085180791-0e634c8bd1e6.jpg",
+            "color": "#3b3a36",
             "color_name": "Graphite",
-            "image": "shopify://shop_images/photo-1656085180791-0e634c8bd1e6.jpg"
+            "product": ""
           }
         }
       },
-      "block_order": ["colorway-1", "colorway-2"],
+      "block_order": [
+        "colorway-1",
+        "colorway-2"
+      ],
       "settings": {
         "heading": "Feels like you",
+        "subheading": "",
         "cta_text": "Shop now",
         "cta_link": "/collections/all"
       }
@@ -42,24 +48,41 @@
         "item-1": {
           "type": "item",
           "settings": {
-            "text": "New drop every Friday"
+            "text": "New drop every Friday",
+            "link": ""
           }
         },
         "item-2": {
           "type": "item",
           "settings": {
-            "text": "Free shipping over $100"
+            "text": "Free shipping over $100",
+            "link": ""
           }
         },
         "item-3": {
           "type": "item",
           "settings": {
-            "text": "30-day returns"
+            "text": "30-day returns",
+            "link": ""
           }
         }
       },
-      "block_order": ["item-1", "item-2", "item-3"],
-      "settings": {}
+      "block_order": [
+        "item-1",
+        "item-2",
+        "item-3"
+      ],
+      "settings": {
+        "speed": 25
+      }
+    },
+    "collection-index": {
+      "type": "collection-index",
+      "settings": {
+        "heading": "Shop the edit",
+        "collection": "",
+        "item_limit": 5
+      }
     },
     "product-anatomy": {
       "type": "product-anatomy",
@@ -69,6 +92,7 @@
           "settings": {
             "label": "Cushioning",
             "text": "Responsive foam that absorbs impact without losing energy return.",
+            "link": "",
             "position_x": 30,
             "position_y": 70
           }
@@ -78,6 +102,7 @@
           "settings": {
             "label": "Upper material",
             "text": "Breathable knit that moves with your foot, not against it.",
+            "link": "",
             "position_x": 50,
             "position_y": 25
           }
@@ -87,12 +112,17 @@
           "settings": {
             "label": "Outsole",
             "text": "High-abrasion rubber for grip on wet and dry surfaces alike.",
+            "link": "",
             "position_x": 65,
             "position_y": 85
           }
         }
       },
-      "block_order": ["callout-1", "callout-2", "callout-3"],
+      "block_order": [
+        "callout-1",
+        "callout-2",
+        "callout-3"
+      ],
       "settings": {
         "heading": "Built for the long run",
         "image": "shopify://shop_images/photo-1620138548682-fd0c1175a1bc.jpg"
@@ -104,15 +134,9 @@
         "heading": "Next drop",
         "description": "Sign up to be first in line when it lands.",
         "target_date": "2027-09-01 09:00",
+        "fallback_text": "",
         "cta_text": "Get notified",
         "cta_link": "/pages/contact"
-      }
-    },
-    "collection-index": {
-      "type": "collection-index",
-      "settings": {
-        "heading": "Shop the edit",
-        "item_limit": 5
       }
     },
     "shoppable-lookbook": {
@@ -121,32 +145,36 @@
         "look-1": {
           "type": "look",
           "settings": {
-            "position_x": 50,
-            "position_y": 60,
             "image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg",
-            "product": "stride-apex-runner"
+            "product": "stride-apex-runner",
+            "position_x": 50,
+            "position_y": 60
           }
         },
         "look-2": {
           "type": "look",
           "settings": {
-            "position_x": 40,
-            "position_y": 45,
             "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
-            "product": "stride-drift-low"
+            "product": "stride-drift-low",
+            "position_x": 40,
+            "position_y": 45
           }
         },
         "look-3": {
           "type": "look",
           "settings": {
-            "position_x": 55,
-            "position_y": 50,
             "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
-            "product": "stride-cloud-trainer"
+            "product": "stride-cloud-trainer",
+            "position_x": 55,
+            "position_y": 50
           }
         }
       },
-      "block_order": ["look-1", "look-2", "look-3"],
+      "block_order": [
+        "look-1",
+        "look-2",
+        "look-3"
+      ],
       "settings": {
         "heading": "Shop the look"
       }
@@ -158,6 +186,44 @@
         "subtext": "New drops, restocks, and members-only access — straight to your inbox.",
         "success_message": "Thanks — you're on the list."
       }
+    },
+    "carousel_4dWbja": {
+      "type": "carousel",
+      "blocks": {
+        "slide_gUP7JM": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/the-kayak-and-the-rock.jpg",
+            "heading": "Как вывести часы на рабочий стол",
+            "link": "shopify://pages/contact"
+          }
+        },
+        "slide_6yfF6D": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/tablet-lays-on-a-white-table-with-screen-lit-by-app-icons.jpg",
+            "heading": "Как вывести часы на рабочий стол",
+            "link": "shopify://products/aquatica-hl-4b130c-zmishuvach-dlia-kukhni-z-povorotnym-j-obraznym-vylyvom"
+          }
+        },
+        "slide_DMfdHq": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/dangling-black-fashion-sneakers-held-between-fingertips.jpg",
+            "heading": "Как вывести часы на рабочий стол",
+            "link": "shopify://products/aquatica-hm-1a131c-zmishuvach-dlia-rakovyny-na-haitsi"
+          }
+        }
+      },
+      "block_order": [
+        "slide_gUP7JM",
+        "slide_6yfF6D",
+        "slide_DMfdHq"
+      ],
+      "name": "t:general.carousel",
+      "settings": {
+        "heading": "Как вывести часы на рабочий стол"
+      }
     }
   },
   "order": [
@@ -167,6 +233,7 @@
     "product-anatomy",
     "drop-countdown",
     "shoppable-lookbook",
-    "newsletter-band"
+    "newsletter-band",
+    "carousel_4dWbja"
   ]
 }
