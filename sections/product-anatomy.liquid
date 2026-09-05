@@ -1,9 +1,13 @@
 {% comment %}
-  Numbered callout pins over a single product image. Desktop: pins
-  positioned absolutely on the image, connected to a static legend list
-  below. Mobile: pins are hidden (too small to tap reliably at that
-  size) and the legend becomes a horizontal scroll-snap row of cards.
-  Fully static CSS — no JS, per spec §4.4.
+  Numbered callout pins over a single product image, connected to a
+  legend list below (pins are decorative/aria-hidden -- the legend item
+  is the real, accessible target, and becomes a real link when a
+  callout's own url setting is set). Desktop: pins positioned
+  absolutely on the image, legend as a static column. Mobile: pins stay
+  visible (each is >=24px, meeting the touch-target minimum) and the
+  legend becomes a horizontal scroll-snap row of cards instead of a
+  column, to fit the narrower viewport. Fully static CSS — no JS, per
+  spec §4.4.
 
   This section requires an `image` setting to render anything (see the
   zero-content guard below). The committed templates/index.json ships
@@ -45,7 +49,13 @@
         <li class="product-anatomy__legend-item" {{ block.shopify_attributes }}>
           <span class="product-anatomy__legend-number" aria-hidden="true">{{ forloop.index }}</span>
           <div class="product-anatomy__legend-copy">
-            <h3 class="product-anatomy__legend-label">{{ block.settings.label }}</h3>
+            <h3 class="product-anatomy__legend-label">
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="product-anatomy__legend-link">{{ block.settings.label }}</a>
+              {% else %}
+                {{ block.settings.label }}
+              {% endif %}
+            </h3>
             {% if block.settings.text != blank %}
               <p class="product-anatomy__legend-text">{{ block.settings.text }}</p>
             {% endif %}
@@ -103,11 +113,6 @@
     font-weight: 700;
     box-shadow: 0 0 0 3px rgb(255 255 255 / 60%);
   }
-  @media (max-width: 749px) {
-    .product-anatomy__pin {
-      display: none;
-    }
-  }
   .product-anatomy__legend {
     list-style: none;
     margin: var(--space-6) 0 0;
@@ -138,6 +143,16 @@
   .product-anatomy__legend-label {
     font-size: 1rem;
     margin: 0 0 var(--space-1);
+  }
+  .product-anatomy__legend-link {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    display: inline-block;
+    min-height: 24px;
+  }
+  .product-anatomy__legend-link:hover {
+    color: var(--color-accent);
   }
   .product-anatomy__legend-text {
     color: var(--color-foreground-muted);
@@ -198,6 +213,11 @@
           "type": "textarea",
           "id": "text",
           "label": "t:labels.text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:labels.link"
         },
         {
           "type": "range",
