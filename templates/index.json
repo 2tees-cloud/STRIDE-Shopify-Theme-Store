@@ -12,6 +12,15 @@
     "hero": {
       "type": "hero-colorway",
       "blocks": {
+        "colorway_GtqDQT": {
+          "type": "colorway",
+          "settings": {
+            "image": "shopify://shop_images/dangling-black-fashion-sneakers-held-between-fingertips.jpg",
+            "color": "#b5502d",
+            "color_name": "Clay",
+            "product": "aquatica-hm-1a131c-zmishuvach-dlia-rakovyny-na-haitsi"
+          }
+        },
         "colorway-1": {
           "type": "colorway",
           "settings": {
@@ -32,6 +41,7 @@
         }
       },
       "block_order": [
+        "colorway_GtqDQT",
         "colorway-1",
         "colorway-2"
       ],

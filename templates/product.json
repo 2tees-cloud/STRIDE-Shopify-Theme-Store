@@ -12,14 +12,48 @@
     "main": {
       "type": "product",
       "blocks": {
-        "title": { "type": "product-title" },
-        "vendor": { "type": "product-vendor" },
-        "price": { "type": "product-price" },
-        "description": { "type": "product-description" },
-        "variant-picker": { "type": "variant-picker" },
-        "quantity-selector": { "type": "quantity-selector" },
-        "gift-card-recipient": { "type": "gift-card-recipient" },
-        "buy-buttons": { "type": "buy-buttons" }
+        "title": {
+          "type": "product-title",
+          "settings": {},
+          "blocks": {}
+        },
+        "vendor": {
+          "type": "product-vendor",
+          "settings": {},
+          "blocks": {}
+        },
+        "price": {
+          "type": "product-price",
+          "settings": {},
+          "blocks": {}
+        },
+        "variant-picker": {
+          "type": "variant-picker",
+          "settings": {
+            "show_size_chart": false
+          },
+          "blocks": {}
+        },
+        "quantity-selector": {
+          "type": "quantity-selector",
+          "settings": {},
+          "blocks": {}
+        },
+        "gift-card-recipient": {
+          "type": "gift-card-recipient",
+          "settings": {},
+          "blocks": {}
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {},
+          "blocks": {}
+        },
+        "description": {
+          "type": "product-description",
+          "settings": {},
+          "blocks": {}
+        }
       },
       "block_order": [
         "title",
@@ -32,9 +66,18 @@
         "description"
       ],
       "settings": {}
+    },
+    "collections_aEpRXM": {
+      "type": "collections",
+      "name": "t:general.collections_grid",
+      "settings": {
+        "grid_item_width": "collections--full",
+        "grid_gap": 30
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "collections_aEpRXM"
   ]
 }
