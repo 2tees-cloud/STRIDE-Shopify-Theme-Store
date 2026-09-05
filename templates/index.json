@@ -293,12 +293,6 @@
     "icons_with_text_fddipP": {
       "type": "icons-with-text",
       "blocks": {
-        "icon_t4FiCx": {
-          "type": "icon",
-          "settings": {
-            "text": ""
-          }
-        },
         "icon_Nqdd7k": {
           "type": "icon",
           "settings": {
@@ -322,7 +316,6 @@
         }
       },
       "block_order": [
-        "icon_t4FiCx",
         "icon_Nqdd7k",
         "icon_VxcFnT",
         "icon_EqPWyQ"
