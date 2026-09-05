@@ -216,6 +216,151 @@
         "cta_text": "shipping icon png",
         "cta_link": "shopify://products/aquatica-ht-1a171p-smesytel-dlia-rakovyny-35-mm"
       }
+    },
+    "multicolumn_q99MEK": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_Hdaxin": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/the-kayak-and-the-rock.jpg",
+            "heading": "shipping icon png",
+            "text": "<p>shipping icon png</p>"
+          }
+        },
+        "column_WgGeBN": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/tablet-lays-on-a-white-table-with-screen-lit-by-app-icons.jpg",
+            "heading": "",
+            "text": ""
+          }
+        },
+        "column_mUz4ct": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
+            "heading": "",
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_Hdaxin",
+        "column_WgGeBN",
+        "column_mUz4ct"
+      ],
+      "name": "t:general.multicolumn",
+      "settings": {
+        "heading": "shipping icon png"
+      }
+    },
+    "icons_with_text_UHqhhg": {
+      "type": "icons-with-text",
+      "blocks": {
+        "icon_99M9Uh": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "shipping icon png"
+          }
+        },
+        "icon_D9Lw4V": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "shipping icon png"
+          }
+        },
+        "icon_cDfEHW": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "shipping icon png"
+          }
+        },
+        "icon_Kye7xJ": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "shipping icon png"
+          }
+        }
+      },
+      "block_order": [
+        "icon_99M9Uh",
+        "icon_D9Lw4V",
+        "icon_cDfEHW",
+        "icon_Kye7xJ"
+      ],
+      "name": "t:general.icons_with_text",
+      "settings": {
+        "heading": "",
+        "icon_size": "medium",
+        "text_size": "medium"
+      }
+    },
+    "contact_form_BhEXyT": {
+      "type": "contact-form",
+      "name": "t:general.contact_form",
+      "settings": {
+        "heading": "Get in touch"
+      }
+    },
+    "custom_liquid_kdccY6": {
+      "type": "custom-liquid",
+      "name": "t:general.custom_liquid",
+      "settings": {
+        "code": ""
+      }
+    },
+    "blog_posts_wD8JwD": {
+      "type": "blog-posts",
+      "name": "t:general.blog_posts",
+      "settings": {
+        "heading": "From the blog",
+        "blog": "",
+        "item_limit": 3,
+        "layout": "grid"
+      }
+    },
+    "carousel_E8WJyc": {
+      "type": "carousel",
+      "blocks": {
+        "slide_MLazRx": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/the-kayak-and-the-rock.jpg",
+            "heading": "shipping icon png",
+            "link": "shopify://products/aquatica-et24-membrana-dlia-hidroakumuliatora-90-mm-19-24-l"
+          }
+        },
+        "slide_DnRGAj": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/tablet-lays-on-a-white-table-with-screen-lit-by-app-icons.jpg",
+            "heading": "shipping icon png",
+            "link": "shopify://products/aquatica-hz-6b243w-protochnyi-kran-nahrivach-dlia-kukhni-3-kvt"
+          }
+        },
+        "slide_Q7XWDD": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/dangling-black-fashion-sneakers-held-between-fingertips.jpg",
+            "heading": "shipping icon png",
+            "link": "shopify://products/aquatica-hz-6b243w-protochnyi-kran-nahrivach-dlia-kukhni-3-kvt"
+          }
+        }
+      },
+      "block_order": [
+        "slide_MLazRx",
+        "slide_DnRGAj",
+        "slide_Q7XWDD"
+      ],
+      "name": "t:general.carousel",
+      "settings": {
+        "heading": ""
+      }
     }
   },
   "order": [
@@ -228,6 +373,12 @@
     "newsletter-band",
     "featured_product_bDLTKQ",
     "rich_text_P7BTDF",
-    "image_with_text_EDjyc7"
+    "image_with_text_EDjyc7",
+    "multicolumn_q99MEK",
+    "icons_with_text_UHqhhg",
+    "contact_form_BhEXyT",
+    "custom_liquid_kdccY6",
+    "blog_posts_wD8JwD",
+    "carousel_E8WJyc"
   ]
 }
