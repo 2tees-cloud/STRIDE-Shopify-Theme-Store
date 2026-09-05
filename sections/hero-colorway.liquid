@@ -19,6 +19,7 @@
               alt="{{ block.settings.image.alt | default: section.settings.heading | escape }}"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
+              style="object-position: {{ block.settings.image.presentation.focal_point.x }}% {{ block.settings.image.presentation.focal_point.y }}%;"
               loading="eager"
               fetchpriority="high"
               data-hero-image
@@ -34,6 +35,7 @@
               alt="{{ block.settings.image.alt | default: section.settings.heading | escape }}"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
+              style="object-position: {{ block.settings.image.presentation.focal_point.x }}% {{ block.settings.image.presentation.focal_point.y }}%;"
               loading="lazy"
               fetchpriority="low"
               aria-hidden="true"
