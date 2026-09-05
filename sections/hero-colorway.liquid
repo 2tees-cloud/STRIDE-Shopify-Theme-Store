@@ -3,13 +3,39 @@
   instantly swaps the hero image (all colorway images are already in the
   DOM, so switching is instant with no network wait) and, if that
   colorway has a linked product, updates the CTA to point at it.
+
+  A colorway can use a video instead of (or in addition to) its image --
+  when both are set, the video plays and the image is only used as its
+  poster frame while the video buffers. Every colorway's video is
+  rendered up front (same "already in the DOM" instant-switch approach
+  as the images), but only the active one is ever actually playing:
+  assets in this file's javascript block play() the newly active video
+  and pause() the previous one on swatch click, rather than
+  autoplaying every video at once.
 {% endcomment %}
 
 {% if section.blocks.size > 0 %}
   <div class="hero full-width">
     <div class="hero__media">
       {% for block in section.blocks %}
-        {% if block.settings.image %}
+        {% if block.settings.video %}
+          <video
+            class="hero__image{% if forloop.first %} is-active{% endif %}"
+            poster="{% if block.settings.image %}{{ block.settings.image | image_url: width: 1600 }}{% else %}{{ block.settings.video.preview_image | image_url: width: 1600 }}{% endif %}"
+            muted
+            loop
+            playsinline
+            preload="{% if forloop.first %}auto{% else %}metadata{% endif %}"
+            {% unless forloop.first %}aria-hidden="true"{% endunless %}
+            data-hero-image
+            data-block-id="{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            {% for source in block.settings.video.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        {% elsif block.settings.image %}
           {% if forloop.first %}
             <img
               class="hero__image is-active"
@@ -204,10 +230,23 @@
       s.setAttribute('aria-pressed', isActive);
     });
 
-    hero.querySelectorAll('[data-hero-image]').forEach(function (img) {
-      var isActive = img.dataset.blockId === blockId;
-      img.classList.toggle('is-active', isActive);
-      img.toggleAttribute('aria-hidden', !isActive);
+    hero.querySelectorAll('[data-hero-image]').forEach(function (media) {
+      var isActive = media.dataset.blockId === blockId;
+      media.classList.toggle('is-active', isActive);
+      media.toggleAttribute('aria-hidden', !isActive);
+
+      if (media.tagName === 'VIDEO') {
+        if (isActive) {
+          // play() returns a promise that can reject if the browser's
+          // autoplay policy blocks it -- shouldn't happen given
+          // muted+playsinline, but a swatch click is itself a user
+          // gesture anyway, so this is just a safety net against an
+          // unhandled rejection showing up in the console.
+          media.play().catch(function () {});
+        } else {
+          media.pause();
+        }
+      }
     });
 
     var cta = hero.querySelector('[data-hero-cta]');
@@ -223,6 +262,15 @@
         if (!hero) return;
         activateColorway(hero, swatch.dataset.blockId);
       });
+    });
+
+    // The initially active colorway's video (if any) isn't reached by a
+    // swatch click, so it never gets the play() call above -- start it
+    // here instead, once on load.
+    root.querySelectorAll('[data-hero-image].is-active').forEach(function (media) {
+      if (media.tagName === 'VIDEO') {
+        media.play().catch(function () {});
+      }
     });
   }
 
@@ -284,7 +332,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:labels.image"
+          "label": "t:labels.image",
+          "info": "t:labels.hero_image_info"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "t:labels.video",
+          "info": "t:labels.hero_video_info"
         },
         {
           "type": "color",
