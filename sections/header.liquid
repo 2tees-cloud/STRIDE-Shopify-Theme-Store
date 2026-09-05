@@ -316,6 +316,13 @@
       transform: none;
       transition: none;
       padding: 0;
+      /* This is the same element as the mobile slide-out drawer (styled
+         above as a background-color: var(--color-surface) card) --
+         reused here as the desktop inline nav+localization row instead
+         of a floating panel, so it must NOT keep that drawer's white
+         card background; it should sit flush on the header's own
+         background-color: var(--color-background) instead. */
+      background-color: transparent;
       flex-direction: row;
       align-items: center;
       gap: var(--space-6);
