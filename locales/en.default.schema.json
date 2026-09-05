@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": "Not found",
@@ -104,11 +113,11 @@
     "label": "Label",
     "position_x": "Horizontal position",
     "position_y": "Vertical position",
-    "position_desktop_only_info": "Pins are hidden on mobile — preview at desktop width to see this take effect.",
+    "position_desktop_only_info": "Position is set for desktop; the pin also shows on mobile at this position.",
     "color": "Swatch color",
     "color_name": "Color name",
     "product": "Linked product",
-    "look_product_info": "Each look is one photo with a single tagged product. To tag more products, add more Look blocks.",
+    "look_product_info": "To tag more than one product on the same photo, add another Look block and pick the SAME image again — it joins the same photo as an extra pin.",
     "speed": "Scroll speed",
     "target_date": "Target date and time",
     "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone).",

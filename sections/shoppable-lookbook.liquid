@@ -1,8 +1,16 @@
 {% comment %}
-  Asymmetric grid of tagged lookbook photos. Each block is one photo
-  tile with exactly one product hotspot (a repeater of "one photo, many
-  hotspots" isn't representable in classic section/block schema, so the
-  grid itself provides the "many photos, many tags" effect instead).
+  Asymmetric grid of tagged lookbook photos. Classic section/block
+  schema can't nest blocks inside blocks, so "one photo, several
+  product tags" isn't representable as a single block -- instead, each
+  block is ONE product hotspot, and consecutive blocks that share the
+  exact same image are grouped into a single grid tile with multiple
+  hotspots on it. Add several "Look" blocks, pick the SAME photo for
+  each, and give each its own product + position to tag multiple items
+  in one photo (e.g. shoes on one pin, a shirt on another). Blocks
+  grouped this way must be adjacent in the block order -- a
+  different-image block in between starts a new tile instead of
+  continuing the current one. Give a look only one product to keep the
+  original "each block is its own tile" behavior.
   Hotspot popovers show via CSS :hover/:focus-within for mouse/keyboard
   (no JS required for that base experience) — the JS in this file is
   ONLY a click-toggle fallback for touch devices, which don't reliably
@@ -17,23 +25,38 @@
     {% endif %}
 
     <div class="shoppable-lookbook__grid">
+      {% assign previous_image_src = blank %}
+      {% assign tile_image_markup = '' %}
+      {% assign tile_hotspots_markup = '' %}
       {% for block in section.blocks %}
-        <div class="shoppable-lookbook__item" {{ block.shopify_attributes }}>
-          {% if block.settings.image != blank %}
-            <img
-              class="shoppable-lookbook__image"
-              src="{{ block.settings.image | image_url: width: 1200 }}"
-              srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 1200 }} 1200w"
-              sizes="(min-width: 750px) 40vw, 90vw"
-              width="{{ block.settings.image.width }}"
-              height="{{ block.settings.image.height }}"
-              loading="lazy"
-              alt="{{ block.settings.image.alt | default: block.settings.product.title | default: section.settings.heading | escape }}"
-            >
-          {% endif %}
+        {% assign current_image_src = block.settings.image.src | default: blank %}
 
-          {% if block.settings.product != blank %}
-            {% assign tagged_product = block.settings.product %}
+        {% comment %} A new image starts a new tile: flush the previous one (unless this is the very first block) and capture this block's image markup as the new tile's image. {% endcomment %}
+        {% if current_image_src != previous_image_src %}
+          {% unless forloop.first %}
+            <div class="shoppable-lookbook__item">{{ tile_image_markup }}{{ tile_hotspots_markup }}</div>
+          {% endunless %}
+          {% assign tile_hotspots_markup = '' %}
+          {% capture tile_image_markup %}
+            {% if block.settings.image != blank %}
+              <img
+                class="shoppable-lookbook__image"
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 1200 }} 1200w"
+                sizes="(min-width: 750px) 40vw, 90vw"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+                alt="{{ block.settings.image.alt | default: block.settings.product.title | default: section.settings.heading | escape }}"
+              >
+            {% endif %}
+          {% endcapture %}
+          {% assign previous_image_src = current_image_src %}
+        {% endif %}
+
+        {% if block.settings.product != blank %}
+          {% assign tagged_product = block.settings.product %}
+          {% capture hotspot_markup %}
             <button
               type="button"
               class="shoppable-lookbook__hotspot"
@@ -42,6 +65,7 @@
               aria-controls="LookbookPopover-{{ block.id }}"
               aria-label="{{ 'lookbook.view_product_named' | t: product_title: tagged_product.title }}"
               data-lookbook-hotspot
+              {{ block.shopify_attributes }}
             >
               <span aria-hidden="true">+</span>
             </button>
@@ -60,8 +84,13 @@
               <span class="shoppable-lookbook__popover-price">{{ tagged_product.price | money }}</span>
               <a href="{{ tagged_product.url }}" class="shoppable-lookbook__popover-link">{{ 'lookbook.view_product' | t }}</a>
             </div>
-          {% endif %}
-        </div>
+          {% endcapture %}
+          {% assign tile_hotspots_markup = tile_hotspots_markup | append: hotspot_markup %}
+        {% endif %}
+
+        {% if forloop.last %}
+          <div class="shoppable-lookbook__item">{{ tile_image_markup }}{{ tile_hotspots_markup }}</div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
