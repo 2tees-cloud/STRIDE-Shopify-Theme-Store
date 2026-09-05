@@ -163,6 +163,15 @@
     gap: 1rem;
     flex-shrink: 0;
   }
+  /* Shopify's own customer-accounts runtime injects an empty, invisible
+     <shopify-store> element as a sibling of <shopify-account> (carries
+     store-domain/country/language data attributes, renders nothing) --
+     not present anywhere in this theme's own markup. As a flex child it
+     still claims a gap on both sides, doubling the visible spacing
+     between the search and account icons versus every other icon pair. */
+  header .header__icons shopify-store:empty {
+    display: none;
+  }
 
   header .header__search {
     position: relative;
