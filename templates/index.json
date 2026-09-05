@@ -187,13 +187,34 @@
         "success_message": "Thanks — you're on the list."
       }
     },
-    "video_aCRPMe": {
-      "type": "video",
-      "name": "t:general.video",
+    "featured_product_bDLTKQ": {
+      "type": "featured-product",
+      "name": "t:general.featured_product",
       "settings": {
-        "heading": "Video",
-        "video": "shopify://files/videos/vidssave.com BACKSTAGE 1080P.mp4",
-        "cover_image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg"
+        "product": "aquatica-hl-3c230c-zmishuvach-dlia-vanny-z-priamym-vylyvom-350-mm",
+        "heading": "featured product"
+      }
+    },
+    "rich_text_P7BTDF": {
+      "type": "rich-text",
+      "name": "t:general.rich_text",
+      "settings": {
+        "heading": "shipping icon png",
+        "text": "<p>shipping icon png</p>",
+        "cta_text": "shipping icon png",
+        "cta_link": ""
+      }
+    },
+    "image_with_text_EDjyc7": {
+      "type": "image-with-text",
+      "name": "t:general.image_with_text",
+      "settings": {
+        "image": "shopify://shop_images/hightop-lighted-sneakers.jpg",
+        "image_position": "left",
+        "heading": "shipping icon png",
+        "text": "<p>shipping icon png</p>",
+        "cta_text": "shipping icon png",
+        "cta_link": "shopify://products/aquatica-ht-1a171p-smesytel-dlia-rakovyny-35-mm"
       }
     }
   },
@@ -205,6 +226,8 @@
     "drop-countdown",
     "shoppable-lookbook",
     "newsletter-band",
-    "video_aCRPMe"
+    "featured_product_bDLTKQ",
+    "rich_text_P7BTDF",
+    "image_with_text_EDjyc7"
   ]
 }
