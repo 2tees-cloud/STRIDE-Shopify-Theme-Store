@@ -1,0 +1,21 @@
+{% doc %}
+  Renders the store's configured social media links (Instagram, X, TikTok
+  — set under Theme settings → Social media) as icons. An addable,
+  removable, repositionable footer block instead of the old hardcoded
+  render, so a merchant can place it among the other footer columns (or
+  leave it out) the same way they already can with the Menu block.
+
+  @example
+  {% content_for 'block', type: 'social-icons', id: 'social-icons' %}
+{% enddoc %}
+
+<div class="social-icons-block" {{ block.shopify_attributes }}>
+  {% render 'social-icons' %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.social_media",
+  "presets": [{ "name": "t:general.social_media" }]
+}
+{% endschema %}
