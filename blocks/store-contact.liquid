@@ -1,0 +1,91 @@
+{% doc %}
+  Renders a footer column with the store's physical address, phone, and
+  email — an addable/removable/repositionable footer block like Menu
+  and Social icons, rather than being hardcoded into the footer.
+
+  @example
+  {% content_for 'block', type: 'store-contact', id: 'store-contact' %}
+{% enddoc %}
+
+<div class="store-contact" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <h2 class="store-contact__heading">{{ block.settings.heading }}</h2>
+  {% endif %}
+  {% if block.settings.address != blank %}
+    <p class="store-contact__address">{{ block.settings.address | newline_to_br }}</p>
+  {% endif %}
+  {% if block.settings.phone != blank %}
+    <p class="store-contact__phone">
+      <a href="tel:{{ block.settings.phone | strip | replace: ' ', '' }}">{{ block.settings.phone }}</a>
+    </p>
+  {% endif %}
+  {% if block.settings.email != blank %}
+    <p class="store-contact__email">
+      <a href="mailto:{{ block.settings.email | escape }}">{{ block.settings.email }}</a>
+    </p>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .store-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .store-contact__heading {
+    font-family: var(--font-header--family);
+    font-size: 1rem;
+    margin: 0 0 var(--space-1);
+  }
+  .store-contact__address {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    line-height: 1.6;
+  }
+  .store-contact__phone,
+  .store-contact__email {
+    margin: 0;
+  }
+  .store-contact__phone a,
+  .store-contact__email a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: var(--color-foreground-muted);
+    text-decoration: none;
+  }
+  .store-contact__phone a:hover,
+  .store-contact__email a:hover {
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.store_contact",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Visit us"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "t:labels.address"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:labels.phone"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "t:labels.email"
+    }
+  ],
+  "presets": [{ "name": "t:general.store_contact" }]
+}
+{% endschema %}
