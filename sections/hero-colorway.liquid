@@ -101,6 +101,15 @@
     .hero__media {
       aspect-ratio: 16 / 9;
       min-height: 0;
+      /* Uncapped, aspect-ratio: 16/9 scales the hero's height with
+         viewport WIDTH alone -- on a wide monitor (1920px+) that's well
+         over 1000px tall. .hero__content anchors the heading/swatches/CTA
+         to the bottom of this box (justify-content: flex-end), so on a
+         browser window shorter than that height, they'd sit below the
+         initial fold with nothing on screen to suggest scrolling would
+         reveal them. Capping the rendered height keeps the hero from
+         growing past a real viewport on any screen width. */
+      max-height: 44rem;
     }
   }
   .hero__image {
