@@ -172,13 +172,35 @@
     display: flex;
     justify-content: center;
   }
-  .collection__pagination a {
+  /*
+    Shopify's default_pagination filter wraps every page number/prev/next
+    in a <span> (class "page", "page current", "deco", "next", "prev"),
+    but that <span> only ever contains an <a> for the entries you can
+    click -- the current page and the "…" ellipsis are bare text
+    directly inside their span, no <a>. Sizing/centering only the <a>
+    (as this rule used to) left those two with no padding and no
+    vertical centering, so "current" rendered as a tiny sliver of its
+    siblings' width and its digit sat at the top of the flex-stretched
+    row instead of centered (confirmed live: 6px wide vs. 25px+ for a
+    linked page number, both 35px tall). Sizing the outer span
+    uniformly, and having the <a> just fill it, fixes both.
+  */
+  .collection__pagination :is(.page, .deco, .next, .prev) {
     min-width: 24px;
     min-height: 24px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: var(--space-2);
+  }
+  .collection__pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
   }
   .collection__empty {
     text-align: center;

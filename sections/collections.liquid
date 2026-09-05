@@ -151,13 +151,33 @@
     display: flex;
     justify-content: center;
   }
-  .collections-page__pagination a {
+  /*
+    default_pagination wraps every entry in a <span> (class "page",
+    "page current", "deco", "next", "prev"), but only the clickable ones
+    contain an <a> -- the current page and the "…" ellipsis are bare
+    text directly inside their span. Sizing only the <a> (as this rule
+    used to) left those two with no padding and no vertical centering,
+    rendering "current" as a thin sliver next to its padded siblings
+    (see sections/collection.liquid for the live-confirmed measurements
+    behind this fix). Sizing the outer span uniformly, and having the
+    <a> just fill it, fixes both.
+  */
+  .collections-page__pagination :is(.page, .deco, .next, .prev) {
     min-width: 24px;
     min-height: 24px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: var(--space-2);
+  }
+  .collections-page__pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
   }
   .collections-page__empty {
     text-align: center;
