@@ -97,6 +97,9 @@
   },
   "labels": {
     "alignment": "Alignment",
+    "autoplay": "Autoplay",
+    "autoplay_speed": "Autoplay speed",
+    "autoplay_speed_info": "Seconds between slides. Only applies when Autoplay is on.",
     "background": "Background",
     "background_alt": "Background (alternate)",
     "foreground": "Foreground",
