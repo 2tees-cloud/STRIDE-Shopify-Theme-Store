@@ -114,7 +114,10 @@
     "close_menu": "Close menu",
     "country": "Country/region",
     "language": "Language",
-    "update": "Update"
+    "update": "Update",
+    "image_compare_slider": "Drag to compare before and after",
+    "previous_slide": "Previous slide",
+    "next_slide": "Next slide"
   },
   "password": {
     "title": "This shop is private",

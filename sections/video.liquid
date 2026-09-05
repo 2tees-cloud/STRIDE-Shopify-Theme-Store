@@ -1,0 +1,118 @@
+{% comment %}
+  A single video, either uploaded to Shopify Files or embedded from
+  YouTube/Vimeo via a URL — merchant picks whichever they have; the
+  embed only renders one, preferring the pasted URL when both are set.
+  Unlike the Hero's colorway videos (autoplay/muted background loops),
+  this is a standalone, user-initiated video with visible controls.
+{% endcomment %}
+
+{% if section.settings.video_url != blank or section.settings.video != blank %}
+  <div class="video-section full-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="video-section__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="video-section__media">
+      {% if section.settings.video_url != blank %}
+        {% comment %}
+          external_video_tag only accepts an actual external_video MEDIA
+          object (e.g. from product.media) -- a video_url SETTING's
+          value is a different drop, and passing it to that filter
+          throws "external_video_tag does not support VideoUrlDrop"
+          (confirmed live). Its .id and .type (youtube/vimeo) are
+          documented instead, so the embed URL is built by hand here.
+        {% endcomment %}
+        {% if section.settings.video_url.type == 'youtube' %}
+          <iframe
+            src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}"
+            title="{{ section.settings.heading | default: shop.name | escape }}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            frameborder="0"
+          ></iframe>
+        {% elsif section.settings.video_url.type == 'vimeo' %}
+          <iframe
+            src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}"
+            title="{{ section.settings.heading | default: shop.name | escape }}"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            frameborder="0"
+          ></iframe>
+        {% endif %}
+      {% elsif section.settings.video != blank %}
+        <video
+          class="video-section__video"
+          controls
+          {% if section.settings.cover_image != blank %}poster="{{ section.settings.cover_image | image_url: width: 1600 }}"{% endif %}
+        >
+          {% for source in section.settings.video.sources %}
+            <source src="{{ source.url }}" type="{{ source.mime_type }}">
+          {% endfor %}
+        </video>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .video-section {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 750px) {
+    .video-section {
+      padding-inline: var(--space-6);
+    }
+  }
+  .video-section__heading {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-6);
+    text-align: center;
+  }
+  .video-section__media {
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-background-alt);
+  }
+  .video-section__media iframe,
+  .video-section__video {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "t:labels.video_url",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:labels.video",
+      "info": "t:labels.video_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "t:labels.cover_image"
+    }
+  ],
+  "presets": [{ "name": "t:general.video" }]
+}
+{% endschema %}

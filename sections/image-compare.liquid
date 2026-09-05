@@ -1,0 +1,170 @@
+{% comment %}
+  Before/after image slider. Driven by a native <input type="range">
+  (accessible and keyboard-operable out of the box) whose value sets a
+  CSS custom property which clip-paths the "after" image -- the
+  javascript block below only ever reads that one input value and
+  writes one CSS variable, no drag/pointer-event handling of its own.
+
+  Never spell out the literal stylesheet/javascript/schema tag
+  delimiters inside a comment in a section file -- see
+  sections/carousel.liquid's comment for why (a real, live-confirmed
+  bundler corruption, not a hypothetical).
+{% endcomment %}
+
+{% if section.settings.before_image != blank and section.settings.after_image != blank %}
+  <div class="image-compare full-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="image-compare__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="image-compare__frame" style="--compare-position: 50%" data-image-compare>
+      <img
+        class="image-compare__image image-compare__image--before"
+        src="{{ section.settings.before_image | image_url: width: 1200 }}"
+        width="{{ section.settings.before_image.width }}"
+        height="{{ section.settings.before_image.height }}"
+        loading="lazy"
+        alt="{{ section.settings.before_label | default: 'Before' | escape }}"
+      >
+      <img
+        class="image-compare__image image-compare__image--after"
+        src="{{ section.settings.after_image | image_url: width: 1200 }}"
+        width="{{ section.settings.after_image.width }}"
+        height="{{ section.settings.after_image.height }}"
+        loading="lazy"
+        alt="{{ section.settings.after_label | default: 'After' | escape }}"
+      >
+      <div class="image-compare__handle" aria-hidden="true"></div>
+      <input
+        type="range"
+        class="image-compare__input"
+        min="0"
+        max="100"
+        value="50"
+        aria-label="{{ 'labels.image_compare_slider' | t }}"
+        data-image-compare-input
+      >
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .image-compare {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 750px) {
+    .image-compare {
+      padding-inline: var(--space-6);
+    }
+  }
+  .image-compare__heading {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-6);
+    text-align: center;
+  }
+  .image-compare__frame {
+    position: relative;
+    overflow: hidden;
+  }
+  .image-compare__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .image-compare__image--after {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--compare-position)) 0 0);
+  }
+  .image-compare__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--compare-position);
+    width: 2px;
+    background-color: var(--color-surface);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .image-compare__handle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-foreground-muted);
+    transform: translate(-50%, -50%);
+  }
+  .image-compare__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  function initImageCompare(root) {
+    root.querySelectorAll('[data-image-compare]').forEach(function (frame) {
+      var input = frame.querySelector('[data-image-compare-input]');
+      if (!input) return;
+
+      input.addEventListener('input', function () {
+        frame.style.setProperty('--compare-position', input.value + '%');
+      });
+    });
+  }
+
+  initImageCompare(document);
+  document.addEventListener('shopify:section:load', function (event) {
+    initImageCompare(event.target);
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.image_compare",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "t:labels.before_image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "t:labels.before_label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "t:labels.after_image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "t:labels.after_label",
+      "default": "After"
+    }
+  ],
+  "presets": [{ "name": "t:general.image_compare" }]
+}
+{% endschema %}

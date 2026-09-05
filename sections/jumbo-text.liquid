@@ -1,0 +1,70 @@
+{% comment %}
+  A single oversized statement, no image — the "billboard" section for
+  a short brand line that needs to fill the screen with type alone.
+{% endcomment %}
+
+{% if section.settings.text != blank %}
+  <div class="jumbo-text full-width">
+    <p class="jumbo-text__text">{{ section.settings.text }}</p>
+    {% if section.settings.cta_text != blank %}
+      <a href="{{ section.settings.cta_link | escape }}" class="jumbo-text__cta">{{ section.settings.cta_text }}</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .jumbo-text {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 72rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  @media (min-width: 750px) {
+    .jumbo-text {
+      padding-inline: var(--space-6);
+    }
+  }
+  .jumbo-text__text {
+    font-family: var(--font-header--family);
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    line-height: 1.05;
+    margin: 0;
+  }
+  .jumbo-text__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    margin-top: var(--space-6);
+    padding: var(--space-3) var(--space-5);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    text-decoration: none;
+    font-weight: 700;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.jumbo_text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "Made to move with you"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "t:labels.cta_text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "t:labels.cta_link"
+    }
+  ],
+  "presets": [{ "name": "t:general.jumbo_text" }]
+}
+{% endschema %}

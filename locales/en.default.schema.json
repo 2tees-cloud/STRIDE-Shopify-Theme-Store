@@ -14,6 +14,9 @@
     "article": "Article",
     "block": "Block",
     "blog": "Blog",
+    "blog_posts": "Blog posts",
+    "carousel": "Carousel",
+    "carousel_slide": "Slide",
     "body_font": "Body font",
     "buy_buttons": "Buy buttons",
     "callout": "Callout",
@@ -32,12 +35,15 @@
     "custom_section": "Custom section",
     "divider": "Divider",
     "drop_countdown": "Drop countdown",
+    "editorial": "Editorial",
     "faq": "FAQ",
     "faq_question": "Question",
     "favicon": "Favicon",
     "icons_with_text": "Icons with text",
     "icon_text_item": "Icon",
+    "image_compare": "Image compare",
     "image_with_text": "Image with text",
+    "jumbo_text": "Editorial: Jumbo text",
     "fonts": "Fonts",
     "footer": "Footer",
     "footer_link_list": "Link list",
@@ -78,7 +84,8 @@
     "text": "Text",
     "theme": "Theme",
     "typography": "Typography",
-    "variant_picker": "Variant picker"
+    "variant_picker": "Variant picker",
+    "video": "Video"
   },
   "labels": {
     "alignment": "Alignment",
@@ -139,6 +146,7 @@
     "target_date": "Target date and time",
     "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone).",
     "collection": "Collection",
+    "blog": "Blog",
     "item_limit": "Number of products",
     "address": "Address",
     "address_info": "Shown next to the form, and used to place the map pin below it.",
@@ -152,7 +160,14 @@
     "answer": "Answer",
     "icon": "Icon",
     "spacing": "Spacing",
-    "image_position": "Image position"
+    "image_position": "Image position",
+    "video_url": "Video URL",
+    "cover_image": "Cover image",
+    "video_info": "Used only if no video URL is set above.",
+    "before_image": "Before image",
+    "before_label": "Before label",
+    "after_image": "After image",
+    "after_label": "After label"
   },
   "options": {
     "alignment": {
@@ -180,6 +195,10 @@
     "image_position": {
       "left": "Left",
       "right": "Right"
+    },
+    "blog_posts_layout": {
+      "grid": "Grid",
+      "carousel": "Carousel"
     }
   }
 }
