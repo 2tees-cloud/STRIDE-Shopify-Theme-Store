@@ -26,6 +26,41 @@
       </a>
     </li>
   {% endif %}
+  {% if settings.social_facebook_link != blank %}
+    <li>
+      <a href="{{ settings.social_facebook_link | escape }}" aria-label="Facebook">
+        {{ 'icon-facebook.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_youtube_link != blank %}
+    <li>
+      <a href="{{ settings.social_youtube_link | escape }}" aria-label="YouTube">
+        {{ 'icon-youtube.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_pinterest_link != blank %}
+    <li>
+      <a href="{{ settings.social_pinterest_link | escape }}" aria-label="Pinterest">
+        {{ 'icon-pinterest.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_linkedin_link != blank %}
+    <li>
+      <a href="{{ settings.social_linkedin_link | escape }}" aria-label="LinkedIn">
+        {{ 'icon-linkedin.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.social_snapchat_link != blank %}
+    <li>
+      <a href="{{ settings.social_snapchat_link | escape }}" aria-label="Snapchat">
+        {{ 'icon-snapchat.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
 </ul>
 
 {% stylesheet %}

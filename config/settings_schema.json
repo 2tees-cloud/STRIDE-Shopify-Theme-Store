@@ -161,6 +161,31 @@
         "type": "url",
         "id": "social_tiktok_link",
         "label": "t:labels.tiktok"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "t:labels.facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "t:labels.youtube"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest_link",
+        "label": "t:labels.pinterest"
+      },
+      {
+        "type": "url",
+        "id": "social_linkedin_link",
+        "label": "t:labels.linkedin"
+      },
+      {
+        "type": "url",
+        "id": "social_snapchat_link",
+        "label": "t:labels.snapchat"
       }
     ]
   }
