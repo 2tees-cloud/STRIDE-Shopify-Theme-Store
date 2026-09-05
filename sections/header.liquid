@@ -11,7 +11,21 @@
   </button>
 
   <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
+    <a href="{{ routes.root_url }}" class="header__logo-link">
+      {% if section.settings.logo %}
+        <img
+          class="header__logo"
+          src="{{ section.settings.logo | image_url: width: 400 }}"
+          srcset="{{ section.settings.logo | image_url: width: 200 }} 200w, {{ section.settings.logo | image_url: width: 400 }} 400w"
+          alt="{{ shop.name | escape }}"
+          width="{{ section.settings.logo.width }}"
+          height="{{ section.settings.logo.height }}"
+          loading="eager"
+        >
+      {% else %}
+        {{ shop.name }}
+      {% endif %}
+    </a>
   </h2>
 
   <div class="header__panel" id="MobileNavPanel">
@@ -131,10 +145,20 @@
     padding-block: var(--space-2);
   }
   header .header__title {
+    /*
+      No flex-grow: this used to be flex:1 specifically so it would
+      absorb all the row's free space and shove the menu (and icons)
+      toward the far right, right up against each other -- instead of
+      the logo AND menu sitting together on the left the way "header
+      layout" normally means, with only the icons pushed off to the
+      right (via .header__icons's margin-left: auto below). Natural
+      width also matters once this can render an actual logo <img>
+      instead of always a text shop name: growing an image's own flex
+      item does nothing useful, since the image itself doesn't stretch.
+    */
     font-family: var(--font-header--family);
     font-style: var(--font-header--style);
     font-weight: var(--font-header--weight);
-    flex: 1;
   }
   header a {
     position: relative;
@@ -143,6 +167,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  /*
+    The generic `header a` rule above centers a link's content within
+    its own box -- correct for the small fixed-size icon buttons it was
+    written for, but wrong here: .header__logo-link's box is only ever
+    as wide as its own content (see the no-flex-grow comment above), so
+    center vs. flex-start makes no visual difference for a short shop
+    name/logo... except it silently would if a wide logo image ever
+    needed to sit inside a wider box for any reason. Pinning this
+    explicitly to flex-start is the correct, permanent "logo is left-
+    aligned" rule, not an accident of box sizing.
+  */
+  header .header__logo-link {
+    justify-content: flex-start;
+  }
+  header .header__logo {
+    display: block;
+    max-height: 2.5rem;
+    width: auto;
   }
   header a sup {
     position: absolute;
@@ -162,6 +205,15 @@
     align-items: center;
     gap: 1rem;
     flex-shrink: 0;
+    /*
+      This is what actually pushes the icons to the far right now that
+      .header__title no longer flex-grows to do that job itself (see
+      its comment) -- an auto margin on a flex item consumes all the
+      row's free space on that side, so logo + menu (the panel, inline
+      at desktop) stay grouped together on the left exactly where they
+      naturally fall, with only the icons shoved to the opposite edge.
+    */
+    margin-left: auto;
   }
   /* <shopify-account>'s default trigger button renders at ~44px --
      taller than every other 32px icon in this row. Shopify documents
@@ -717,6 +769,12 @@
 {
   "name": "t:general.header",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo",
+      "info": "t:labels.logo_info"
+    },
     {
       "type": "link_list",
       "id": "menu",

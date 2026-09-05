@@ -114,6 +114,8 @@
     "cta_text": "Button label",
     "cta_link": "Button link",
     "fallback_text": "Message after the countdown ends",
+    "logo": "Logo",
+    "logo_info": "Shown instead of the store name, aligned left and vertically centered next to the menu. Scales to fit a compact height automatically — no need to pre-crop it.",
     "image": "Image",
     "label": "Label",
     "position_x": "Horizontal position",
