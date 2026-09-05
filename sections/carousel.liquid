@@ -81,7 +81,23 @@
     text-align: center;
   }
   .carousel__viewport {
+    /*
+      .carousel itself is full-width (spans the entire browser
+      viewport, not just the page's normal content column), but the
+      track's slides have a fixed max width (min(20rem, 80vw) each) and
+      don't grow to fill leftover space -- with only 3-4 slides on a
+      wide screen, that left a lot of empty space between the last
+      slide and .carousel__viewport's own right edge, which is exactly
+      where the next-arrow's position: absolute anchors, so it rendered
+      far from the actual visible content instead of hugging it
+      (confirmed live via a screenshot: the arrows sat at the browser's
+      edges with ~200px of dead space next to the real cards). Matches
+      every other section's own constrained content width instead of
+      genuinely spanning the raw viewport.
+    */
     position: relative;
+    max-width: 64rem;
+    margin-inline: auto;
   }
   .carousel__track {
     display: flex;
