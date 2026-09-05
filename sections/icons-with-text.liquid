@@ -10,7 +10,7 @@
       <h2 class="icons-with-text__heading">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="icons-with-text__row icons-with-text__row--{{ section.settings.icon_size }}">
+    <div class="icons-with-text__row icons-with-text__row--{{ section.settings.icon_size }} icons-with-text__row--text-{{ section.settings.text_size }}">
       {% for block in section.blocks %}
         <div class="icons-with-text__item" {{ block.shopify_attributes }}>
           {% if block.settings.image != blank %}
@@ -89,8 +89,16 @@
   .icons-with-text__icon {
     object-fit: contain;
   }
-  .icons-with-text__text {
+  .icons-with-text__row--text-small .icons-with-text__text {
+    font-size: 0.75rem;
+  }
+  .icons-with-text__row--text-medium .icons-with-text__text {
     font-size: 0.875rem;
+  }
+  .icons-with-text__row--text-large .icons-with-text__text {
+    font-size: 1.125rem;
+  }
+  .icons-with-text__text {
     color: var(--color-foreground-muted);
   }
 {% endstylesheet %}
@@ -108,6 +116,17 @@
       "type": "select",
       "id": "icon_size",
       "label": "t:labels.icon_size",
+      "options": [
+        { "value": "small", "label": "t:options.icon_size.small" },
+        { "value": "medium", "label": "t:options.icon_size.medium" },
+        { "value": "large", "label": "t:options.icon_size.large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:labels.text_size",
       "options": [
         { "value": "small", "label": "t:options.icon_size.small" },
         { "value": "medium", "label": "t:options.icon_size.medium" },

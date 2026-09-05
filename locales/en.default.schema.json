@@ -182,7 +182,8 @@
     "title": "Title",
     "code": "Liquid code",
     "code_info": "Add Liquid, HTML, CSS, and JavaScript code to customize your store.",
-    "icon_size": "Icon size"
+    "icon_size": "Icon size",
+    "text_size": "Text size"
   },
   "options": {
     "alignment": {
