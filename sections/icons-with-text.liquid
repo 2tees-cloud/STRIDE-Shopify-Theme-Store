@@ -49,42 +49,51 @@
     margin: 0 0 var(--space-6);
     text-align: center;
   }
+  /*
+    Grid, not a centered flex row: with only 2-3 items, justify-content:
+    center clusters them in the middle of a wide screen with a lot of
+    dead space on both sides -- confirmed live as the "grouped in the
+    center" complaint. auto-fit + minmax spreads whatever count of
+    items there are across the FULL row width (same layout mechanism
+    sections/multicolumn.liquid's grid already uses), and each column
+    still shrinks to fit more items instead of overflowing.
+  */
   .icons-with-text__row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-8);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--space-6);
     max-width: 64rem;
     margin-inline: auto;
   }
   .icons-with-text__item {
+    /* container-type lets .icons-with-text__icon size itself off THIS
+       item's own rendered column width (cqw), the same auto-scaling
+       approach as sections/multicolumn.liquid: 2-3 items render wide
+       columns and a bigger icon, 6 items render narrow columns and a
+       correspondingly smaller one, automatically, in step with however
+       many blocks are actually on the row -- see that section's
+       comment for the full reasoning. The Icon size setting still
+       exists here to let a merchant bias the range up or down (small/
+       medium/large each define a different clamp below), it just no
+       longer pins one fixed px value regardless of block count. */
+    container-type: inline-size;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
     text-align: center;
-    max-width: 10rem;
   }
-  /*
-    Sized well above the header's 32px icon row on purpose: those are
-    small, dense UI controls sitting next to other controls, while
-    these are the section's own visual content -- every real trust-
-    badge row (shipping/returns/secure-checkout icons) sizes them
-    around 48-80px, never icon-toolbar-small, or they read as an
-    afterthought instead of content. Merchant-configurable since the
-    right size also depends on how busy the icon artwork itself is.
-  */
   .icons-with-text__row--small .icons-with-text__icon {
-    width: 3rem;
-    height: 3rem;
+    width: clamp(3rem, 45cqw, 5rem);
+    height: clamp(3rem, 45cqw, 5rem);
   }
   .icons-with-text__row--medium .icons-with-text__icon {
-    width: 4rem;
-    height: 4rem;
+    width: clamp(4rem, 50cqw, 7rem);
+    height: clamp(4rem, 50cqw, 7rem);
   }
   .icons-with-text__row--large .icons-with-text__icon {
-    width: 5rem;
-    height: 5rem;
+    width: clamp(5rem, 55cqw, 9rem);
+    height: clamp(5rem, 55cqw, 9rem);
   }
   .icons-with-text__icon {
     object-fit: contain;
