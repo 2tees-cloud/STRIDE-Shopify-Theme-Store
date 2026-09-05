@@ -10,13 +10,14 @@
       <h2 class="icons-with-text__heading">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="icons-with-text__row">
+    <div class="icons-with-text__row icons-with-text__row--{{ section.settings.icon_size }}">
       {% for block in section.blocks %}
         <div class="icons-with-text__item" {{ block.shopify_attributes }}>
           {% if block.settings.image != blank %}
             <img
               class="icons-with-text__icon"
-              src="{{ block.settings.image | image_url: width: 80 }}"
+              src="{{ block.settings.image | image_url: width: 160 }}"
+              srcset="{{ block.settings.image | image_url: width: 80 }} 80w, {{ block.settings.image | image_url: width: 160 }} 160w"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
               loading="lazy"
@@ -52,7 +53,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-6);
+    gap: var(--space-8);
     max-width: 64rem;
     margin-inline: auto;
   }
@@ -60,13 +61,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     text-align: center;
     max-width: 10rem;
   }
+  /*
+    Sized well above the header's 32px icon row on purpose: those are
+    small, dense UI controls sitting next to other controls, while
+    these are the section's own visual content -- every real trust-
+    badge row (shipping/returns/secure-checkout icons) sizes them
+    around 48-80px, never icon-toolbar-small, or they read as an
+    afterthought instead of content. Merchant-configurable since the
+    right size also depends on how busy the icon artwork itself is.
+  */
+  .icons-with-text__row--small .icons-with-text__icon {
+    width: 3rem;
+    height: 3rem;
+  }
+  .icons-with-text__row--medium .icons-with-text__icon {
+    width: 4rem;
+    height: 4rem;
+  }
+  .icons-with-text__row--large .icons-with-text__icon {
+    width: 5rem;
+    height: 5rem;
+  }
   .icons-with-text__icon {
-    width: 2.5rem;
-    height: 2.5rem;
     object-fit: contain;
   }
   .icons-with-text__text {
@@ -83,6 +103,17 @@
       "type": "text",
       "id": "heading",
       "label": "t:labels.heading"
+    },
+    {
+      "type": "select",
+      "id": "icon_size",
+      "label": "t:labels.icon_size",
+      "options": [
+        { "value": "small", "label": "t:options.icon_size.small" },
+        { "value": "medium", "label": "t:options.icon_size.medium" },
+        { "value": "large", "label": "t:options.icon_size.large" }
+      ],
+      "default": "medium"
     }
   ],
   "blocks": [
