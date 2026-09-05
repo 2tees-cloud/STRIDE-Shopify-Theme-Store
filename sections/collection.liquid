@@ -42,8 +42,6 @@
   </div>
 
   {% paginate collection.products by 24 %}
-    {% render 'collection-filters', collection: collection, section: section %}
-
     {% comment %}
       Result-count announcement for Task 3's AJAX enhancement
       (assets/collection-filters.js). Stays outside the swapped grid/empty
@@ -65,6 +63,12 @@
       with no error anywhere). Using `results:` avoids the reserved name
       entirely instead of relying on flat-string interpolation happening
       to tolerate a non-numeric value passed as `count:`.
+
+      Kept OUTSIDE .collection__layout below (rather than as its 3rd
+      child) on purpose: that grid only ever expects exactly 2 children
+      (the filters form -> left column, data-collection-results -> right
+      column, placed by source order) -- this element is visually-hidden
+      anyway, so it doesn't need a grid track at all.
     {% endcomment %}
     <div
       class="visually-hidden"
@@ -75,56 +79,67 @@
     ></div>
 
     {% comment %}
-      data-collection-results wraps the grid/empty-state AND the
-      pagination nav together, and is what Task 3's AJAX enhancement
-      actually swaps as a single unit on each fetch — not just
-      data-collection-grid on its own. Filtering/sorting can change the
-      total page count (paginate.pages), so the pagination nav has to be
-      replaced in lockstep with the grid; swapping data-collection-grid
-      alone would leave a stale pagination nav (wrong page links, or a
-      nav still showing when the new result set no longer has multiple
-      pages) sitting next to a freshly-swapped grid.
-
-      data-results-total="{{ paginate.items }}" carries the TRUE filtered
-      result count (confirmed via Shopify's paginate object docs:
-      "the total number of items to be paginated" — e.g. 120 across all
-      pages for a paginated set of 120, not the current page's size) so
-      Task 3's aria-live announcement reads the real total instead of
-      counting rendered .product-card elements, which would be capped at
-      the 24-per-page page_size below and wrongly announce "24" for any
-      filter matching 24 or more products.
+      Sidebar layout: the filters form is the left column, the results
+      (grid/empty-state + pagination) the right column, on desktop --
+      stacked in source order on mobile (plain block flow, same as
+      before this layout existed). Exactly 2 children by design; see the
+      live-region comment above for why that element lives outside this.
     {% endcomment %}
-    <div data-collection-results data-results-total="{{ paginate.items }}">
-      {% if collection.products.size > 0 %}
-        {% comment %}
-          data-collection-grid is unused by assets/collection-filters.js
-          today — the AJAX swap operates on the data-collection-results
-          wrapper above (see its comment), not this element directly.
-          Kept as a stable, documented hook on the grid itself (its
-          original purpose per Task 1) in case a future addition needs to
-          target the grid specifically without also touching pagination/
-          the empty state.
-        {% endcomment %}
-        <div class="collection__grid" data-collection-grid>
-          {% for product in collection.products %}
-            {% render 'product-card', product: product, priority: forloop.first %}
-          {% endfor %}
-        </div>
+    <div class="collection__layout">
+      {% render 'collection-filters', collection: collection, section: section %}
 
-        {% if paginate.pages > 1 %}
-          <nav class="collection__pagination" aria-label="{{ 'collection.pagination' | t }}">
-            {{ paginate | default_pagination }}
-          </nav>
+      {% comment %}
+        data-collection-results wraps the grid/empty-state AND the
+        pagination nav together, and is what Task 3's AJAX enhancement
+        actually swaps as a single unit on each fetch — not just
+        data-collection-grid on its own. Filtering/sorting can change the
+        total page count (paginate.pages), so the pagination nav has to be
+        replaced in lockstep with the grid; swapping data-collection-grid
+        alone would leave a stale pagination nav (wrong page links, or a
+        nav still showing when the new result set no longer has multiple
+        pages) sitting next to a freshly-swapped grid.
+
+        data-results-total="{{ paginate.items }}" carries the TRUE filtered
+        result count (confirmed via Shopify's paginate object docs:
+        "the total number of items to be paginated" — e.g. 120 across all
+        pages for a paginated set of 120, not the current page's size) so
+        Task 3's aria-live announcement reads the real total instead of
+        counting rendered .product-card elements, which would be capped at
+        the 24-per-page page_size below and wrongly announce "24" for any
+        filter matching 24 or more products.
+      {% endcomment %}
+      <div data-collection-results data-results-total="{{ paginate.items }}">
+        {% if collection.products.size > 0 %}
+          {% comment %}
+            data-collection-grid is unused by assets/collection-filters.js
+            today — the AJAX swap operates on the data-collection-results
+            wrapper above (see its comment), not this element directly.
+            Kept as a stable, documented hook on the grid itself (its
+            original purpose per Task 1) in case a future addition needs to
+            target the grid specifically without also touching pagination/
+            the empty state.
+          {% endcomment %}
+          <div class="collection__grid" data-collection-grid>
+            {% for product in collection.products %}
+              {% render 'product-card', product: product, priority: forloop.first %}
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            <nav class="collection__pagination" aria-label="{{ 'collection.pagination' | t }}">
+              {{ paginate | default_pagination }}
+            </nav>
+          {% endif %}
+        {% else %}
+          <p class="collection__empty">
+            {%- if has_active_filters -%}
+              {{ 'collection.empty_filtered' | t }}
+            {%- else -%}
+              {{ 'collection.empty' | t }}
+            {%- endif -%}
+          </p>
         {% endif %}
-      {% else %}
-        <p class="collection__empty">
-          {%- if has_active_filters -%}
-            {{ 'collection.empty_filtered' | t }}
-          {%- else -%}
-            {{ 'collection.empty' | t }}
-          {%- endif -%}
-        </p>
-      {% endif %}
+      </div>
     </div>
   {% endpaginate %}
 </div>
@@ -155,6 +170,22 @@
   }
   .collection__description {
     color: var(--color-foreground-muted);
+  }
+  /*
+    Mobile: no explicit display -- the filters form and the results div
+    just stack in normal block flow, identical to the layout before this
+    grid existed. Desktop: a real 2-column sidebar (filters left, results
+    right), which is why sections/collection.liquid keeps this element
+    down to exactly those 2 children -- a 3rd child would fall into the
+    left column on its own row instead of row 1 column 2.
+  */
+  @media (min-width: 750px) {
+    .collection__layout {
+      display: grid;
+      grid-template-columns: 16rem 1fr;
+      align-items: start;
+      gap: var(--space-8);
+    }
   }
   .collection__grid {
     display: grid;

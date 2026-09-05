@@ -65,20 +65,53 @@
 
           {% case filter.type %}
             {% when 'list' %}
-              <div class="collection-filters__values">
-                {% for value in filter.values %}
-                  <label class="collection-filters__value">
-                    <input
-                      type="checkbox"
-                      name="{{ value.param_name | escape }}"
-                      value="{{ value.value | escape }}"
-                      {% if value.active %}checked{% endif %}
-                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+              {% comment %}
+                filter.presentation is only ever "swatch", "image", or nil
+                (confirmed against https://shopify.dev/docs/api/liquid/objects/filter)
+                -- nil covers everything without a merchant-configured
+                visual representation (e.g. Size, Brand/Vendor), which
+                keeps rendering as the plain checkbox list. "swatch" is
+                the color-option case this task specifically adds; a
+                filter_value's swatch.color is a real Shopify color
+                object here, output directly as a CSS color the same way
+                sections/hero-colorway.liquid already does for its own
+                swatches (`--swatch-color: {{ block.settings.color }}`).
+              {% endcomment %}
+              {% if filter.presentation == 'swatch' %}
+                <div class="collection-filters__values collection-filters__values--swatch">
+                  {% for value in filter.values %}
+                    <label
+                      class="collection-filters__swatch{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
+                      style="--swatch-color: {{ value.swatch.color }};{% if value.swatch.image %} --swatch-image: url({{ value.swatch.image | image_url: width: 64 }});{% endif %}"
+                      title="{{ value.label }} ({{ value.count }})"
                     >
-                    {{ value.label }} ({{ value.count }})
-                  </label>
-                {% endfor %}
-              </div>
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name | escape }}"
+                        value="{{ value.value | escape }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      >
+                      <span class="visually-hidden">{{ value.label }} ({{ value.count }})</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="collection-filters__values">
+                  {% for value in filter.values %}
+                    <label class="collection-filters__value">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name | escape }}"
+                        value="{{ value.value | escape }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      >
+                      {{ value.label }} ({{ value.count }})
+                    </label>
+                  {% endfor %}
+                </div>
+              {% endif %}
             {% when 'boolean' %}
               <div class="collection-filters__values">
                 <label class="collection-filters__value">
@@ -149,6 +182,24 @@
     gap: var(--space-4);
     margin-bottom: var(--space-6);
   }
+  /*
+    At desktop width this form IS the left sidebar column (see
+    sections/collection.liquid's .collection__layout), not a horizontal
+    bar above the grid -- switching to a full-width vertical stack here
+    matches how a sidebar filter panel reads (sort, then every facet,
+    then actions, each spanning the sidebar's full width) instead of
+    wrapping fixed-min-width fieldsets into whatever fits a 16rem column
+    like a smaller version of the horizontal mobile layout would.
+    Mobile keeps the original horizontal, wrapping bar unchanged.
+  */
+  @media (min-width: 750px) {
+    .collection-filters {
+      flex-direction: column;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      margin-bottom: 0;
+    }
+  }
   .collection-filters__sort {
     display: flex;
     flex-direction: column;
@@ -163,7 +214,8 @@
   }
   @media (min-width: 750px) {
     .collection-filters__facets {
-      width: auto;
+      flex-direction: column;
+      align-items: stretch;
     }
   }
   .collection-filters__facet {
@@ -181,6 +233,11 @@
     padding: var(--space-3);
     min-width: 10rem;
   }
+  @media (min-width: 750px) {
+    .collection-filters__facet {
+      width: 100%;
+    }
+  }
   .collection-filters__values {
     display: flex;
     flex-direction: column;
@@ -193,6 +250,41 @@
     gap: var(--space-2);
     min-width: 24px;
     min-height: 24px;
+  }
+  .collection-filters__values--swatch {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .collection-filters__swatch {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 50%;
+    background-color: var(--swatch-color);
+    background-image: var(--swatch-image, none);
+    background-size: cover;
+    background-position: center;
+    border: 2px solid transparent;
+    box-shadow: 0 0 0 1px var(--color-foreground-muted);
+    cursor: pointer;
+  }
+  .collection-filters__swatch.is-active {
+    border-color: var(--color-foreground);
+  }
+  .collection-filters__swatch.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .collection-filters__swatch input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
   }
   .collection-filters__select {
     min-width: 24px;
@@ -225,10 +317,5 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-  @media (min-width: 750px) {
-    .collection-filters__actions {
-      width: auto;
-    }
   }
 {% endstylesheet %}
