@@ -289,6 +289,98 @@
       "settings": {
         "heading": ""
       }
+    },
+    "icons_with_text_fddipP": {
+      "type": "icons-with-text",
+      "blocks": {
+        "icon_t4FiCx": {
+          "type": "icon",
+          "settings": {
+            "text": ""
+          }
+        },
+        "icon_Nqdd7k": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "Как вывести часы на рабочий стол"
+          }
+        },
+        "icon_VxcFnT": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "Как вывести часы на рабочий стол"
+          }
+        },
+        "icon_EqPWyQ": {
+          "type": "icon",
+          "settings": {
+            "image": "shopify://shop_images/vecteezy_truck-fast-shipping-icon-light_43212040.png",
+            "text": "Как вывести часы на рабочий стол"
+          }
+        }
+      },
+      "block_order": [
+        "icon_t4FiCx",
+        "icon_Nqdd7k",
+        "icon_VxcFnT",
+        "icon_EqPWyQ"
+      ],
+      "name": "t:general.icons_with_text",
+      "settings": {
+        "heading": "Как вывести часы на рабочий стол",
+        "icon_size": "medium",
+        "text_size": "medium"
+      }
+    },
+    "collection_index_F8qanW": {
+      "type": "collection-index",
+      "name": "t:general.collection_index",
+      "settings": {
+        "heading": "Shop the edit",
+        "collection": "автомобільні-лебідки",
+        "item_limit": 5
+      }
+    },
+    "collection_links_QK8XQ3": {
+      "type": "collection-links",
+      "blocks": {
+        "link_eqeqV4": {
+          "type": "link",
+          "settings": {
+            "image": "shopify://shop_images/tablet-lays-on-a-white-table-with-screen-lit-by-app-icons.jpg",
+            "title": "Как вывести часы на рабочий стол",
+            "link": "shopify://collections/автотовари"
+          }
+        },
+        "link_JmNUen": {
+          "type": "link",
+          "settings": {
+            "image": "shopify://shop_images/hightop-lighted-sneakers.jpg",
+            "title": "Как вывести часы на рабочий стол",
+            "link": "shopify://collections/автохімия-і-автомастила"
+          }
+        },
+        "link_ytPrD6": {
+          "type": "link",
+          "settings": {
+            "image": "shopify://shop_images/dangling-black-fashion-sneakers-held-between-fingertips.jpg",
+            "title": "Как вывести часы на рабочий стол",
+            "link": "shopify://collections/zaklepky-aliuminiyevi"
+          }
+        }
+      },
+      "block_order": [
+        "link_eqeqV4",
+        "link_JmNUen",
+        "link_ytPrD6"
+      ],
+      "name": "t:general.collection_links",
+      "settings": {
+        "heading": "Как вывести часы на рабочий стол",
+        "style": "spotlight"
+      }
     }
   },
   "order": [
@@ -301,6 +393,9 @@
     "newsletter-band",
     "rich_text_qTqTDM",
     "multicolumn_aFtWEy",
-    "carousel_BdNc9P"
+    "carousel_BdNc9P",
+    "icons_with_text_fddipP",
+    "collection_index_F8qanW",
+    "collection_links_QK8XQ3"
   ]
 }
