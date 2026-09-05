@@ -1,0 +1,46 @@
+{% comment %}
+  A plain horizontal rule with configurable vertical spacing, for
+  separating two sections without adding any visible content between
+  them.
+{% endcomment %}
+
+<div class="divider full-width" style="--divider-spacing: {{ section.settings.spacing }}px">
+  <hr class="divider__line">
+</div>
+
+{% stylesheet %}
+  .divider {
+    padding-block: var(--divider-spacing);
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .divider {
+      padding-inline: var(--space-6);
+    }
+  }
+  .divider__line {
+    max-width: 64rem;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.divider",
+  "settings": [
+    {
+      "type": "range",
+      "id": "spacing",
+      "label": "t:labels.spacing",
+      "min": 0,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [{ "name": "t:general.divider" }]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{% comment %}
+  Large centered quotation with an optional attribution line — press
+  mentions, customer testimonials, brand statements.
+{% endcomment %}
+
+{% if section.settings.quote != blank %}
+  <div class="pull-quote full-width">
+    <blockquote class="pull-quote__quote">
+      {{ section.settings.quote }}
+    </blockquote>
+    {% if section.settings.attribution != blank %}
+      <cite class="pull-quote__attribution">{{ section.settings.attribution }}</cite>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .pull-quote {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 48rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  @media (min-width: 750px) {
+    .pull-quote {
+      padding-inline: var(--space-6);
+    }
+  }
+  .pull-quote__quote {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-style: italic;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .pull-quote__quote::before {
+    content: '\201C';
+  }
+  .pull-quote__quote::after {
+    content: '\201D';
+  }
+  .pull-quote__attribution {
+    display: block;
+    margin-top: var(--space-4);
+    color: var(--color-foreground-muted);
+    font-style: normal;
+    font-size: 0.875rem;
+  }
+  .pull-quote__attribution::before {
+    content: '\2014 ';
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.pull_quote",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "t:labels.quote"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "t:labels.attribution"
+    }
+  ],
+  "presets": [{ "name": "t:general.pull_quote" }]
+}
+{% endschema %}

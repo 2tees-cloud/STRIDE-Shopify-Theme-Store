@@ -30,8 +30,14 @@
     "contact": "Contact form",
     "content": "Content",
     "custom_section": "Custom section",
+    "divider": "Divider",
     "drop_countdown": "Drop countdown",
+    "faq": "FAQ",
+    "faq_question": "Question",
     "favicon": "Favicon",
+    "icons_with_text": "Icons with text",
+    "icon_text_item": "Icon",
+    "image_with_text": "Image with text",
     "fonts": "Fonts",
     "footer": "Footer",
     "footer_link_list": "Link list",
@@ -46,6 +52,8 @@
     "marquee": "Marquee",
     "marquee_item": "Ticker message",
     "message": "Message",
+    "multicolumn": "Multicolumn",
+    "multicolumn_item": "Column",
     "newsletter": "Newsletter signup",
     "newsletter_band": "Newsletter band",
     "page": "Page",
@@ -56,7 +64,9 @@
     "product_price": "Price",
     "product_title": "Product title",
     "product_vendor": "Vendor",
+    "pull_quote": "Pull quote",
     "quantity_selector": "Quantity selector",
+    "rich_text": "Rich text",
     "row": "Row",
     "search": "Search",
     "secondary": "Secondary",
@@ -135,7 +145,14 @@
     "phone": "Phone",
     "video": "Video",
     "hero_image_info": "Optional if a video is set below — used as the video's poster frame while it loads, and shown on its own if no video is set.",
-    "hero_video_info": "Plays muted and on a loop in place of the image above when this colorway is active. Uploaded from your files."
+    "hero_video_info": "Plays muted and on a loop in place of the image above when this colorway is active. Uploaded from your files.",
+    "quote": "Quote",
+    "attribution": "Attribution",
+    "question": "Question",
+    "answer": "Answer",
+    "icon": "Icon",
+    "spacing": "Spacing",
+    "image_position": "Image position"
   },
   "options": {
     "alignment": {
@@ -159,6 +176,10 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
+    },
+    "image_position": {
+      "left": "Left",
+      "right": "Right"
     }
   }
 }

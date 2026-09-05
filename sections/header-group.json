@@ -13,21 +13,15 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {
-        "rotation_speed": 5
-      }
+      "settings": {}
     },
     "header": {
       "type": "header",
-      "settings": {
-        "logo": "shopify://shop_images/large.png",
-        "menu": "main-menu",
-        "customer_account_menu": "customer-account-main-menu"
-      }
+      "settings": {}
     }
   },
   "order": [
     "announcement-bar",
     "header"
-  ]
+  ],
 }
