@@ -18,6 +18,17 @@
         }
       }
     },
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "4963582989228167545": {
+        "type": "shopify://apps/ai-dropshipping-hub/blocks/delivery_embed/01a0292d-8dae-730a-ab90-e94194be362d",
+        "disabled": false,
+        "settings": {
+          "title": "Оберіть доставку",
+          "enable_ukrposhta": true,
+          "fallback_price_text": "За тарифами перевізника"
+        }
+      }
+    }
   }
 }
