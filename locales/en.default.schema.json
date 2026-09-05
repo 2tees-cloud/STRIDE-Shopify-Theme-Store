@@ -17,6 +17,10 @@
     "blog_posts": "Blog posts",
     "carousel": "Carousel",
     "carousel_slide": "Slide",
+    "collection_item": "Collection",
+    "collection_links": "Collection links",
+    "collection_links_item": "Link",
+    "collection_list_grid": "Collection list: Grid",
     "body_font": "Body font",
     "buy_buttons": "Buy buttons",
     "callout": "Callout",
@@ -37,6 +41,7 @@
     "drop_countdown": "Drop countdown",
     "editorial": "Editorial",
     "faq": "FAQ",
+    "featured_product": "Featured product",
     "faq_question": "Question",
     "favicon": "Favicon",
     "icons_with_text": "Icons with text",
@@ -72,6 +77,7 @@
     "product_vendor": "Vendor",
     "pull_quote": "Pull quote",
     "quantity_selector": "Quantity selector",
+    "recommended_products": "Recommended products",
     "rich_text": "Rich text",
     "row": "Row",
     "search": "Search",
@@ -167,7 +173,11 @@
     "before_image": "Before image",
     "before_label": "Before label",
     "after_image": "After image",
-    "after_label": "After label"
+    "after_label": "After label",
+    "complementary_heading": "Complementary heading",
+    "eyebrow_text": "Eyebrow text",
+    "style": "Style",
+    "title": "Title"
   },
   "options": {
     "alignment": {
@@ -199,6 +209,10 @@
     "blog_posts_layout": {
       "grid": "Grid",
       "carousel": "Carousel"
+    },
+    "collection_links_style": {
+      "spotlight": "Spotlight (image cards)",
+      "text": "Text (link list)"
     }
   }
 }
