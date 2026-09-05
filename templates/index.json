@@ -374,6 +374,53 @@
         "heading": "Как вывести часы на рабочий стол",
         "style": "spotlight"
       }
+    },
+    "collection_list_grid_WNEae4": {
+      "type": "collection-list-grid",
+      "blocks": {
+        "collection_item_wNUKMh": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "автомобільні-домкрати-підставки"
+          }
+        },
+        "collection_item_Firjz7": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "автокосметика"
+          }
+        },
+        "collection_item_yjYFaC": {
+          "type": "collection_item",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_item_wNUKMh",
+        "collection_item_Firjz7",
+        "collection_item_yjYFaC"
+      ],
+      "name": "t:general.collection_list_grid",
+      "settings": {
+        "heading": "Shop by collection"
+      }
+    },
+    "custom_section_fjrB6C": {
+      "type": "custom-section",
+      "name": "t:general.custom_section",
+      "settings": {}
+    },
+    "editorial_xRhPKb": {
+      "type": "editorial",
+      "name": "t:general.editorial",
+      "settings": {
+        "heading": "Как вывести часы на рабочий стол",
+        "text": "Как вывести часы на рабочий стол",
+        "cta_text": "Как вывести часы на рабочий стол",
+        "cta_link": "shopify://products/aquatica-hm-1a131c-zmishuvach-dlia-rakovyny-na-haitsi"
+      }
     }
   },
   "order": [
@@ -389,6 +436,9 @@
     "carousel_BdNc9P",
     "icons_with_text_fddipP",
     "collection_index_F8qanW",
-    "collection_links_QK8XQ3"
+    "collection_links_QK8XQ3",
+    "collection_list_grid_WNEae4",
+    "custom_section_fjrB6C",
+    "editorial_xRhPKb"
   ]
 }
