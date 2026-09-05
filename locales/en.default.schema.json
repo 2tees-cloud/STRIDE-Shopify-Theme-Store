@@ -35,7 +35,9 @@
     "colorway": "Colorway",
     "column": "Column",
     "contact": "Contact form",
+    "contact_form": "Contact form",
     "content": "Content",
+    "custom_liquid": "Custom Liquid",
     "custom_section": "Custom section",
     "divider": "Divider",
     "drop_countdown": "Drop countdown",
@@ -177,7 +179,9 @@
     "complementary_heading": "Complementary heading",
     "eyebrow_text": "Eyebrow text",
     "style": "Style",
-    "title": "Title"
+    "title": "Title",
+    "code": "Liquid code",
+    "code_info": "Add Liquid, HTML, CSS, and JavaScript code to customize your store."
   },
   "options": {
     "alignment": {

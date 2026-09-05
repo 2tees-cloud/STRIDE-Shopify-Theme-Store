@@ -1,0 +1,36 @@
+{% comment %}
+  Escape hatch for one-off markup a merchant/developer pastes directly
+  in the theme editor — distinct from sections/custom-section.liquid,
+  which is a themed container for adding existing THEME BLOCKS, not
+  arbitrary raw code.
+{% endcomment %}
+
+<div class="custom-liquid full-width">
+  {{ section.settings.code }}
+</div>
+
+{% stylesheet %}
+  .custom-liquid {
+    padding-inline: var(--space-4);
+  }
+  @media (min-width: 750px) {
+    .custom-liquid {
+      padding-inline: var(--space-6);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.custom_liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "code",
+      "label": "t:labels.code",
+      "info": "t:labels.code_info"
+    }
+  ],
+  "presets": [{ "name": "t:general.custom_liquid" }]
+}
+{% endschema %}
