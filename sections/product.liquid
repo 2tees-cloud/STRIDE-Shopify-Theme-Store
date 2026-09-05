@@ -150,7 +150,12 @@
         length.
       */
       min-height: calc(100svh - var(--sticky-header-height, calc(var(--space-8) + var(--space-2))) - var(--space-4) + 100vh);
-      justify-content: center;
+      /* flex-start, not center: the min-height above is a scroll-buffer
+         for the sticky buy-box, not a box the gallery content should be
+         vertically centered inside -- centering it here pushes the
+         first image roughly halfway down the tall column instead of
+         flush with the top of the page like every other product theme. */
+      justify-content: flex-start;
     }
     .product__info {
       /*
