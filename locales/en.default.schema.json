@@ -122,7 +122,10 @@
     "target_date": "Target date and time",
     "target_date_info": "Format: YYYY-MM-DD HH:MM (24-hour, store time zone).",
     "collection": "Collection",
-    "item_limit": "Number of products"
+    "item_limit": "Number of products",
+    "address": "Address",
+    "address_info": "Shown next to the form, and used to place the map pin below it.",
+    "phone": "Phone"
   },
   "options": {
     "alignment": {

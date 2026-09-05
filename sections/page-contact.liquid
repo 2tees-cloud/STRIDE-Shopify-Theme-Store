@@ -1,62 +1,141 @@
 {% comment %}
   This section is used in the page.contact template to render a store's
   contact page, combining page content with Shopify's native contact form.
+  When an address is set, a two-column layout puts the form on the left
+  and store info (address, phone, map) on the right; the map is a
+  keyless Google Maps embed built from the address text, so there's
+  nothing for a merchant to configure beyond typing the address.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
+<div class="page-contact full-width">
+  <h1 class="page-contact__title">{{ page.title }}</h1>
 
-{{ page.content }}
+  <div class="page-contact__content">
+    {{ page.content }}
+  </div>
 
-{% form 'contact', class: 'contact-form' %}
-  {% if form.posted_successfully? %}
-    <p class="form-status form-status--success">{{ 'contact.form.success' | t }}</p>
+  {% assign has_info = false %}
+  {% if section.settings.address != blank or section.settings.phone != blank %}
+    {% assign has_info = true %}
   {% endif %}
 
-  {% if form.errors %}
-    <div class="form-status form-status--error">
-      {{ form.errors | default_errors }}
-    </div>
-  {% endif %}
+  <div class="page-contact__layout{% if has_info %} page-contact__layout--with-info{% endif %}">
+    {% form 'contact', class: 'contact-form' %}
+      {% if form.posted_successfully? %}
+        <p class="form-status form-status--success">{{ 'contact.form.success' | t }}</p>
+      {% endif %}
 
-  <div class="field">
-    <label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
-    <input
-      type="text"
-      id="ContactFormName"
-      name="contact[name]"
-      autocomplete="name"
-      value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
-    >
+      {% if form.errors %}
+        <div class="form-status form-status--error">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <div class="field">
+        <label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+        <input
+          type="text"
+          id="ContactFormName"
+          name="contact[name]"
+          autocomplete="name"
+          value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
+        >
+      </div>
+
+      <div class="field">
+        <label for="ContactFormEmail">{{ 'contact.form.email' | t }}</label>
+        <input
+          type="email"
+          id="ContactFormEmail"
+          name="contact[email]"
+          autocomplete="email"
+          autocapitalize="off"
+          value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="ContactFormMessage">{{ 'contact.form.message' | t }}</label>
+        <textarea rows="5" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+      </div>
+
+      <button type="submit">{{ 'contact.form.submit' | t }}</button>
+    {% endform %}
+
+    {% if has_info %}
+      <div class="page-contact__info">
+        {% if section.settings.address != blank %}
+          <p class="page-contact__address">{{ section.settings.address | newline_to_br }}</p>
+        {% endif %}
+
+        {% if section.settings.phone != blank %}
+          <p class="page-contact__phone">
+            <a href="tel:{{ section.settings.phone | strip | replace: ' ', '' }}">{{ section.settings.phone }}</a>
+          </p>
+        {% endif %}
+
+        {% if section.settings.address != blank %}
+          <div class="page-contact__map">
+            <iframe
+              src="https://www.google.com/maps?q={{ section.settings.address | newline_to_br | strip_newlines | replace: '<br />', ', ' | strip_html | url_encode }}&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="{{ 'contact.map_title' | t }}"
+            ></iframe>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
-
-  <div class="field">
-    <label for="ContactFormEmail">{{ 'contact.form.email' | t }}</label>
-    <input
-      type="email"
-      id="ContactFormEmail"
-      name="contact[email]"
-      autocomplete="email"
-      autocapitalize="off"
-      value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
-      required
-    >
-  </div>
-
-  <div class="field">
-    <label for="ContactFormMessage">{{ 'contact.form.message' | t }}</label>
-    <textarea rows="5" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
-  </div>
-
-  <button type="submit">{{ 'contact.form.submit' | t }}</button>
-{% endform %}
+</div>
 
 {% stylesheet %}
+  .page-contact {
+    /* Without an explicit width, this grid item (a full-width section
+       child with margin-inline: auto) shrinks to fit its content
+       instead of filling the centered column -- and that content is a
+       narrow flex-column form, not wide flowing text, so it collapses
+       hard. Same root cause as the hero-colorway width fix. */
+    width: 100%;
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 750px) {
+    .page-contact {
+      padding-inline: var(--space-6);
+    }
+  }
+  .page-contact__title {
+    font-family: var(--font-header--family);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-4);
+  }
+  .page-contact__content {
+    color: var(--color-foreground);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+  .page-contact__layout--with-info {
+    display: grid;
+    gap: var(--space-8);
+  }
+  @media (min-width: 750px) {
+    .page-contact__layout--with-info {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
   .contact-form {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+  }
+  .page-contact__layout:not(.page-contact__layout--with-info) .contact-form {
     max-width: 32rem;
   }
   .contact-form .field {
@@ -70,11 +149,45 @@
   .form-status--error {
     color: var(--color-urgency);
   }
+  .page-contact__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .page-contact__address {
+    color: var(--color-foreground);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .page-contact__phone {
+    margin: 0;
+  }
+  .page-contact__phone a {
+    color: var(--color-foreground);
+  }
+  .page-contact__map iframe {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 0;
+    display: block;
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.contact",
-  "settings": []
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "t:labels.address",
+      "info": "t:labels.address_info"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:labels.phone"
+    }
+  ]
 }
 {% endschema %}
