@@ -122,7 +122,17 @@ body {
 }
 
 .scroll-sentinel {
+  /* Absolute + top:0 keeps this purely a scroll-position marker for
+     initStickyHeader's IntersectionObserver (sections/header.liquid) --
+     it must not participate in normal document flow, or it visibly
+     pushes the whole page down by its own height. The 4rem height is
+     kept (not shrunk to 0/1px) since it's the deliberate scroll
+     threshold before the header condenses -- shrinking it would make
+     the header condense on the very first pixel of scroll instead. */
+  position: absolute;
+  top: 0;
   height: 4rem;
+  width: 1px;
   pointer-events: none;
 }
 
