@@ -8,5 +8,16 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "background_color": "#FFFFFF",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "free_shipping_threshold": 0
+        }
+      }
+    },
+    "content_for_index": []
+  }
 }
