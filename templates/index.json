@@ -15,38 +15,35 @@
         "colorway-1": {
           "type": "colorway",
           "settings": {
-            "image": "shopify://shop_images/photo-1780148547461-4e9d19b0836a.jpg",
-            "color": "#E8501F",
-            "color_name": "Volt",
-            "product": "aerofoam-runner"
+            "color": "#8C8578",
+            "color_name": "Fog",
+            "image": "shopify://shop_images/9d3310b0-9dec-11ef-ac2f-0cc47ae7dc54-14.jpg",
+            "product": "sneakers-womens-winter-faux-fur-lined-white-grey-248ram015"
           }
         },
         "colorway-2": {
           "type": "colorway",
           "settings": {
-            "image": "shopify://shop_images/photo-1770269845865-4f8177a14a9b.jpg",
-            "color": "#3E6B8A",
-            "color_name": "Frost",
-            "product": "aerofoam-runner"
+            "color": "#1A1A1A",
+            "color_name": "Onyx",
+            "image": "shopify://shop_images/9d3310b0-9dec-11ef-ac2f-0cc47ae7dc54-28.jpg",
+            "product": "sneakers-womens-winter-faux-fur-lined-black-248ram015"
           }
         }
       },
-      "block_order": [
-        "colorway-1",
-        "colorway-2"
-      ],
+      "block_order": ["colorway-1", "colorway-2"],
       "settings": {
-        "heading": "Feels like you",
-        "subheading": "Every color, one platform. Meet the Aerofoam Runner.",
-        "cta_text": "Shop now",
-        "cta_link": "/collections/running"
+        "heading": "Warm feet, cold weather",
+        "subheading": "Faux-fur lined sneakers with an eco-leather upper, built to see you through winter.",
+        "cta_text": "Shop women's",
+        "cta_link": "/collections/womens"
       }
     },
     "intro": {
       "type": "rich-text",
       "settings": {
-        "heading": "Built different, on purpose",
-        "text": "<p>Traction started with a simple frustration: most “performance” shoes look the same box to box. We build fewer styles, refine them longer, and let the materials do the talking.</p>",
+        "heading": "Built for the season",
+        "text": "<p>Traction sources real winter footwear — eco-leather uppers, brushed linings, and flexible outsoles — across dozens of colorways for men and women. No filler, just shoes people actually wear in the cold.</p>",
         "cta_text": "Shop all",
         "cta_link": "/collections/all"
       }
@@ -57,27 +54,23 @@
         "item-1": {
           "type": "item",
           "settings": {
-            "text": "New drop every Friday"
+            "text": "Faux-fur lined for winter"
           }
         },
         "item-2": {
           "type": "item",
           "settings": {
-            "text": "Free shipping over $100"
+            "text": "Eco-leather uppers"
           }
         },
         "item-3": {
           "type": "item",
           "settings": {
-            "text": "30-day returns"
+            "text": "New colorways added weekly"
           }
         }
       },
-      "block_order": [
-        "item-1",
-        "item-2",
-        "item-3"
-      ],
+      "block_order": ["item-1", "item-2", "item-3"],
       "settings": {}
     },
     "trust-badges": {
@@ -108,12 +101,7 @@
           }
         }
       },
-      "block_order": [
-        "badge-1",
-        "badge-2",
-        "badge-3",
-        "badge-4"
-      ],
+      "block_order": ["badge-1", "badge-2", "badge-3", "badge-4"],
       "settings": {
         "icon_size": "small",
         "text_size": "medium"
@@ -137,22 +125,11 @@
         "cat-3": {
           "type": "collection_item",
           "settings": {
-            "collection": "limited-drops"
-          }
-        },
-        "cat-4": {
-          "type": "collection_item",
-          "settings": {
             "collection": "sale"
           }
         }
       },
-      "block_order": [
-        "cat-1",
-        "cat-2",
-        "cat-3",
-        "cat-4"
-      ],
+      "block_order": ["cat-1", "cat-2", "cat-3"],
       "settings": {
         "heading": "Shop by category"
       }
@@ -166,7 +143,7 @@
     "spotlight": {
       "type": "featured-product",
       "settings": {
-        "product": "nova-collab-high-top",
+        "product": "sneakers-womens-winter-faux-fur-lined-black-248ra2256",
         "heading": "This week's spotlight"
       }
     },
@@ -176,33 +153,29 @@
         "slide-1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/photo-1774719194893-a8e7f20363b1.jpg",
-            "heading": "Fast and light",
-            "link": "/collections/running"
+            "image": "shopify://shop_images/39071e44-9b4d-11ef-ac2f-0cc47ae7dc54-21.jpg",
+            "heading": "Grip that holds",
+            "link": "/collections/womens"
           }
         },
         "slide-2": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/photo-1762709753401-d0ff2c4936c5.jpg",
-            "heading": "Built for the trail",
-            "link": "/collections/limited-drops"
+            "image": "shopify://shop_images/f6f2a453-9c19-11ef-ac2f-0cc47ae7dc54.jpg",
+            "heading": "Lined for the cold",
+            "link": "/collections/sale"
           }
         },
         "slide-3": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/photo-1652447198049-d70d2b77ddb1.jpg",
-            "heading": "Every run counts",
-            "link": "/collections/all"
+            "image": "shopify://shop_images/05c8d7e1-9e90-11ef-ac2f-0cc47ae7dc54.jpg",
+            "heading": "Built for him too",
+            "link": "/collections/mens"
           }
         }
       },
-      "block_order": [
-        "slide-1",
-        "slide-2",
-        "slide-3"
-      ],
+      "block_order": ["slide-1", "slide-2", "slide-3"],
       "settings": {
         "heading": "Moments in motion",
         "autoplay": true,
@@ -212,12 +185,12 @@
     "materials-story": {
       "type": "image-with-text",
       "settings": {
-        "image": "shopify://shop_images/photo-1666374554013-bf9a3c00f39b.jpg",
+        "image": "shopify://shop_images/5014b863-9c5b-11ef-ac2f-0cc47ae7dc54-21.jpg",
         "image_position": "left",
         "heading": "Materials that earn their place",
-        "text": "<p>Every panel is chosen for a reason — breathable mesh where your foot needs to flex, reinforced stitching where it needs to hold. Nothing on a Traction shoe is there just to look busy.</p>",
-        "cta_text": "Shop lifestyle",
-        "cta_link": "/collections/lifestyle"
+        "text": "<p>A soft eco-leather upper pairs with a brushed inner lining for warmth without the bulk, while a flexible rubber sole keeps every step steady on wet or icy ground.</p>",
+        "cta_text": "Shop women's",
+        "cta_link": "/collections/womens"
       }
     },
     "anatomy": {
@@ -226,8 +199,8 @@
         "callout-1": {
           "type": "callout",
           "settings": {
-            "label": "Cushioning",
-            "text": "Responsive foam that absorbs impact without losing energy return.",
+            "label": "Lining",
+            "text": "Brushed faux-fur lining traps warmth on cold mornings.",
             "position_x": 30,
             "position_y": 70
           }
@@ -236,7 +209,7 @@
           "type": "callout",
           "settings": {
             "label": "Upper material",
-            "text": "Breathable knit that moves with your foot, not against it.",
+            "text": "Eco-leather that wipes clean and holds its shape.",
             "position_x": 50,
             "position_y": 25
           }
@@ -245,46 +218,40 @@
           "type": "callout",
           "settings": {
             "label": "Outsole",
-            "text": "High-abrasion rubber for grip on wet and dry surfaces alike.",
+            "text": "Flexible rubber tread for grip on wet and icy surfaces.",
             "position_x": 65,
             "position_y": 85
           }
         }
       },
-      "block_order": [
-        "callout-1",
-        "callout-2",
-        "callout-3"
-      ],
+      "block_order": ["callout-1", "callout-2", "callout-3"],
       "settings": {
-        "heading": "Built for the long run",
-        "image": "shopify://shop_images/photo-1553529699-6dc057e56b70.jpg"
+        "heading": "Built for the cold",
+        "image": "shopify://shop_images/e00972ec-9b76-11ef-ac2f-0cc47ae7dc54.jpg"
       }
     },
-    "materials-compare": {
-      "type": "image-compare",
+    "shop-the-edit": {
+      "type": "collection-index",
       "settings": {
-        "heading": "From raw material to finished shoe",
-        "before_image": "shopify://shop_images/photo-1581060238855-ca6c6fd4ffff.jpg",
-        "before_label": "Raw material",
-        "after_image": "shopify://shop_images/photo-1571829604981-ea159f94e5ad.jpg",
-        "after_label": "Finished leather"
+        "heading": "Shop the edit",
+        "collection": "womens",
+        "item_limit": 8
       }
     },
     "statement": {
       "type": "editorial",
       "settings": {
-        "image": "shopify://shop_images/photo-1620138547487-bd817502a919.jpg",
-        "heading": "Made to be yours",
-        "text": "Small-batch colorways, numbered and never restocked.",
-        "cta_text": "Shop limited drops",
-        "cta_link": "/collections/limited-drops"
+        "image": "shopify://shop_images/a48a1c18-9d0b-11ef-ac2f-0cc47ae7dc54-21.jpg",
+        "heading": "Marked down, not compromised",
+        "text": "Same eco-leather and faux-fur lining, at a lower price while stock lasts.",
+        "cta_text": "Shop sale",
+        "cta_link": "/collections/sale"
       }
     },
     "billboard": {
       "type": "jumbo-text",
       "settings": {
-        "text": "Built for the long run",
+        "text": "Built for the cold",
         "cta_text": "Shop all",
         "cta_link": "/collections/all"
       }
@@ -292,88 +259,18 @@
     "testimonial": {
       "type": "pull-quote",
       "settings": {
-        "quote": "<p>I've re-bought the same pair twice now. Comfortable enough for a 10-mile Saturday and clean enough to wear to work.</p>",
+        "quote": "<p>These are the first winter sneakers that actually kept my feet warm on the walk to work — and they still look good after a season of wear.</p>",
         "attribution": "Jordan T., verified buyer"
-      }
-    },
-    "shop-the-look": {
-      "type": "shoppable-lookbook",
-      "blocks": {
-        "look-1": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
-            "product": "aerofoam-runner",
-            "position_x": 35,
-            "position_y": 65
-          }
-        },
-        "look-2": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
-            "product": "velocity-mesh-runner",
-            "position_x": 55,
-            "position_y": 40
-          }
-        },
-        "look-3": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
-            "product": "marathon-pro",
-            "position_x": 70,
-            "position_y": 70
-          }
-        },
-        "look-4": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
-            "product": "edgegrip-trail",
-            "position_x": 30,
-            "position_y": 55
-          }
-        },
-        "look-5": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
-            "product": "cloudcore-jogger",
-            "position_x": 50,
-            "position_y": 45
-          }
-        },
-        "look-6": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
-            "product": "trailhead-trainer",
-            "position_x": 65,
-            "position_y": 65
-          }
-        }
-      },
-      "block_order": [
-        "look-1",
-        "look-2",
-        "look-3",
-        "look-4",
-        "look-5",
-        "look-6"
-      ],
-      "settings": {
-        "heading": "Shop the look"
       }
     },
     "drop-countdown": {
       "type": "drop-countdown",
       "settings": {
-        "heading": "Next drop",
-        "description": "Sign up to be first in line when it lands.",
+        "heading": "New colorways incoming",
+        "description": "Sign up to be first in line when new winter colorways land.",
         "target_date": "2026-10-31 09:00",
-        "cta_text": "See limited drops",
-        "cta_link": "/collections/limited-drops"
+        "cta_text": "Shop women's",
+        "cta_link": "/collections/womens"
       }
     },
     "journal": {
@@ -412,17 +309,12 @@
         "q-4": {
           "type": "question",
           "settings": {
-            "question": "How do I care for suede or canvas pairs?",
-            "answer": "<p>Brush suede before each wear and treat it with a water-repellent spray. Canvas can be spot-cleaned with a damp cloth.</p>"
+            "question": "How do I care for the eco-leather upper?",
+            "answer": "<p>Wipe clean with a damp cloth and let pairs air-dry away from direct heat. Avoid machine washing.</p>"
           }
         }
       },
-      "block_order": [
-        "q-1",
-        "q-2",
-        "q-3",
-        "q-4"
-      ],
+      "block_order": ["q-1", "q-2", "q-3", "q-4"],
       "settings": {
         "heading": "Frequently asked questions"
       }
@@ -453,11 +345,10 @@
     "moments",
     "materials-story",
     "anatomy",
-    "materials-compare",
+    "shop-the-edit",
     "statement",
     "billboard",
     "testimonial",
-    "shop-the-look",
     "drop-countdown",
     "journal",
     "faq",
