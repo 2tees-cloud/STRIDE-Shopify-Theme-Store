@@ -13,6 +13,26 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "menu": {
+          "type": "footer-link-list",
+          "settings": {
+            "heading": "Menu",
+            "menu": "footer"
+          }
+        },
+        "social": {
+          "type": "social-icons",
+          "settings": {}
+        },
+        "contact": {
+          "type": "store-contact",
+          "settings": {
+            "heading": "Visit us"
+          }
+        }
+      },
+      "block_order": ["menu", "social", "contact"],
       "settings": {
         "show_payment_icons": true
       }
