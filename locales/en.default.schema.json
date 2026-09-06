@@ -188,7 +188,8 @@
     "code": "Liquid code",
     "code_info": "Add Liquid, HTML, CSS, and JavaScript code to customize your store.",
     "icon_size": "Icon size",
-    "text_size": "Text size"
+    "text_size": "Text size",
+    "recommendation_intent": "Recommendation type"
   },
   "options": {
     "alignment": {
@@ -229,6 +230,10 @@
       "small": "Small",
       "medium": "Medium",
       "large": "Large"
+    },
+    "recommendation_intent": {
+      "related": "Related products",
+      "complementary": "Complementary products"
     }
   }
 }

@@ -10,7 +10,7 @@
 
 <div
   class="recommended-products full-width"
-  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.item_limit }}&intent=related"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.item_limit }}&intent={{ section.settings.intent }}"
   data-recommended-products
 >
   {% if recommendations.performed? and recommendations.products_count > 0 %}
@@ -97,6 +97,16 @@
 {
   "name": "t:general.recommended_products",
   "settings": [
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "t:labels.recommendation_intent",
+      "options": [
+        { "value": "related", "label": "t:options.recommendation_intent.related" },
+        { "value": "complementary", "label": "t:options.recommendation_intent.complementary" }
+      ],
+      "default": "related"
+    },
     {
       "type": "text",
       "id": "heading",
