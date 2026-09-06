@@ -189,7 +189,8 @@
     "code_info": "Add Liquid, HTML, CSS, and JavaScript code to customize your store.",
     "icon_size": "Icon size",
     "text_size": "Text size",
-    "recommendation_intent": "Recommendation type"
+    "recommendation_intent": "Recommendation type",
+    "image_ratio": "Image ratio"
   },
   "options": {
     "alignment": {
@@ -234,6 +235,12 @@
     "recommendation_intent": {
       "related": "Related products",
       "complementary": "Complementary products"
+    },
+    "image_ratio": {
+      "square": "Square",
+      "portrait": "Portrait",
+      "landscape": "Landscape",
+      "adapt": "Adapt to image"
     }
   }
 }

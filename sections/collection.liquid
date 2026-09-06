@@ -121,7 +121,7 @@
           {% endcomment %}
           <div class="collection__grid" data-collection-grid>
             {% for product in collection.products %}
-              {% render 'product-card', product: product, priority: forloop.first %}
+              {% render 'product-card', product: product, priority: forloop.first, image_ratio: section.settings.image_ratio %}
             {% endfor %}
           </div>
 
@@ -243,6 +243,19 @@
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "square", "label": "t:options.image_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_ratio.landscape" },
+        { "value": "adapt", "label": "t:options.image_ratio.adapt" }
+      ],
+      "default": "square"
+    }
+  ]
 }
 {% endschema %}

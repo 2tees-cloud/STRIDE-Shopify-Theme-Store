@@ -23,7 +23,7 @@
     </h2>
     <div class="recommended-products__grid">
       {% for product in recommendations.products %}
-        {% render 'product-card', product: product %}
+        {% render 'product-card', product: product, image_ratio: section.settings.image_ratio %}
       {% endfor %}
     </div>
   {% endif %}
@@ -97,6 +97,18 @@
 {
   "name": "t:general.recommended_products",
   "settings": [
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "square", "label": "t:options.image_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_ratio.landscape" },
+        { "value": "adapt", "label": "t:options.image_ratio.adapt" }
+      ],
+      "default": "square"
+    },
     {
       "type": "select",
       "id": "intent",

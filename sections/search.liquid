@@ -79,7 +79,7 @@
             {% else %}
               <div class="search-result search-result--product">
                 <span class="search-result__type">{{ 'search.result_type_product' | t }}</span>
-                {% render 'product-card', product: result %}
+                {% render 'product-card', product: result, image_ratio: section.settings.image_ratio %}
               </div>
             {% endif %}
           {% endfor %}
@@ -231,6 +231,19 @@
 {% schema %}
 {
   "name": "t:general.search",
-  "settings": []
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "square", "label": "t:options.image_ratio.square" },
+        { "value": "portrait", "label": "t:options.image_ratio.portrait" },
+        { "value": "landscape", "label": "t:options.image_ratio.landscape" },
+        { "value": "adapt", "label": "t:options.image_ratio.adapt" }
+      ],
+      "default": "square"
+    }
+  ]
 }
 {% endschema %}

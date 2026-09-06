@@ -1,23 +1,31 @@
 {% doc %}
-  Renders one product card for a collection grid: image (natural aspect
-  ratio, not force-cropped — the grid must handle varying image aspect
-  ratios per spec), title, price, sale badge, unit price when
-  configured, and a sold-out indicator when the product has no
-  available variants.
+  Renders one product card for a collection grid: image, title, price,
+  sale badge, unit price when configured, and a sold-out indicator when
+  the product has no available variants.
 
   @param {product} product - The product to render
   @param {boolean} [priority] - Marks this card's image as the page's
     likely Largest Contentful Paint element (e.g. the first card in a
     grid): loads eagerly with high fetch priority instead of the default
     lazy loading. Only pass this for the first card in a grid/list.
+  @param {string} [image_ratio] - How the card image is cropped:
+    "square", "portrait", "landscape", or "adapt" (each image keeps its
+    own natural aspect ratio, so cards in the same grid can end up
+    different shapes -- only appropriate when every image is already a
+    consistent shape). Defaults to "square".
 
   @example
   {% render 'product-card', product: product %}
   {% render 'product-card', product: product, priority: true %}
+  {% render 'product-card', product: product, image_ratio: 'portrait' %}
 {% enddoc %}
 
+{% liquid
+  assign image_ratio = image_ratio | default: 'square'
+%}
+
 <a href="{{ product.url }}" class="product-card">
-  <div class="product-card__media">
+  <div class="product-card__media product-card__media--{{ image_ratio }}">
     {% if product.featured_image %}
       {% render 'image', image: product.featured_image, class: 'product-card__image', priority: priority %}
     {% else %}
@@ -75,6 +83,21 @@
   .product-card__image--placeholder {
     aspect-ratio: 1 / 1;
     background-color: var(--color-background-alt);
+  }
+  .product-card__media--square .image {
+    aspect-ratio: 1 / 1;
+  }
+  .product-card__media--portrait .image {
+    aspect-ratio: 4 / 5;
+  }
+  .product-card__media--landscape .image {
+    aspect-ratio: 3 / 2;
+  }
+  .product-card__media--square .image > img,
+  .product-card__media--portrait .image > img,
+  .product-card__media--landscape .image > img {
+    height: 100%;
+    object-fit: cover;
   }
   .product-card__badge {
     position: absolute;
