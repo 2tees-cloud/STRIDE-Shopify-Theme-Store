@@ -43,6 +43,7 @@
         <div class="featured-product__description">{{ featured_product.description | strip_html | truncatewords: 30 }}</div>
       {% endif %}
       <a href="{{ featured_product.url }}" class="featured-product__cta">{{ 'general.shop_now' | t }}</a>
+      {% content_for 'blocks' %}
     </div>
   </div>
 {% endif %}
@@ -116,6 +117,7 @@
       "label": "t:labels.eyebrow_text"
     }
   ],
+  "blocks": [{ "type": "@app" }],
   "presets": [{ "name": "t:general.featured_product" }]
 }
 {% endschema %}

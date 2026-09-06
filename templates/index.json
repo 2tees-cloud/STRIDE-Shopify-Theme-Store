@@ -15,29 +15,23 @@
         "colorway-1": {
           "type": "colorway",
           "settings": {
-            "image": "shopify://shop_images/photo-1603808033192-082d6919d3e1.jpg",
-            "color": "#b5502d",
+            "color": "#B5502D",
             "color_name": "Clay",
-            "product": ""
+            "image": "shopify://shop_images/photo-1603808033192-082d6919d3e1.jpg"
           }
         },
         "colorway-2": {
           "type": "colorway",
           "settings": {
-            "image": "shopify://shop_images/photo-1656085180791-0e634c8bd1e6.jpg",
-            "color": "#3b3a36",
+            "color": "#3B3A36",
             "color_name": "Graphite",
-            "product": ""
+            "image": "shopify://shop_images/photo-1656085180791-0e634c8bd1e6.jpg"
           }
         }
       },
-      "block_order": [
-        "colorway-1",
-        "colorway-2"
-      ],
+      "block_order": ["colorway-1", "colorway-2"],
       "settings": {
         "heading": "Feels like you",
-        "subheading": "",
         "cta_text": "Shop now",
         "cta_link": "/collections/all"
       }
@@ -48,41 +42,24 @@
         "item-1": {
           "type": "item",
           "settings": {
-            "text": "New drop every Friday",
-            "link": ""
+            "text": "New drop every Friday"
           }
         },
         "item-2": {
           "type": "item",
           "settings": {
-            "text": "Free shipping over $100",
-            "link": ""
+            "text": "Free shipping over $100"
           }
         },
         "item-3": {
           "type": "item",
           "settings": {
-            "text": "30-day returns",
-            "link": ""
+            "text": "30-day returns"
           }
         }
       },
-      "block_order": [
-        "item-1",
-        "item-2",
-        "item-3"
-      ],
-      "settings": {
-        "speed": 25
-      }
-    },
-    "collection-index": {
-      "type": "collection-index",
-      "settings": {
-        "heading": "Shop the edit",
-        "collection": "",
-        "item_limit": 5
-      }
+      "block_order": ["item-1", "item-2", "item-3"],
+      "settings": {}
     },
     "product-anatomy": {
       "type": "product-anatomy",
@@ -92,7 +69,6 @@
           "settings": {
             "label": "Cushioning",
             "text": "Responsive foam that absorbs impact without losing energy return.",
-            "link": "",
             "position_x": 30,
             "position_y": 70
           }
@@ -102,7 +78,6 @@
           "settings": {
             "label": "Upper material",
             "text": "Breathable knit that moves with your foot, not against it.",
-            "link": "",
             "position_x": 50,
             "position_y": 25
           }
@@ -112,17 +87,12 @@
           "settings": {
             "label": "Outsole",
             "text": "High-abrasion rubber for grip on wet and dry surfaces alike.",
-            "link": "",
             "position_x": 65,
             "position_y": 85
           }
         }
       },
-      "block_order": [
-        "callout-1",
-        "callout-2",
-        "callout-3"
-      ],
+      "block_order": ["callout-1", "callout-2", "callout-3"],
       "settings": {
         "heading": "Built for the long run",
         "image": "shopify://shop_images/photo-1620138548682-fd0c1175a1bc.jpg"
@@ -134,9 +104,15 @@
         "heading": "Next drop",
         "description": "Sign up to be first in line when it lands.",
         "target_date": "2027-09-01 09:00",
-        "fallback_text": "",
         "cta_text": "Get notified",
         "cta_link": "/pages/contact"
+      }
+    },
+    "collection-index": {
+      "type": "collection-index",
+      "settings": {
+        "heading": "Shop the edit",
+        "item_limit": 5
       }
     },
     "shoppable-lookbook": {
@@ -145,36 +121,32 @@
         "look-1": {
           "type": "look",
           "settings": {
-            "image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg",
-            "product": "stride-apex-runner",
             "position_x": 50,
-            "position_y": 60
+            "position_y": 60,
+            "image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg",
+            "product": "stride-apex-runner"
           }
         },
         "look-2": {
           "type": "look",
           "settings": {
-            "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
-            "product": "stride-drift-low",
             "position_x": 40,
-            "position_y": 45
+            "position_y": 45,
+            "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
+            "product": "stride-drift-low"
           }
         },
         "look-3": {
           "type": "look",
           "settings": {
-            "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
-            "product": "stride-cloud-trainer",
             "position_x": 55,
-            "position_y": 50
+            "position_y": 50,
+            "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
+            "product": "stride-cloud-trainer"
           }
         }
       },
-      "block_order": [
-        "look-1",
-        "look-2",
-        "look-3"
-      ],
+      "block_order": ["look-1", "look-2", "look-3"],
       "settings": {
         "heading": "Shop the look"
       }
@@ -186,46 +158,6 @@
         "subtext": "New drops, restocks, and members-only access — straight to your inbox.",
         "success_message": "Thanks — you're on the list."
       }
-    },
-    "carousel_cV4FXL": {
-      "type": "carousel",
-      "blocks": {
-        "slide_dPhUxf": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/the-kayak-and-the-rock.jpg",
-            "heading": "https://",
-            "link": ""
-          }
-        },
-        "slide_LmgLNA": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/tablet-lays-on-a-white-table-with-screen-lit-by-app-icons.jpg",
-            "heading": "",
-            "link": ""
-          }
-        },
-        "slide_hjAdqU": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg",
-            "heading": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "slide_dPhUxf",
-        "slide_LmgLNA",
-        "slide_hjAdqU"
-      ],
-      "name": "t:general.carousel",
-      "settings": {
-        "heading": "https://",
-        "autoplay": true,
-        "autoplay_speed": 5
-      }
     }
   },
   "order": [
@@ -235,7 +167,6 @@
     "product-anatomy",
     "drop-countdown",
     "shoppable-lookbook",
-    "newsletter-band",
-    "carousel_cV4FXL"
+    "newsletter-band"
   ]
 }
