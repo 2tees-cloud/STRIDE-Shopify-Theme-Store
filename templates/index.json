@@ -15,24 +15,36 @@
         "colorway-1": {
           "type": "colorway",
           "settings": {
-            "color": "#B5502D",
-            "color_name": "Clay",
-            "image": "shopify://shop_images/photo-1603808033192-082d6919d3e1.jpg"
+            "color": "#E8501F",
+            "color_name": "Volt",
+            "image": "shopify://shop_images/photo-1780148547461-4e9d19b0836a.jpg",
+            "product": "aerofoam-runner"
           }
         },
         "colorway-2": {
           "type": "colorway",
           "settings": {
-            "color": "#3B3A36",
-            "color_name": "Graphite",
-            "image": "shopify://shop_images/photo-1656085180791-0e634c8bd1e6.jpg"
+            "color": "#3E6B8A",
+            "color_name": "Frost",
+            "image": "shopify://shop_images/photo-1770269845865-4f8177a14a9b.jpg",
+            "product": "aerofoam-runner"
           }
         }
       },
       "block_order": ["colorway-1", "colorway-2"],
       "settings": {
         "heading": "Feels like you",
+        "subheading": "Every color, one platform. Meet the Aerofoam Runner.",
         "cta_text": "Shop now",
+        "cta_link": "/collections/running"
+      }
+    },
+    "intro": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "Built different, on purpose",
+        "text": "<p>Traction started with a simple frustration: most “performance” shoes look the same box to box. We build fewer styles, refine them longer, and let the materials do the talking.</p>",
+        "cta_text": "Shop all",
         "cta_link": "/collections/all"
       }
     },
@@ -61,7 +73,133 @@
       "block_order": ["item-1", "item-2", "item-3"],
       "settings": {}
     },
-    "product-anatomy": {
+    "trust-badges": {
+      "type": "icons-with-text",
+      "blocks": {
+        "badge-1": {
+          "type": "icon",
+          "settings": {
+            "text": "Free shipping over $100"
+          }
+        },
+        "badge-2": {
+          "type": "icon",
+          "settings": {
+            "text": "30-day easy returns"
+          }
+        },
+        "badge-3": {
+          "type": "icon",
+          "settings": {
+            "text": "Secure checkout"
+          }
+        },
+        "badge-4": {
+          "type": "icon",
+          "settings": {
+            "text": "Real support, real people"
+          }
+        }
+      },
+      "block_order": ["badge-1", "badge-2", "badge-3", "badge-4"],
+      "settings": {
+        "icon_size": "small",
+        "text_size": "medium"
+      }
+    },
+    "shop-by-category": {
+      "type": "collection-list-grid",
+      "blocks": {
+        "cat-1": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "running"
+          }
+        },
+        "cat-2": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "lifestyle"
+          }
+        },
+        "cat-3": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "limited-drops"
+          }
+        },
+        "cat-4": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "sale"
+          }
+        }
+      },
+      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4"],
+      "settings": {
+        "heading": "Shop by category"
+      }
+    },
+    "divider-1": {
+      "type": "divider",
+      "settings": {
+        "spacing": 24
+      }
+    },
+    "spotlight": {
+      "type": "featured-product",
+      "settings": {
+        "product": "nova-collab-high-top",
+        "heading": "This week's spotlight"
+      }
+    },
+    "moments": {
+      "type": "carousel",
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/photo-1774719194893-a8e7f20363b1.jpg",
+            "heading": "Fast and light",
+            "link": "/collections/running"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/photo-1762709753401-d0ff2c4936c5.jpg",
+            "heading": "Built for the trail",
+            "link": "/collections/limited-drops"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/photo-1652447198049-d70d2b77ddb1.jpg",
+            "heading": "Every run counts",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["slide-1", "slide-2", "slide-3"],
+      "settings": {
+        "heading": "Moments in motion",
+        "autoplay": true,
+        "autoplay_speed": 5
+      }
+    },
+    "materials-story": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/photo-1666374554013-bf9a3c00f39b.jpg",
+        "image_position": "left",
+        "heading": "Materials that earn their place",
+        "text": "<p>Every panel is chosen for a reason — breathable mesh where your foot needs to flex, reinforced stitching where it needs to hold. Nothing on a Traction shoe is there just to look busy.</p>",
+        "cta_text": "Shop lifestyle",
+        "cta_link": "/collections/lifestyle"
+      }
+    },
+    "anatomy": {
       "type": "product-anatomy",
       "blocks": {
         "callout-1": {
@@ -95,7 +233,105 @@
       "block_order": ["callout-1", "callout-2", "callout-3"],
       "settings": {
         "heading": "Built for the long run",
-        "image": "shopify://shop_images/photo-1620138548682-fd0c1175a1bc.jpg"
+        "image": "shopify://shop_images/photo-1553529699-6dc057e56b70.jpg"
+      }
+    },
+    "materials-compare": {
+      "type": "image-compare",
+      "settings": {
+        "heading": "From raw material to finished shoe",
+        "before_image": "shopify://shop_images/photo-1581060238855-ca6c6fd4ffff.jpg",
+        "before_label": "Raw material",
+        "after_image": "shopify://shop_images/photo-1571829604981-ea159f94e5ad.jpg",
+        "after_label": "Finished leather"
+      }
+    },
+    "statement": {
+      "type": "editorial",
+      "settings": {
+        "image": "shopify://shop_images/photo-1620138547487-bd817502a919.jpg",
+        "heading": "Made to be yours",
+        "text": "Small-batch colorways, numbered and never restocked.",
+        "cta_text": "Shop limited drops",
+        "cta_link": "/collections/limited-drops"
+      }
+    },
+    "billboard": {
+      "type": "jumbo-text",
+      "settings": {
+        "text": "Built for the long run",
+        "cta_text": "Shop all",
+        "cta_link": "/collections/all"
+      }
+    },
+    "testimonial": {
+      "type": "pull-quote",
+      "settings": {
+        "quote": "<p>I've re-bought the same pair twice now. Comfortable enough for a 10-mile Saturday and clean enough to wear to work.</p>",
+        "attribution": "Jordan T., verified buyer"
+      }
+    },
+    "shop-the-look": {
+      "type": "shoppable-lookbook",
+      "blocks": {
+        "look-1": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
+            "product": "aerofoam-runner",
+            "position_x": 35,
+            "position_y": 65
+          }
+        },
+        "look-2": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
+            "product": "velocity-mesh-runner",
+            "position_x": 55,
+            "position_y": 40
+          }
+        },
+        "look-3": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1758506972012-e1a36d85bb13.jpg",
+            "product": "marathon-pro",
+            "position_x": 70,
+            "position_y": 70
+          }
+        },
+        "look-4": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
+            "product": "edgegrip-trail",
+            "position_x": 30,
+            "position_y": 55
+          }
+        },
+        "look-5": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
+            "product": "cloudcore-jogger",
+            "position_x": 50,
+            "position_y": 45
+          }
+        },
+        "look-6": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1762709753316-591427724237.jpg",
+            "product": "trailhead-trainer",
+            "position_x": 65,
+            "position_y": 65
+          }
+        }
+      },
+      "block_order": ["look-1", "look-2", "look-3", "look-4", "look-5", "look-6"],
+      "settings": {
+        "heading": "Shop the look"
       }
     },
     "drop-countdown": {
@@ -103,52 +339,61 @@
       "settings": {
         "heading": "Next drop",
         "description": "Sign up to be first in line when it lands.",
-        "target_date": "2027-09-01 09:00",
-        "cta_text": "Get notified",
-        "cta_link": "/pages/contact"
+        "target_date": "2026-10-31 09:00",
+        "cta_text": "See limited drops",
+        "cta_link": "/collections/limited-drops"
       }
     },
-    "collection-index": {
-      "type": "collection-index",
+    "journal": {
+      "type": "blog-posts",
       "settings": {
-        "heading": "Shop the edit",
-        "item_limit": 5
+        "heading": "From the Journal",
+        "blog": "journal",
+        "item_limit": 3,
+        "layout": "grid"
       }
     },
-    "shoppable-lookbook": {
-      "type": "shoppable-lookbook",
+    "faq": {
+      "type": "faq",
       "blocks": {
-        "look-1": {
-          "type": "look",
+        "q-1": {
+          "type": "question",
           "settings": {
-            "position_x": 50,
-            "position_y": 60,
-            "image": "shopify://shop_images/photo-1606964212916-4d23bf4044cb.jpg",
-            "product": "stride-apex-runner"
+            "question": "How long does shipping take?",
+            "answer": "<p>Most orders ship within 1-2 business days and arrive within 5-7 business days domestically.</p>"
           }
         },
-        "look-2": {
-          "type": "look",
+        "q-2": {
+          "type": "question",
           "settings": {
-            "position_x": 40,
-            "position_y": 45,
-            "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
-            "product": "stride-drift-low"
+            "question": "What's your return policy?",
+            "answer": "<p>Unworn pairs in original packaging can be returned within 30 days of delivery for a full refund.</p>"
           }
         },
-        "look-3": {
-          "type": "look",
+        "q-3": {
+          "type": "question",
           "settings": {
-            "position_x": 55,
-            "position_y": 50,
-            "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
-            "product": "stride-cloud-trainer"
+            "question": "How do your sizes run?",
+            "answer": "<p>Our shoes run true to size. If you're between sizes, we recommend sizing up for a roomier fit.</p>"
+          }
+        },
+        "q-4": {
+          "type": "question",
+          "settings": {
+            "question": "How do I care for suede or canvas pairs?",
+            "answer": "<p>Brush suede before each wear and treat it with a water-repellent spray. Canvas can be spot-cleaned with a damp cloth.</p>"
           }
         }
       },
-      "block_order": ["look-1", "look-2", "look-3"],
+      "block_order": ["q-1", "q-2", "q-3", "q-4"],
       "settings": {
-        "heading": "Shop the look"
+        "heading": "Frequently asked questions"
+      }
+    },
+    "footer-note": {
+      "type": "custom-liquid",
+      "settings": {
+        "code": "<div style=\"text-align:center;padding:2rem 1rem;font-family:var(--font-header--family);font-size:1.125rem;\">{{ shop.name }} — est. 2026</div>"
       }
     },
     "newsletter-band": {
@@ -162,11 +407,24 @@
   },
   "order": [
     "hero",
+    "intro",
     "marquee",
-    "collection-index",
-    "product-anatomy",
+    "trust-badges",
+    "shop-by-category",
+    "divider-1",
+    "spotlight",
+    "moments",
+    "materials-story",
+    "anatomy",
+    "materials-compare",
+    "statement",
+    "billboard",
+    "testimonial",
+    "shop-the-look",
     "drop-countdown",
-    "shoppable-lookbook",
+    "journal",
+    "faq",
+    "footer-note",
     "newsletter-band"
   ]
 }
