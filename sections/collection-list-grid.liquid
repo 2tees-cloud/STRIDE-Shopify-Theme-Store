@@ -82,7 +82,17 @@
     clipped at the bottom by its overflow:hidden instead of cropped
     from a chosen focal point).
   */
-  .collection-list-grid__image > img {
+  /*
+    .image.collection-list-grid__image (both classes), not just
+    .collection-list-grid__image, so this beats the shared
+    .image > img { height: auto } rule on specificity (0,0,2,1 vs
+    0,0,1,1) rather than depending on which stylesheet happens to be
+    concatenated later -- the two have equal specificity otherwise, so
+    source order was silently deciding the winner and height: auto
+    was winning, undoing the cover crop below by letting the img
+    render at its own natural (taller-than-square) height regardless.
+  */
+  .image.collection-list-grid__image > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
