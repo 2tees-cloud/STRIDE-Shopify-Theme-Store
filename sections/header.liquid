@@ -38,16 +38,34 @@
     <nav class="header__menu" aria-label="{{ 'labels.menu' | t }}">
       {% for link in section.settings.menu.links %}
         {% if link.links.size > 0 %}
-          <details class="header__menu-item">
-            <summary>{{ link.title }}</summary>
-            <ul class="header__submenu">
+          {%- comment -%}
+            A plain JS-driven disclosure, not <details>/<summary>: native
+            <details> has a long-documented WebKit/mobile-Safari quirk
+            where taps on content inside it -- especially content that's
+            been taken out of flow with position: absolute, as this
+            submenu is -- can fail to register as a real click on real
+            touch devices even though the exact same markup responds
+            fine to synthetic/desktop clicks. Full JS control here
+            sidesteps that native-widget behavior entirely.
+          {%- endcomment -%}
+          <div class="header__menu-item header__menu-item--has-children" data-menu-dropdown>
+            <button
+              type="button"
+              class="header__menu-item-trigger"
+              aria-expanded="false"
+              aria-controls="HeaderSubmenu-{{ forloop.index }}"
+              data-menu-dropdown-trigger
+            >
+              {{ link.title }}
+            </button>
+            <ul class="header__submenu" id="HeaderSubmenu-{{ forloop.index }}" hidden>
               {% for child_link in link.links %}
                 <li>
                   <a href="{{ child_link.url }}">{{ child_link.title }}</a>
                 </li>
               {% endfor %}
             </ul>
-          </details>
+          </div>
         {% else %}
           <a class="header__menu-item" href="{{ link.url }}">{{ link.title }}</a>
         {% endif %}
@@ -413,35 +431,37 @@
     align-items: center;
     min-height: 24px;
   }
-  header details.header__menu-item {
+  header .header__menu-item--has-children {
     position: relative;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
-  header details.header__menu-item > summary {
+  header .header__menu-item-trigger {
     list-style: none;
     color: var(--color-foreground);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 24px;
     /*
-      The details container's own align-items: flex-start (needed to
-      keep .header__submenu below it shrink-to-fit and left-anchored,
-      not stretched full-width) would otherwise also shrink this
-      summary down to its "Shop"-sized content box, leaving the
+      The wrapper's own align-items: flex-start (needed to keep
+      .header__submenu below it shrink-to-fit and left-anchored, not
+      stretched full-width) would otherwise also shrink this trigger
+      down to its "Shop"-sized content box, leaving the
       justify-content: center above with no extra width to center
       into -- unlike its <a> siblings (Home, Contact), which stretch
       full-width under .header__menu's default align-items: stretch
-      and so end up visibly centered. Stretching just the summary
+      and so end up visibly centered. Stretching just the trigger
       (not the submenu) matches that sibling behavior.
     */
     align-self: stretch;
   }
-  header details.header__menu-item > summary::-webkit-details-marker {
-    display: none;
-  }
-  header details[open].header__menu-item > summary {
+  header .header__menu-item-trigger[aria-expanded="true"] {
     color: var(--color-accent);
   }
   header .header__submenu {
@@ -458,6 +478,7 @@
     top: 100%;
     left: 0;
     right: 0;
+    display: block;
     list-style: none;
     margin: var(--space-1) 0 0;
     padding: var(--space-2);
@@ -468,12 +489,15 @@
     min-width: 0;
     z-index: 1;
   }
+  header .header__submenu[hidden] {
+    display: none;
+  }
   @media (min-width: 750px) {
-    header details.header__menu-item {
+    header .header__menu-item--has-children {
       flex-direction: row;
       align-items: center;
     }
-    header details.header__menu-item > summary {
+    header .header__menu-item-trigger {
       align-self: auto;
     }
     header .header__submenu {
@@ -774,11 +798,59 @@
     });
   }
 
+  // A plain button + ul disclosure for menu items with sub-links (e.g.
+  // "Shop"), not native <details>/<summary> -- see the markup comment
+  // in the liquid above for why. Mirrors initSearchTrigger's
+  // open/close-on-outside-click/Escape shape.
+  function initMenuDropdowns(root) {
+    root.querySelectorAll('[data-menu-dropdown]').forEach(function (dropdown) {
+      var trigger = dropdown.querySelector('[data-menu-dropdown-trigger]');
+      var submenu = dropdown.querySelector('.header__submenu');
+      if (!trigger || !submenu || submenu.dataset.menuDropdownInitialized) return;
+      submenu.dataset.menuDropdownInitialized = 'true';
+
+      function onDocumentClick(event) {
+        if (dropdown.contains(event.target)) return;
+        closeMenu();
+      }
+
+      function onKeydown(event) {
+        if (event.key === 'Escape') {
+          closeMenu();
+          trigger.focus();
+        }
+      }
+
+      function openMenu() {
+        submenu.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        document.addEventListener('click', onDocumentClick);
+        document.addEventListener('keydown', onKeydown);
+      }
+
+      function closeMenu() {
+        submenu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('click', onDocumentClick);
+        document.removeEventListener('keydown', onKeydown);
+      }
+
+      trigger.addEventListener('click', function () {
+        if (submenu.hidden) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      });
+    });
+  }
+
   initStickyHeader(document);
   initStickyHeaderHeightVar();
   initLocalizationForms(document);
   initMobileNav(document);
   initSearchTrigger(document);
+  initMenuDropdowns(document);
 
   document.addEventListener('shopify:section:load', function (event) {
     initStickyHeader(event.target);
@@ -786,6 +858,7 @@
     initLocalizationForms(event.target);
     initMobileNav(event.target);
     initSearchTrigger(event.target);
+    initMenuDropdowns(event.target);
   });
 {% endjavascript %}
 
