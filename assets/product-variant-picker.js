@@ -171,6 +171,115 @@
       });
   }
 
+  function getSellingPlanAllocations(container) {
+    var script = container.querySelector('[data-selling-plan-allocations-json]');
+    if (!script) return [];
+    try {
+      return JSON.parse(script.textContent);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  // Reads whichever [data-selling-plan-option] radio is currently
+  // checked and redraws the price accordingly, reusing updatePrice
+  // above rather than duplicating its DOM-writing logic — a synthetic
+  // "variant" object carrying just the four price fields updatePrice
+  // reads is enough. One-time purchase uses the container's own
+  // data-one-time-price* attributes (the variant selected when this
+  // block was last rendered); a subscription plan uses the matching
+  // entry from this block's own allocations JSON, scoped to that same
+  // variant (see the file-level doc comment for why it can't safely
+  // reach across a later variant switch).
+  function updateSellingPlanPrice(sectionRoot) {
+    var container = sectionRoot.querySelector('[data-selling-plan-picker]');
+    if (!container) return;
+
+    var checked = container.querySelector('[data-selling-plan-option]:checked');
+    var sellingPlanId = checked ? checked.value : '';
+
+    var input = container.querySelector('[data-selling-plan-input]');
+    if (input) input.value = sellingPlanId;
+
+    if (!sellingPlanId) {
+      updatePrice(sectionRoot, {
+        price: Number(container.dataset.oneTimePrice),
+        price_formatted: container.dataset.oneTimePriceFormatted,
+        compare_at_price: Number(container.dataset.oneTimeCompareAtPrice) || 0,
+        compare_at_price_formatted: container.dataset.oneTimeCompareAtPriceFormatted,
+      });
+      return;
+    }
+
+    var allocation = getSellingPlanAllocations(container).find(function (entry) {
+      return String(entry.id) === sellingPlanId;
+    });
+    if (!allocation) return;
+
+    // selling_plan_allocation doesn't expose a raw compare_at_price
+    // integer the same way a variant does (see blocks/selling-plan-
+    // picker.liquid's JSON, which only ever emits the FORMATTED
+    // compare-at string, or null) — updatePrice's own showCompareAt
+    // check only needs compare_at_price > price to be true when a
+    // formatted string is present, so 1/0 stands in for that
+    // comparison without a matching raw compare_at_price value.
+    updatePrice(sectionRoot, {
+      price: 0,
+      price_formatted: allocation.price_formatted,
+      compare_at_price: allocation.compare_at_price_formatted ? 1 : 0,
+      compare_at_price_formatted: allocation.compare_at_price_formatted,
+    });
+  }
+
+  // Called from initVariantPicker's click handler on every variant
+  // switch. The allocations JSON embedded in blocks/selling-plan-
+  // picker.liquid is scoped to whichever variant was selected when the
+  // page (or this block) was last rendered server-side — data-variant-id
+  // records exactly which one. A switch to any OTHER variant makes that
+  // data stale (see the file-level doc comment in
+  // blocks/selling-plan-picker.liquid), so this falls back to one-time
+  // purchase and disables the subscription radios rather than risk
+  // showing a subscription price that belongs to a different variant.
+  function syncSellingPlanPickerForVariant(sectionRoot, variant) {
+    var container = sectionRoot.querySelector('[data-selling-plan-picker]');
+    if (!container || !variant) return;
+
+    if (String(variant.id) === container.dataset.variantId) return;
+
+    // Refresh the one-time-purchase cache to the NEW variant before
+    // updateSellingPlanPrice reads it below — otherwise resetting to
+    // one-time here would redraw the price from the OLD variant's cached
+    // values, clobbering the correct price updatePrice(sectionRoot,
+    // matchedVariant) already wrote moments earlier in the click handler.
+    container.dataset.variantId = variant.id;
+    container.dataset.oneTimePrice = variant.price;
+    container.dataset.oneTimePriceFormatted = variant.price_formatted || '';
+    container.dataset.oneTimeCompareAtPrice = variant.compare_at_price || '';
+    container.dataset.oneTimeCompareAtPriceFormatted =
+      variant.compare_at_price > variant.price ? variant.compare_at_price_formatted : '';
+
+    container.querySelectorAll('[data-selling-plan-option]').forEach(function (radio) {
+      if (radio.value === '') {
+        radio.checked = true;
+        radio.disabled = false;
+      } else {
+        radio.checked = false;
+        radio.disabled = true;
+      }
+    });
+
+    updateSellingPlanPrice(sectionRoot);
+  }
+
+  function initSellingPlanPicker(root) {
+    root.querySelectorAll('[data-selling-plan-option]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        var sectionRoot = (typeof radio.closest === 'function' && radio.closest('.shopify-section')) || root;
+        updateSellingPlanPrice(sectionRoot);
+      });
+    });
+  }
+
   function initGalleryThumbnails(root) {
     root.querySelectorAll('[data-product-gallery-thumbnail]').forEach(function (thumbnail) {
       thumbnail.addEventListener('click', function () {
@@ -234,6 +343,7 @@
         updateVariantId(sectionRoot, matchedVariant);
         updateGalleryImage(sectionRoot, matchedVariant);
         updatePickupAvailability(matchedVariant);
+        syncSellingPlanPickerForVariant(sectionRoot, matchedVariant);
         updateUrl(matchedVariant);
       });
     });
@@ -318,10 +428,12 @@
   initGalleryThumbnails(document);
   initSizeChartModal(document);
   initPickupAvailabilityModal(document);
+  initSellingPlanPicker(document);
   document.addEventListener('shopify:section:load', function (event) {
     initVariantPicker(event.target);
     initGalleryThumbnails(event.target);
     initSizeChartModal(event.target);
     initPickupAvailabilityModal(event.target);
+    initSellingPlanPicker(event.target);
   });
 })();

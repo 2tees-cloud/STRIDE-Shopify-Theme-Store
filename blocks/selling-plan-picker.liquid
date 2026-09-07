@@ -1,0 +1,157 @@
+{% doc %}
+  Subscription vs. one-time-purchase picker. Renders one radio per
+  selling plan across ALL of product.selling_plan_groups, plus a
+  "one-time purchase" radio, in a single radio group (name=
+  "selling_plan_radio") so only one option is ever selected regardless
+  of how many groups exist. The selected plan's ID is tracked via a
+  hidden input named "selling_plan" -- Shopify's documented contract for
+  the cart form (empty value means one-time purchase). This block must
+  render inside sections/product.liquid's {% form 'product' %}, not as
+  a standalone section, or that hidden input would never be part of the
+  submitted form data.
+
+  Selecting a plan updates the displayed price
+  (assets/product-variant-picker.js, updateSellingPlanPrice) using
+  current_variant.selling_plan_allocations, embedded below in this
+  block's own JSON script tag scoped to the variant selected AT RENDER
+  TIME (not all variants -- keeps this correct for single-variant
+  products, where blocks/variant-picker.liquid's own variants-json never
+  renders at all since it's wrapped in
+  {% if product.has_only_default_variant == false %}).
+
+  Switching variant client-side can't safely reuse that same allocation
+  data (it's for the OLD variant), so assets/product-variant-picker.js
+  detects the mismatch via data-variant-id below and falls back to
+  one-time purchase, disabling the subscription radios until the next
+  full page load. A product mixing subscription-only variants
+  (variant.requires_selling_plan) with regular ones -- inherently in
+  conflict with that fallback -- is a known, deliberately unhandled edge
+  case; ordinary "same plans, different variant" products work fine.
+
+  @example
+  {% content_for 'block', type: 'selling-plan-picker', id: 'selling-plan-picker' %}
+{% enddoc %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+%}
+
+{% if product.selling_plan_groups.size > 0 %}
+  <fieldset
+    class="selling-plan-picker"
+    data-selling-plan-picker
+    data-variant-id="{{ current_variant.id }}"
+    data-one-time-price="{{ current_variant.price }}"
+    data-one-time-price-formatted="{{ current_variant.price | money | escape }}"
+    data-one-time-compare-at-price="{{ current_variant.compare_at_price }}"
+    data-one-time-compare-at-price-formatted="{% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money | escape }}{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    <legend class="selling-plan-picker__label">{{ 'product.purchase_options' | t }}</legend>
+
+    <label class="selling-plan-picker__option" data-selling-plan-one-time-option {% if current_variant.requires_selling_plan %}hidden{% endif %}>
+      <input
+        type="radio"
+        name="selling_plan_radio"
+        value=""
+        data-selling-plan-option
+        {% unless current_variant.requires_selling_plan %}checked{% endunless %}
+      >
+      {{ 'product.one_time_purchase' | t }}
+    </label>
+
+    {% for group in product.selling_plan_groups %}
+      {% for plan in group.selling_plans %}
+        {% liquid
+          assign plan_allocation = nil
+          for allocation in current_variant.selling_plan_allocations
+            if allocation.selling_plan.id == plan.id
+              assign plan_allocation = allocation
+            endif
+          endfor
+        %}
+        <label class="selling-plan-picker__option">
+          <input
+            type="radio"
+            name="selling_plan_radio"
+            value="{{ plan.id }}"
+            data-selling-plan-option
+            {% if current_variant.requires_selling_plan and forloop.first and forloop.parentloop.first %}
+              checked
+            {% endif %}
+          >
+          <span class="selling-plan-picker__option-name">{{ plan.name }}</span>
+          {% if plan_allocation %}
+            <span class="selling-plan-picker__option-price">{{ plan_allocation.price | money }}</span>
+          {% endif %}
+        </label>
+      {% endfor %}
+    {% endfor %}
+
+    <input
+      type="hidden"
+      name="selling_plan"
+      value="{% if current_variant.requires_selling_plan %}{{ product.selling_plan_groups.first.selling_plans.first.id }}{% endif %}"
+      data-selling-plan-input
+    >
+
+    <script type="application/json" data-selling-plan-allocations-json>
+      [
+        {% for allocation in current_variant.selling_plan_allocations %}
+          {
+            "id": {{ allocation.selling_plan.id | json }},
+            "price_formatted": {{ allocation.price | money | json }},
+            "compare_at_price_formatted": {% if allocation.compare_at_price > allocation.price %}{{ allocation.compare_at_price | money | json }}{% else %}null{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    </script>
+  </fieldset>
+{% endif %}
+
+{% stylesheet %}
+  .selling-plan-picker {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .selling-plan-picker__label {
+    padding: 0;
+    margin-block-end: var(--space-2);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  .selling-plan-picker__option {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    border: 1px solid var(--color-foreground-muted);
+    padding: var(--space-3);
+    cursor: pointer;
+  }
+  .selling-plan-picker__option:has(input:checked) {
+    border-color: var(--color-foreground);
+    box-shadow: 0 0 0 1px var(--color-foreground) inset;
+  }
+  .selling-plan-picker__option:has(input:disabled) {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .selling-plan-picker__option-name {
+    font-weight: 600;
+  }
+  .selling-plan-picker__option-price {
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.selling_plan_picker",
+  "settings": []
+}
+{% endschema %}

@@ -32,6 +32,10 @@
           "type": "variant-picker",
           "settings": {}
         },
+        "selling-plan-picker": {
+          "type": "selling-plan-picker",
+          "settings": {}
+        },
         "quantity-selector": {
           "type": "quantity-selector",
           "settings": {}
@@ -50,6 +54,7 @@
         "vendor",
         "price",
         "variant-picker",
+        "selling-plan-picker",
         "quantity-selector",
         "gift-card-recipient",
         "buy-buttons",

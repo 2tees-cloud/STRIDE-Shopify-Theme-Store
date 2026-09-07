@@ -152,7 +152,9 @@
     "pickup_check_other_stores": "Check other stores",
     "pickup_availability": "Pickup availability",
     "pickup_available": "Available",
-    "pickup_currently_unavailable": "Currently unavailable"
+    "pickup_currently_unavailable": "Currently unavailable",
+    "purchase_options": "Purchase options",
+    "one_time_purchase": "One-time purchase"
   },
   "search": {
     "title": "Search",
