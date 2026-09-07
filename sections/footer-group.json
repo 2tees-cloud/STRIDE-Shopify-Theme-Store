@@ -28,7 +28,10 @@
         "contact": {
           "type": "store-contact",
           "settings": {
-            "heading": "Visit us"
+            "heading": "Visit us",
+            "address": "482 Union Street, Suite 200\nSeattle, WA 98101",
+            "phone": "+1 (206) 555-0142",
+            "email": "hello@tractionshoes.com"
           }
         }
       },
