@@ -423,7 +423,20 @@
     color: var(--color-foreground);
     display: flex;
     align-items: center;
+    justify-content: center;
     min-height: 24px;
+    /*
+      The details container's own align-items: flex-start (needed to
+      keep .header__submenu below it shrink-to-fit and left-anchored,
+      not stretched full-width) would otherwise also shrink this
+      summary down to its "Shop"-sized content box, leaving the
+      justify-content: center above with no extra width to center
+      into -- unlike its <a> siblings (Home, Contact), which stretch
+      full-width under .header__menu's default align-items: stretch
+      and so end up visibly centered. Stretching just the summary
+      (not the submenu) matches that sibling behavior.
+    */
+    align-self: stretch;
   }
   header details.header__menu-item > summary::-webkit-details-marker {
     display: none;
@@ -444,6 +457,9 @@
     header details.header__menu-item {
       flex-direction: row;
       align-items: center;
+    }
+    header details.header__menu-item > summary {
+      align-self: auto;
     }
     header .header__submenu {
       position: absolute;
