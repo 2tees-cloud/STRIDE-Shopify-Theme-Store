@@ -71,9 +71,22 @@
   .collection-list-grid__image {
     width: 100%;
     aspect-ratio: 1 / 1;
+    display: block;
+  }
+  /*
+    render 'image' puts the class on the .image wrapper div, not the
+    <img> itself -- object-fit/object-position only affect a replaced
+    element, so they have to target the nested img (which the shared
+    .image > img rule otherwise leaves at width:100%; height:auto,
+    letting a taller-than-square photo overflow the div and get
+    clipped at the bottom by its overflow:hidden instead of cropped
+    from a chosen focal point).
+  */
+  .collection-list-grid__image > img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center bottom;
-    display: block;
   }
   .collection-list-grid__image--placeholder {
     background-color: var(--color-background-alt);
