@@ -129,6 +129,48 @@
     setActiveGalleryItem(sectionRoot, variant.featured_media_id);
   }
 
+  // Pickup availability lives in its own top-level section
+  // (sections/pickup-availability.liquid, a sibling of "main" in
+  // templates/product.json — same architecture as
+  // recommended-products.liquid), not inside the variant picker's own
+  // .shopify-section, so it's looked up from `document` rather than
+  // `sectionRoot` like the update* functions above. Its container
+  // already carries the exact fetch URL for the CURRENTLY rendered
+  // variant (data-url, built server-side in the section itself); this
+  // only needs to swap that URL's variant= query param for the newly
+  // selected variant's id before fetching, mirroring
+  // recommended-products.liquid's own fetch-and-swap-innerHTML JS.
+  function updatePickupAvailability(variant) {
+    var container = document.querySelector('[data-pickup-availability-container]');
+    if (!container || !variant) return;
+
+    var url = new URL(container.dataset.url, window.location.origin);
+    url.searchParams.set('variant', variant.id);
+
+    fetch(url)
+      .then(function (response) { return response.text(); })
+      .then(function (text) {
+        var html = document.createElement('div');
+        html.innerHTML = text;
+        var fresh = html.querySelector('[data-pickup-availability-container]');
+        // The section renders nothing at all once no pickup-enabled
+        // location has this variant (see the {% if %} guard in the
+        // liquid) -- fresh is null in that case, so the previous
+        // variant's now-stale availability is explicitly cleared
+        // rather than left on screen.
+        container.outerHTML = fresh ? fresh.outerHTML : '';
+        // outerHTML replacement drops the old container node entirely,
+        // taking its trigger/close click listeners with it -- re-run the
+        // modal wiring (querySelectorAll no-ops if nothing matches) or the
+        // pickup-availability trigger button would go dead after the very
+        // first variant switch.
+        initPickupAvailabilityModal(document);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
   function initGalleryThumbnails(root) {
     root.querySelectorAll('[data-product-gallery-thumbnail]').forEach(function (thumbnail) {
       thumbnail.addEventListener('click', function () {
@@ -191,6 +233,7 @@
         updateAvailability(sectionRoot, matchedVariant);
         updateVariantId(sectionRoot, matchedVariant);
         updateGalleryImage(sectionRoot, matchedVariant);
+        updatePickupAvailability(matchedVariant);
         updateUrl(matchedVariant);
       });
     });
@@ -242,12 +285,43 @@
     });
   }
 
+  // Mirrors initSizeChartModal's open/close/focus-restore pattern, but the
+  // trigger and modal are siblings inside the shared
+  // [data-pickup-availability-container] wrapper (trigger is nested in
+  // .pickup-availability__summary, not a direct parent of the modal), so
+  // the modal is found via closest() on that container rather than
+  // trigger.parentElement.
+  function initPickupAvailabilityModal(root) {
+    root.querySelectorAll('[data-pickup-availability-trigger]').forEach(function (trigger) {
+      var container = trigger.closest('[data-pickup-availability-container]');
+      var modal = container ? container.querySelector('[data-pickup-availability-modal]') : null;
+      if (!modal) return;
+
+      trigger.addEventListener('click', function () {
+        modal.showModal();
+      });
+
+      modal.addEventListener('close', function () {
+        trigger.focus();
+      });
+
+      var closeButton = modal.querySelector('[data-pickup-availability-close]');
+      if (closeButton) {
+        closeButton.addEventListener('click', function () {
+          modal.close();
+        });
+      }
+    });
+  }
+
   initVariantPicker(document);
   initGalleryThumbnails(document);
   initSizeChartModal(document);
+  initPickupAvailabilityModal(document);
   document.addEventListener('shopify:section:load', function (event) {
     initVariantPicker(event.target);
     initGalleryThumbnails(event.target);
     initSizeChartModal(event.target);
+    initPickupAvailabilityModal(event.target);
   });
 })();

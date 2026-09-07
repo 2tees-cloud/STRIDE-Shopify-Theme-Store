@@ -57,6 +57,10 @@
       ],
       "settings": {}
     },
+    "pickup-availability": {
+      "type": "pickup-availability",
+      "settings": {}
+    },
     "complementary-products": {
       "type": "recommended-products",
       "settings": {
@@ -72,6 +76,7 @@
   },
   "order": [
     "main",
+    "pickup-availability",
     "complementary-products",
     "related-products"
   ]

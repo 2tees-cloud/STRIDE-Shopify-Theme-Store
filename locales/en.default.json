@@ -145,7 +145,14 @@
     "gift_card_send_as_gift": "Send as a gift",
     "gift_card_recipient_email": "Recipient email",
     "gift_card_recipient_name": "Recipient name (optional)",
-    "gift_card_recipient_message": "Message (optional)"
+    "gift_card_recipient_message": "Message (optional)",
+    "pickup_available_at_html": "Pickup available at {{ location }}",
+    "pickup_unavailable_at_html": "Currently unavailable for pickup at {{ location }}",
+    "pickup_view_store_info": "View store info",
+    "pickup_check_other_stores": "Check other stores",
+    "pickup_availability": "Pickup availability",
+    "pickup_available": "Available",
+    "pickup_currently_unavailable": "Currently unavailable"
   },
   "search": {
     "title": "Search",

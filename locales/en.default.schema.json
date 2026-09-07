@@ -76,6 +76,7 @@
     "product_description": "Description",
     "product_price": "Price",
     "product_title": "Product title",
+    "pickup_availability": "Pickup availability",
     "product_vendor": "Vendor",
     "pull_quote": "Pull quote",
     "quantity_selector": "Quantity selector",

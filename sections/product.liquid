@@ -104,7 +104,15 @@
         an UndefinedObject).
       {% endcomment %}
       {{ form | payment_button }}
+      {% comment %}
+        Same form-scope requirement as payment_button above: the
+        payment_terms filter needs the product form's `form` object,
+        so it has to be called here rather than from inside a
+        content_for 'blocks' theme block.
+      {% endcomment %}
+      {{ form | payment_terms }}
     {% endform %}
+    {{ shop | login_button }}
   </div>
 </div>
 

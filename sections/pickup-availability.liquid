@@ -1,0 +1,201 @@
+{% comment %}
+  Pickup availability for the product's current variant. A standalone
+  section (same architecture as recommended-products.liquid) rather
+  than embedded directly in sections/product.liquid, so its own JS can
+  re-fetch just this section's markup via
+  product.url?variant=X&section_id=Y on variant change -- the exact
+  pattern already established for recommended-products, rather than
+  introducing Shopify's other documented /variants/{id}/?section_id=
+  endpoint as a second, inconsistent mechanism.
+
+  store_availability is only ever populated when at least one location
+  has pickup enabled (confirmed in Shopify's own docs), so this
+  section renders nothing at all for a shop that never turns pickup
+  on -- no placeholder, no empty heading.
+{% endcomment %}
+
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign pickup_locations = current_variant.store_availabilities | where: 'pick_up_enabled', true
+%}
+
+{% comment %}
+  This wrapper renders unconditionally (data-url and all) even when
+  there's nothing to show for the current variant -- it's the stable
+  anchor updatePickupAvailability's document.querySelector looks up on
+  every variant change in assets/product-variant-picker.js. If it only
+  existed while pickup_locations.size > 0, swapping to a variant with
+  no pickup-enabled location would remove it from the DOM entirely
+  (nothing left to swap its innerHTML on), and switching back to a
+  variant that DOES have one would then find no container to update
+  -- a one-way dead end, not a toggle.
+{% endcomment %}
+<div
+  class="pickup-availability"
+  data-pickup-availability-container
+  data-url="{{ product.url }}?variant={{ current_variant.id }}&section_id={{ section.id }}"
+>
+  {% if pickup_locations.size > 0 %}
+    {% assign closest = pickup_locations.first %}
+    <div class="pickup-availability__summary">
+      {% if closest.available %}
+        <p class="pickup-availability__status pickup-availability__status--available">
+          {{ 'product.pickup_available_at_html' | t: location: closest.location.name }}
+        </p>
+        <p class="pickup-availability__time">{{ closest.pick_up_time }}</p>
+      {% else %}
+        <p class="pickup-availability__status">
+          {{ 'product.pickup_unavailable_at_html' | t: location: closest.location.name }}
+        </p>
+      {% endif %}
+      <button type="button" class="pickup-availability__trigger" data-pickup-availability-trigger>
+        {% if pickup_locations.size > 1 %}
+          {{ 'product.pickup_check_other_stores' | t }}
+        {% else %}
+          {{ 'product.pickup_view_store_info' | t }}
+        {% endif %}
+      </button>
+    </div>
+
+    <dialog
+      class="pickup-availability-modal"
+      scroll-lock
+      data-pickup-availability-modal
+      aria-label="{{ 'product.pickup_availability' | t }}"
+    >
+      <button
+        type="button"
+        class="pickup-availability-modal__close"
+        data-pickup-availability-close
+        aria-label="{{ 'product.close' | t }}"
+      >&times;</button>
+      <h2 class="pickup-availability-modal__title">{{ product.title }}</h2>
+      <ul class="pickup-availability-modal__list">
+        {% for availability in pickup_locations %}
+          <li class="pickup-availability-modal__item">
+            <h3 class="pickup-availability-modal__location">{{ availability.location.name }}</h3>
+            <p class="pickup-availability-modal__status">
+              {% if availability.available %}
+                {{ 'product.pickup_available' | t }}, {{ availability.pick_up_time | downcase }}
+              {% else %}
+                {{ 'product.pickup_currently_unavailable' | t }}
+              {% endif %}
+            </p>
+            <address class="pickup-availability-modal__address">
+              {{ availability.location.address | format_address }}
+            </address>
+          </li>
+        {% endfor %}
+      </ul>
+    </dialog>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .pickup-availability {
+    margin-block-start: var(--space-4);
+    padding-block-start: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+  .pickup-availability__summary {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+  }
+  .pickup-availability__status {
+    margin: 0;
+    font-weight: 600;
+  }
+  .pickup-availability__status--available::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--color-success, #2e7d32);
+    margin-inline-end: var(--space-2);
+  }
+  .pickup-availability__time {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+  .pickup-availability__trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    color: var(--color-foreground);
+    cursor: pointer;
+    font-size: 0.875rem;
+    min-height: 24px;
+  }
+  .pickup-availability-modal {
+    max-width: 28rem;
+    width: calc(100% - var(--space-6));
+    max-height: calc(100% - var(--space-6));
+    overflow-y: auto;
+    border: none;
+    padding: var(--space-6);
+  }
+  .pickup-availability-modal::backdrop {
+    background: rgb(0 0 0 / 50%);
+  }
+  .pickup-availability-modal__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    min-width: 24px;
+    min-height: 24px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .pickup-availability-modal__title {
+    font-family: var(--font-header--family);
+    font-size: 1.25rem;
+    margin: 0 0 var(--space-4);
+  }
+  .pickup-availability-modal__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .pickup-availability-modal__item {
+    padding-block-end: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .pickup-availability-modal__item:last-child {
+    border-bottom: none;
+    padding-block-end: 0;
+  }
+  .pickup-availability-modal__location {
+    font-size: 1rem;
+    margin: 0 0 var(--space-1);
+  }
+  .pickup-availability-modal__status {
+    margin: 0 0 var(--space-1);
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+  }
+  .pickup-availability-modal__address {
+    font-style: normal;
+    font-size: 0.875rem;
+    color: var(--color-foreground-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.pickup_availability",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [{ "name": "t:general.pickup_availability" }]
+}
+{% endschema %}
