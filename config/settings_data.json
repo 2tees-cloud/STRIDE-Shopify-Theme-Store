@@ -8,7 +8,35 @@
  * ------------------------------------------------------------
  */
 {
-  "current": "Traction",
+  "current": {
+    "type_header_font": "playfair_display_n4",
+    "type_primary_font": "work_sans_n4",
+    "max_page_width": "90rem",
+    "min_page_margin": 20,
+    "background_color": "#F7F5F1",
+    "background_alt_color": "#EFEBE4",
+    "foreground_color": "#141311",
+    "foreground_muted_color": "#6B665D",
+    "surface_color": "#FFFFFF",
+    "border_color": "#DDD8CE",
+    "accent_color": "#A84A29",
+    "on_accent_color": "#FFFFFF",
+    "accent_secondary_color": "#7C8471",
+    "urgency_color": "#B23A1F",
+    "input_corner_radius": 4,
+    "social_instagram_link": "https://www.instagram.com/shopify",
+    "social_x_link": "https://x.com/Shopify/",
+    "social_tiktok_link": "https://www.tiktok.com/@shopify?lang=en",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "free_shipping_threshold": 0
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
     "Traction": {
       "type_header_font": "playfair_display_n4",
