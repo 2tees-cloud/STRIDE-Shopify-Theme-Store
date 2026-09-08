@@ -519,6 +519,26 @@
     color: var(--color-foreground);
     text-decoration: none;
   }
+  /*
+    Without this, tapping a submenu link (Men's/Women's/Sale) shows no
+    feedback on the link itself -- the only color change anywhere in
+    this interaction is .header__menu-item-trigger's own
+    [aria-expanded="true"] accent color on "Shop", which stays lit the
+    whole time the submenu is open, including through the tap that
+    navigates away from it. That reads as "Shop" being the thing that
+    got highlighted, when what was actually tapped was the link below
+    it. Giving the tapped link its own accent state makes the tap's
+    real target visibly the one that responds.
+  */
+  header .header__submenu a:hover,
+  header .header__submenu a:focus-visible,
+  header .header__submenu a:active {
+    color: var(--color-accent);
+  }
+  header .header__submenu a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
   header .header__localization-form select {
     /* Same --color-border-on-interactive-boundary fix as .header__submenu above. */
     border: 1px solid var(--color-foreground-muted);
