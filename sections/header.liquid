@@ -863,15 +863,21 @@
         }
       });
 
-      // Tapping a real link navigates away immediately -- there's no
-      // guarantee the browser paints another frame first, so a CSS
-      // hover/active state on the link itself can lose the race and
-      // never actually show. Clearing "Shop"'s own aria-expanded
-      // synchronously here (same tick as the click, before the browser
-      // unloads the page) reliably removes its lit-up state instead of
-      // trying to out-race navigation with a competing highlight.
+      // The visible "highlight stuck on Shop" report turned out to be
+      // Chrome for Android's own focus ring, not our color styling:
+      // tapping "Shop" gives it real DOM focus, and tapping a plain <a>
+      // afterwards doesn't reliably move focus off it before the page
+      // starts navigating away -- so the browser keeps painting its
+      // native focus indicator on "Shop" (the last element that
+      // actually held focus) right through the transition, regardless
+      // of what our own CSS/aria-expanded state says. Blurring the
+      // trigger synchronously on the link's own click removes that
+      // native ring immediately, independent of any paint-timing race.
       submenu.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', closeMenu);
+        link.addEventListener('click', function () {
+          closeMenu();
+          trigger.blur();
+        });
       });
     });
   }
