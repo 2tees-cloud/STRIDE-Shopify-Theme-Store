@@ -11,3 +11,8 @@
 #
 # Ignore templates and sections with a regular expression:
 #   /(templates|sections)/.*\.json/
+
+# Unconfirmed AI-generated block drafts from the Shopify admin's "Generate
+# section with AI" tool land here via the two-way GitHub sync. They are
+# scratch drafts, not part of the theme, and should never ship.
+temp/

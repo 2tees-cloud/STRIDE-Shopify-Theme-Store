@@ -2,15 +2,25 @@
   <br>
     <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
   <br>
-  Shopify Skeleton Theme
+  STRIDE
+  <br>
 </h1>
 
-A minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+<p align="center">A Shopify theme for sneaker and footwear brands, built for the Shopify Theme Store.</p>
 
 <p align="center">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Shopify/skeleton-theme/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/2tees-cloud/STRIDE-Shopify-Theme-Store/actions/workflows/ci.yml/badge.svg"></a>
 </p>
+
+STRIDE is an Online Store 2.0 theme designed around how sneaker and footwear brands actually sell: colorway variants, seasonal drops, and product craft detail. It ships with several sections you won't find in a general-purpose theme:
+
+- **Colorway-switching hero** — clicking a swatch instantly swaps the hero image or video and updates the call-to-action link, with every colorway preloaded so the switch never waits on the network.
+- **Drop countdown** — a countdown section for real, merchant-set release dates (no simulated urgency).
+- **Shoppable lookbook** — tagged hotspots over editorial photography, fully keyboard-operable.
+- **Product anatomy** — a horizontal scroll-through of a product's construction and materials.
+
+Built from scratch on Shopify's `skeleton-theme` scaffold, following its conventions (`{% stylesheet %}` / `{% javascript %}` tags, CSS variables for single-property settings, CSS classes for multi-property settings, no build step).
 
 ## Getting started
 
@@ -26,12 +36,8 @@ If you use VS Code:
 
 ### Clone
 
-Clone this repository using Git or Shopify CLI:
-
 ```bash
-git clone git@github.com:Shopify/skeleton-theme.git
-# or
-shopify theme init
+git clone https://github.com/2tees-cloud/STRIDE-Shopify-Theme-Store.git
 ```
 
 ### Preview
@@ -60,11 +66,7 @@ To learn more, refer to the [theme architecture documentation](https://shopify.d
 
 ### Templates
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme.
-
-The Skeleton Theme scaffolds [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) to make it easy for merchants to customize their store.
-
-None of the template types are required, and not all of them are included in the Skeleton Theme. Refer to the [template types reference](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) for a full list.
+[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme. STRIDE ships [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) for every required Theme Store page type, so merchants can customize each one from the theme editor without touching code.
 
 ### Sections
 
@@ -80,7 +82,7 @@ Blocks are made customizable by including a `{% schema %}` in the body. For more
 
 ## Schemas
 
-When developing components defined by schema settings, we recommend these guidelines to simplify your code:
+When developing components defined by schema settings, this theme follows these conventions:
 
 - **Single property settings**: For settings that correspond to a single CSS property, use CSS variables:
 
@@ -143,18 +145,16 @@ When developing components defined by schema settings, we recommend these guidel
 
 ## CSS & JavaScript
 
-For CSS and JavaScript, we recommend using the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
+For CSS and JavaScript, this theme uses the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
 
 ### `critical.css`
 
-The Skeleton Theme explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
+STRIDE explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
 
-## Contributing
+## Design & implementation notes
 
-We're excited for your contributions to the Skeleton Theme! This repository aims to remain as lean, lightweight, and fundamental as possible, and we kindly ask your contributions to align with this intention.
-
-Visit our [CONTRIBUTING.md](./CONTRIBUTING.md) for a detailed overview of our process, guidelines, and recommendations.
+The full design specification and phase-by-phase implementation plans for this theme live in [`docs/superpowers/`](./docs/superpowers/) — useful background for anyone continuing development, including which requirements are code-level (covered here) versus business/legal steps required before an actual Theme Store submission (trademark clearance, demo store setup, support documentation).
 
 ## License
 
-Skeleton Theme is open-sourced under the [MIT](./LICENSE.md) License.
+STRIDE is licensed under the terms in [LICENSE.md](./LICENSE.md).
