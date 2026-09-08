@@ -1,14 +1,22 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "current": {
-    "favicon": "shopify://shop_images/98dc3dc2-a02a-11ef-ac2f-0cc47ae7dc54.jpg"
+  "current": "Traction",
+  "presets": {
+    "Traction": {
+      "type_header_font": "playfair_display_n4",
+      "type_primary_font": "work_sans_n4",
+      "max_page_width": "90rem",
+      "min_page_margin": 20,
+      "background_color": "#F7F5F1",
+      "background_alt_color": "#EFEBE4",
+      "foreground_color": "#141311",
+      "foreground_muted_color": "#6B665D",
+      "surface_color": "#FFFFFF",
+      "border_color": "#DDD8CE",
+      "accent_color": "#A84A29",
+      "on_accent_color": "#FFFFFF",
+      "accent_secondary_color": "#7C8471",
+      "urgency_color": "#B23A1F",
+      "input_corner_radius": 4
+    }
   }
 }
