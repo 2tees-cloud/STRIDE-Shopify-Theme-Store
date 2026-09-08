@@ -274,6 +274,15 @@
     "shoppable_lookbook_eweMH4": {
       "type": "shoppable-lookbook",
       "blocks": {
+        "look_JjNzDK": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
+            "product": "sneakers-mens-beige",
+            "position_x": 50,
+            "position_y": 41
+          }
+        },
         "look_zqaCdt": {
           "type": "look",
           "settings": {
@@ -303,6 +312,7 @@
         }
       },
       "block_order": [
+        "look_JjNzDK",
         "look_zqaCdt",
         "look_9crYHL",
         "look_CQMBJA"
