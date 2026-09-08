@@ -127,6 +127,16 @@
     if (Object.keys(properties).length > 0) {
       item.properties = properties;
     }
+    // blocks/selling-plan-picker.liquid's hidden "selling_plan" input is
+    // always present in the DOM once a product has selling plan groups,
+    // but empty-string for one-time purchase (see that file's own doc
+    // comment) -- forwarding an empty value would make cart/add.js treat
+    // this as an actual (invalid) plan id instead of a regular purchase,
+    // so it's only added here when non-empty.
+    var sellingPlan = formData.get('selling_plan');
+    if (sellingPlan) {
+      item.selling_plan = sellingPlan;
+    }
 
     var body = JSON.stringify({
       items: [item]
