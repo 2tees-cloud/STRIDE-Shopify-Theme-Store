@@ -14,16 +14,33 @@
     "footer": {
       "type": "footer",
       "blocks": {
+        "group_wK8CMq": {
+          "type": "group",
+          "name": "t:general.column",
+          "settings": {
+            "layout_direction": "group--vertical",
+            "alignment": "flex-start",
+            "padding": 0
+          },
+          "blocks": {
+            "social_icons_dTfDeh": {
+              "type": "social-icons",
+              "name": "t:general.social_media",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "social_icons_dTfDeh"
+          ]
+        },
         "menu": {
           "type": "footer-link-list",
           "settings": {
             "heading": "Menu",
             "menu": "footer"
-          }
-        },
-        "social": {
-          "type": "social-icons",
-          "settings": {}
+          },
+          "blocks": {}
         },
         "contact": {
           "type": "store-contact",
@@ -32,10 +49,15 @@
             "address": "482 Union Street, Suite 200\nSeattle, WA 98101",
             "phone": "+1 (206) 555-0142",
             "email": "hello@tractionshoes.com"
-          }
+          },
+          "blocks": {}
         }
       },
-      "block_order": ["menu", "social", "contact"],
+      "block_order": [
+        "group_wK8CMq",
+        "menu",
+        "contact"
+      ],
       "settings": {
         "show_payment_icons": true
       }
