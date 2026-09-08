@@ -278,18 +278,9 @@
           "type": "look",
           "settings": {
             "image": "shopify://shop_images/photo-1661336509673-910e946daf56.jpg",
-            "product": "sneakers-mens-beige",
+            "product": "sneakers-canvas-white",
             "position_x": 50,
             "position_y": 41
-          }
-        },
-        "look_zqaCdt": {
-          "type": "look",
-          "settings": {
-            "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
-            "product": "sneakers-womens-faux-fur-lined-white",
-            "position_x": 21,
-            "position_y": 67
           }
         },
         "look_9crYHL": {
@@ -299,6 +290,15 @@
             "product": "sneakers-mens-all-season-white-green",
             "position_x": 22,
             "position_y": 50
+          }
+        },
+        "look_zqaCdt": {
+          "type": "look",
+          "settings": {
+            "image": "shopify://shop_images/photo-1697507803481-5724f26a7b50.jpg",
+            "product": "sneakers-womens-faux-fur-lined-white",
+            "position_x": 21,
+            "position_y": 67
           }
         },
         "look_CQMBJA": {
@@ -313,8 +313,8 @@
       },
       "block_order": [
         "look_JjNzDK",
-        "look_zqaCdt",
         "look_9crYHL",
+        "look_zqaCdt",
         "look_CQMBJA"
       ],
       "name": "t:general.shoppable_lookbook",
