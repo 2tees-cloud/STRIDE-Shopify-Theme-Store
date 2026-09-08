@@ -2,7 +2,7 @@
   <br>
     <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
   <br>
-  STRIDE
+  Traction
   <br>
 </h1>
 
@@ -13,7 +13,7 @@
   <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/2tees-cloud/STRIDE-Shopify-Theme-Store/actions/workflows/ci.yml/badge.svg"></a>
 </p>
 
-STRIDE is an Online Store 2.0 theme designed around how sneaker and footwear brands actually sell: colorway variants, seasonal drops, and product craft detail. It ships with several sections you won't find in a general-purpose theme:
+Traction is an Online Store 2.0 theme designed around how sneaker and footwear brands actually sell: colorway variants, seasonal drops, and product craft detail. It ships with several sections you won't find in a general-purpose theme:
 
 - **Colorway-switching hero** — clicking a swatch instantly swaps the hero image or video and updates the call-to-action link, with every colorway preloaded so the switch never waits on the network.
 - **Drop countdown** — a countdown section for real, merchant-set release dates (no simulated urgency).
@@ -66,7 +66,7 @@ To learn more, refer to the [theme architecture documentation](https://shopify.d
 
 ### Templates
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme. STRIDE ships [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) for every required Theme Store page type, so merchants can customize each one from the theme editor without touching code.
+[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme. Traction ships [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) for every required Theme Store page type, so merchants can customize each one from the theme editor without touching code.
 
 ### Sections
 
@@ -149,7 +149,7 @@ For CSS and JavaScript, this theme uses the [`{% stylesheet %}`](https://shopify
 
 ### `critical.css`
 
-STRIDE explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
+Traction explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
 
 ## Design & implementation notes
 
@@ -157,4 +157,4 @@ The full design specification and phase-by-phase implementation plans for this t
 
 ## License
 
-STRIDE is licensed under the terms in [LICENSE.md](./LICENSE.md).
+Traction is licensed under the terms in [LICENSE.md](./LICENSE.md).
