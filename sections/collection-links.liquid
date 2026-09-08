@@ -55,10 +55,32 @@
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-4);
   }
+  /*
+    A lone item trailing an odd count (the 3-block preset is the common
+    case) would otherwise sit alone in the last row, stuck to the left
+    edge with empty space beside it. Give it the full row but cap its
+    own width to one column's share and center it, rather than
+    stretching its image to fill the row.
+  */
+  .collection-links__list--spotlight .collection-links__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: calc(50% - var(--space-4) / 2);
+    margin-inline: auto;
+  }
   @media (min-width: 750px) {
     .collection-links__list--spotlight {
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-6);
+    }
+    .collection-links__list--spotlight .collection-links__item:last-child:nth-child(odd) {
+      grid-column: auto;
+      max-width: none;
+      margin-inline: 0;
+    }
+    .collection-links__list--spotlight .collection-links__item:last-child:nth-child(3n + 1) {
+      grid-column: 1 / -1;
+      max-width: calc(100% / 3 - var(--space-6) * 2 / 3);
+      margin-inline: auto;
     }
   }
   .collection-links__list--spotlight .collection-links__item {
