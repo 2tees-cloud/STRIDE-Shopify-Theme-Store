@@ -2527,6 +2527,137 @@
         "ineligible": {
           "title": "Немає прийнятних карток"
         }
+      },
+      "notice_banner": {
+        "delivery_address_validation_errors_banner": {
+          "contact_us": "Зв'яжіться з нами",
+          "use_different_address": "Використати іншу адресу доставки"
+        },
+        "shipping_address_incomplete_title": "Адреса доставки неповна",
+        "calculating_shipping": "Вартість доставки досі розраховується. Спробуйте ще раз за кілька секунд. З вас ще не стягнуто оплату.",
+        "calculating_taxes": "Податки досі розраховуються. Спробуйте ще раз за кілька секунд. З вас ще не стягнуто оплату.",
+        "generic_processing_error": {
+          "title": "Під час обробки вашого замовлення виникла проблема",
+          "body": "З вас не стягнуто оплату. Спробуйте ще раз або виберіть інший спосіб оплати."
+        },
+        "payment_method_not_available_with_payment_terms": "Вибраний вами спосіб оплати більше недоступний, оскільки оплата цього замовлення тепер здійснюється на умовах {{paymentTerms}}",
+        "payment_method_not_available_with_fulfillment_terms": "Вибраний вами спосіб оплати більше недоступний, оскільки оплата цього замовлення тепер здійснюється під час виконання",
+        "payment_method_not_available_with_fixed_terms": "Вибраний вами спосіб оплати більше недоступний, оскільки термін оплати цього замовлення настане пізніше",
+        "payment_method_not_available_with_review_requirement": "Вибраний вами спосіб оплати більше недоступний, оскільки оплата буде потрібна після підтвердження замовлення.",
+        "contact_information": {
+          "title": "Контактна інформація недійсна",
+          "header": "Щоб оновити свою інформацію, {{emailLink}}.",
+          "email_link": "зв'яжіться з нами"
+        },
+        "validation_errors_banner": {
+          "heading": {
+            "one": "Знайдено {{count}} помилку:",
+            "other": "Знайдено {{count}} помилок:"
+          },
+          "section_label": {
+            "delivery": "Доставка",
+            "contact": "Контакт",
+            "payment": "Оплата",
+            "billing": "Виставлення рахунку"
+          },
+          "errors_in_section": {
+            "one": "{{count}} помилка в розділі «{{section}}»",
+            "other": "{{count}} помилок у розділі «{{section}}»"
+          }
+        }
+      },
+      "review_address_modal": {
+        "title": "Перевірте адресу",
+        "subtitle": {
+          "one": "Це замовлення буде відправлено на адресу, надану {{merchant}}.",
+          "other": "Це замовлення буде відправлено на адресу, надану {{merchant}}. Виберіть адресу доставки."
+        },
+        "subtitle_no_match": "Ця адреса не збігається з жодною з ваших збережених адрес.",
+        "subtitle_must_use": "Ваше замовлення буде відправлено на цю адресу.",
+        "continue": "Продовжити з цією адресою",
+        "use_saved_address": "Використати іншу адресу",
+        "return_to_cart": "Повернутися до кошика"
+      },
+      "marketplaces": {
+        "legal_notice": {
+          "legal_text": "Перевірка",
+          "link_label": "Умови використання {{partnerDisplayName}}"
+        }
+      },
+      "online_store_chat": {
+        "title": "Є запитання? Напишіть нам у чат"
+      },
+      "local_pickup": {
+        "title": "Локація",
+        "location_address_search_label": "Адреса",
+        "location_address_search_placeholder": "%{postal_code_label} або адреса",
+        "location_closest": "Найближча локація з вашим товаром",
+        "location_closest_one_item": "Найближча локація з вашим товаром",
+        "location_closest_other_items": "Найближча локація з вашими товарами",
+        "location_selected": "Вибрана вами локація",
+        "location_information": {
+          "one": "Поруч з вами %{count} локація з товаром у наявності",
+          "other": "Поруч з вами %{count} локацій з товаром у наявності"
+        },
+        "location_information_far_away": {
+          "one": "Є %{count} локація з вашим товаром",
+          "other": "Є %{count} локацій з вашим товаром"
+        },
+        "location_information_far_away_one_item": {
+          "one": "Є %{count} локація з вашим товаром",
+          "other": "Є %{count} локацій з вашим товаром"
+        },
+        "location_information_far_away_other_items": {
+          "one": "Є %{count} локація з вашими товарами",
+          "other": "Є %{count} локацій з вашими товарами"
+        },
+        "location_nearby": {
+          "one": "Поруч є %{count} локація з вашим товаром",
+          "other": "Поруч є %{count} локацій з вашим товаром"
+        },
+        "location_nearby_one_item": {
+          "one": "Поруч є %{count} локація з вашим товаром",
+          "other": "Поруч є %{count} локацій з вашим товаром"
+        },
+        "location_nearby_other_items": {
+          "one": "Поруч є %{count} локація з вашими товарами",
+          "other": "Поруч є %{count} локацій з вашими товарами"
+        },
+        "location_nearby_short": {
+          "one": "%{count} локація поруч з вашим товаром",
+          "other": "%{count} локацій поруч з вашим товаром"
+        },
+        "location_nearby_short_one_item": {
+          "one": "%{count} локація поруч з вашим товаром",
+          "other": "%{count} локацій поруч з вашим товаром"
+        },
+        "location_nearby_short_other_items": {
+          "one": "%{count} локація поруч з вашими товарами",
+          "other": "%{count} локацій поруч з вашими товарами"
+        },
+        "location_far_away": {
+          "one": "%{count} локація з вашим товаром",
+          "other": "%{count} локацій з вашим товаром"
+        },
+        "location_far_away_one_item": {
+          "one": "%{count} локація з вашим товаром",
+          "other": "%{count} локацій з вашим товаром"
+        },
+        "location_far_away_other_items": {
+          "one": "%{count} локація з вашими товарами",
+          "other": "%{count} локацій з вашими товарами"
+        },
+        "toggle_location": "Змінити локацію",
+        "toggle_more_locations": {
+          "one": "Ще %{count} локація",
+          "other": "Ще %{count} локацій"
+        },
+        "toggle_multiple_locations": "Ще %{count}+ локацій",
+        "pick_up_location": "Місце самовивозу",
+        "or": "АБО",
+        "cancel": "Скасувати",
+        "your_location": "вашої локації",
+        "search_button": "Знайти магазини"
       }
     }
   }
