@@ -392,7 +392,314 @@
         "optional_street_name_label": "Вулиця (необов'язково)",
         "street_number_label": "Номер будинку",
         "optional_street_number_label": "Номер будинку (необов'язково)",
-        "address2_label": "Квартира, офіс тощо"
+        "address2_label": "Квартира, офіс тощо",
+        "optional_address2_label": "Квартира, офіс тощо (необов'язково)",
+        "neighborhood_label": "Мікрорайон",
+        "optional_neighborhood_label": "Мікрорайон (необов'язково)",
+        "barangay_label": "Барангай",
+        "optional_barangay_label": "Барангай (необов'язково)",
+        "colony_label": "Колонія",
+        "optional_colony_label": "Колонія (необов'язково)",
+        "commune_label": "Комуна",
+        "optional_commune_label": "Комуна (необов'язково)",
+        "district_label": "Район",
+        "optional_district_label": "Район (необов'язково)",
+        "subdistrict_label": "Підрайон",
+        "optional_subdistrict_label": "Підрайон (необов'язково)",
+        "ward_label": "Округ",
+        "optional_ward_label": "Округ (необов'язково)",
+        "block_label": "Квартал",
+        "optional_block_label": "Квартал (необов'язково)",
+        "area_label": "Місцевість",
+        "optional_area_label": "Місцевість (необов'язково)",
+        "city_label": "Місто",
+        "suburb_label": "Передмістя",
+        "country_label": "Країна/регіон",
+        "country_code": "Код країни/регіону",
+        "province_label": "Область",
+        "province_placeholder": "Область",
+        "county_label": "Округ",
+        "county_placeholder": "Округ",
+        "state_label": "Штат",
+        "state_placeholder": "Штат",
+        "region_label": "Регіон",
+        "region_placeholder": "Регіон",
+        "region_none": "Не вибрано",
+        "prefecture_label": "Префектура",
+        "prefecture_placeholder": "Префектура",
+        "governorate_label": "Губернаторство",
+        "governorate_placeholder": "Губернаторство",
+        "emirate_label": "Емірат",
+        "emirate_placeholder": "Емірат",
+        "state_and_territory_label": "Штат/територія",
+        "state_and_territory_placeholder": "Штат/територія",
+        "phone_label": "Телефон",
+        "phone_rollup_accessibility_label": "Варіанти телефону",
+        "phone_country_code_label": "Код країни номера телефону",
+        "optional_phone_label": "Телефон (необов'язково)",
+        "phone_placeholder": "Телефон",
+        "phone_tooltip": "На випадок, якщо нам потрібно буде зв'язатися з вами щодо замовлення",
+        "zip_code_label": "Поштовий індекс",
+        "optional_zip_code_label": "Поштовий індекс (необов'язково)",
+        "zip_code_placeholder": "Поштовий індекс",
+        "postal_code_label": "Поштовий індекс",
+        "optional_postal_code_label": "Поштовий індекс (необов'язково)",
+        "postal_code_placeholder": "Поштовий індекс",
+        "postcode_label": "Поштовий індекс",
+        "optional_postcode_label": "Поштовий індекс (необов'язково)",
+        "postcode_placeholder": "Поштовий індекс",
+        "pincode_label": "PIN-код",
+        "optional_pincode_label": "PIN-код (необов'язково)",
+        "pincode_placeholder": "PIN-код",
+        "civic_number_warning": "Додайте номер будинку, якщо він у вас є",
+        "optional_last_name_label": "Прізвище (необов'язково)",
+        "company_contact_info": "{{companyName}} · {{contact}}",
+        "different_shipping_address_label": "Доставити на іншу адресу",
+        "different_shipping_address_text": "Використати одноразову адресу для цього замовлення",
+        "change_company_location_link_label": "Змінити локацію компанії",
+        "change_location_link_label": "Змінити локацію",
+        "ship_to_company": "Доставити на {{companyName}}"
+      },
+      "delivery_options": {
+        "free_total_label": "Безкоштовно",
+        "ship": "Доставка",
+        "ship_to_address": "Доставити на адресу",
+        "shipping_address": "Адреса доставки",
+        "pick_up": "Самовивіз",
+        "pickup": "Самовивіз",
+        "pickup_store": "Самовивіз з магазину",
+        "pickup_point": "Пункт видачі",
+        "pick_up_from_store": "Самовивіз з магазину",
+        "pick_up_locations": "Місця самовивозу",
+        "pickup_point_map_title": "Карта пунктів видачі",
+        "pick_up_in_one_hour": "Зазвичай готово протягом 1 години",
+        "pick_up_in_two_hours": "Зазвичай готово протягом 2 годин",
+        "pick_up_in_four_hours": "Зазвичай готово протягом 4 годин",
+        "pick_up_in_twenty_four_hours": "Зазвичай готово протягом 24 годин",
+        "pick_up_in_two_to_four_days": "Зазвичай готово протягом 2-4 днів",
+        "pick_up_in_five_or_more_days": "Зазвичай готово протягом 5+ днів",
+        "pick_up_in_zero_to_two_hours": "Готово до самовивозу через 2 години",
+        "pick_up_in_two_to_four_hours": "Готово до самовивозу через 4 години",
+        "pick_up_immediately": "Готово до самовивозу зараз",
+        "pick_up_next_day": "Готово до самовивозу наступного дня",
+        "pickup_point_method_definition": "Доставка до пункту видачі",
+        "retail_method_definition": "Роздрібна доставка",
+        "company_location_no_address_banner": "Замовлення з доставкою в локації без адреси буде надіслано на перевірку.",
+        "none_method_definition": "Без доставки",
+        "digital_product": "Цифровий товар",
+        "subscription_pickup_information": "Ця локація буде місцем самовивозу для всіх майбутніх замовлень вашої підписки."
+      },
+      "customer_account": {
+        "not_user_label": "Не %{first_name}?",
+        "have_an_account_label": "Уже маєте обліковий запис?",
+        "sign_in_link_label": "Увійти",
+        "sign_out_link_label": "Вийти",
+        "save_my_information_label": "Зберегти цю інформацію на наступний раз",
+        "invalid_address": "Вибрана адреса недійсна. %{update_address_link} або виберіть іншу адресу.",
+        "incomplete_address": "Вибрана адреса неповна. %{update_address_link} або виберіть іншу адресу.",
+        "rollup_label": "Обліковий запис",
+        "rollup_accessibility_label": "Варіанти облікового запису",
+        "invalid_shipping_method_summary": "Виберіть дійсну адресу доставки, щоб переглянути доступні способи доставки",
+        "saved_address_option_description": {
+          "one": "У вас {{count}} збережена адреса.",
+          "other": "У вас {{count}} збережених адрес."
+        },
+        "saved_address_option_link": "Використати збережену адресу",
+        "saved_address_modal_title": "Використати мою збережену адресу"
+      },
+      "remote_merchandise_only": {
+        "title": "Завершіть покупку",
+        "remote_only_notice": "Ці товари продають та доставляють інші магазини. Щоб завершити покупку, оформіть замовлення в кожному магазині окремо.",
+        "return_to_store_label": "Повернутися до магазину",
+        "detail_item_label": {
+          "one": "{{count}} товар",
+          "other": "{{count}} товарів"
+        },
+        "checkout_on_shop_label": "Оформити замовлення на %{shop_name}",
+        "single_shop_transition": "Перенаправляємо вас на %{advertiser}, щоб завершити покупку."
+      },
+      "stock": {
+        "page_title": "Проблеми з наявністю",
+        "title": "Немає в наявності",
+        "items_unavailable_notice": "Деякі товари більше недоступні.",
+        "product_column_header": "Товари",
+        "quantity_column_header": "Кількість",
+        "price_column_header": "Ціна",
+        "status_column_header": "Статус",
+        "removed_from_cart_notice": "Вилучено з кошика",
+        "sold_out_label": "Немає в наявності",
+        "reduced_label": "Зменшено",
+        "reduced_with_quantity_label": "Залишилося лише %{quantity_available}",
+        "remove_from_cart_button_label": "Вилучити з кошика",
+        "continue_shopping_button_label": "Продовжити",
+        "go_back_to_cart_button_label": "Повернутися до кошика",
+        "remove": "Вилучити",
+        "return_to_store_label": "Повернутися до магазину",
+        "continue_cta_label": "Продовжити оформлення замовлення",
+        "item_label": {
+          "one": "{{count}} товар",
+          "other": "{{count}} товарів"
+        },
+        "empty_cart_label": "Ваш кошик порожній",
+        "quantity_update": {
+          "page_title": "Оновлення кількості",
+          "title": "Оновлення кількості",
+          "description": "Доступна кількість цих товарів змінилася, і кошик оновлено відповідно."
+        },
+        "unpurchasable_product": {
+          "title": "Товар, який не можна придбати",
+          "header": "Деякі товари вилучено з вашого кошика",
+          "message": "Ці товари недоступні для B2B-замовлень.",
+          "status_column_header": "Недоступно"
+        },
+        "unpurchasable_product_generic": {
+          "title": "Товар, який не можна придбати",
+          "header": "Деякі товари вилучено з вашого кошика",
+          "message": "Ці товари недоступні.",
+          "status_column_header": "Недоступно"
+        },
+        "unfulfillable_product": {
+          "title": "Доставка недоступна",
+          "message": {
+            "one": "%{delivery_method} більше недоступний для цього товару.",
+            "other": "%{delivery_method} більше недоступний для цих товарів."
+          },
+          "default_message": {
+            "one": "Вибраний спосіб доставки більше недоступний для цього товару.",
+            "other": "Вибраний спосіб доставки більше недоступний для цих товарів."
+          }
+        },
+        "unshippable_product": {
+          "title": "Доставка недоступна",
+          "header": {
+            "one": "Доставка недоступна для %{count} товару",
+            "other": "Доставка недоступна для %{count} товарів"
+          },
+          "message": {
+            "one": "Цей товар буде вилучено з вашого кошика, оскільки для вашої адреси немає доступних способів доставки.",
+            "other": "Ці товари буде вилучено з вашого кошика, оскільки для вашої адреси немає доступних способів доставки."
+          },
+          "status_column_header": "Без доставки"
+        },
+        "price_update": {
+          "title": "Оновлення ціни",
+          "description": "Ціни на ці товари змінилися, і кошик оновлено відповідно.",
+          "updated_price": "Оновлена ціна"
+        },
+        "price_and_quantity_update": {
+          "title": "Оновлення ціни та кількості",
+          "description": "Ціни та доступна кількість цих товарів змінилися, і кошик оновлено відповідно."
+        },
+        "out_of_stock": {
+          "description": "Ці товари більше недоступні та будуть вилучені з вашого кошика.",
+          "items_unavailable": "Деякі товари більше недоступні та будуть вилучені з вашого кошика.",
+          "missing_items": {
+            "title": {
+              "one": "{{count}} товар більше недоступний",
+              "other": "{{count}} товарів більше недоступні"
+            },
+            "some_available_notice": {
+              "one": "Решта товарів досі доступні для оформлення замовлення. Недоступний товар буде вилучено з кошика.",
+              "other": "Решта товарів досі доступні для оформлення замовлення. Недоступні товари буде вилучено з кошика."
+            },
+            "none_available_notice": {
+              "one": "Цей товар більше недоступний, тому його вилучено з вашого кошика.",
+              "other": "Ці товари більше недоступні, тому їх вилучено з вашого кошика."
+            },
+            "mixed_issues_title": "Деякі товари більше недоступні"
+          }
+        },
+        "out_of_stock_in_context_label": "Цей товар недоступний у вашій країні/регіоні."
+      },
+      "contextual_availability": {
+        "title": {
+          "one": "Недоступний товар",
+          "other": "Недоступні товари"
+        },
+        "products_not_available": {
+          "one": "Цей товар буде вилучено з вашого кошика, оскільки він недоступний у вашій країні/регіоні.",
+          "other": "Ці товари буде вилучено з вашого кошика, оскільки вони недоступні у вашій країні/регіоні."
+        },
+        "all_products_in_cart_unavailable": {
+          "one": "Цей товар недоступний у вашій країні/регіоні.",
+          "other": "Ці товари недоступні у вашій країні/регіоні."
+        },
+        "unavailable_label": "Недоступно"
+      },
+      "merchandise_unavailable_in_buyer_location": {
+        "banner_title": {
+          "some_products_one": "Цей товар недоступний для доставки в %{location_name}.",
+          "some_products_other": "Ці товари недоступні для доставки в %{location_name}.",
+          "all_products_one": "Товар у вашому кошику недоступний для доставки в %{location_name}.",
+          "all_products_other": "Товари у вашому кошику недоступні для доставки в %{location_name}."
+        },
+        "missing_country_fallback": "вашої країни",
+        "indeterminate_location_fallback": "вашої локації",
+        "cart_updated": "Ваш кошик оновлено.",
+        "change_address_only": "Щоб продовжити, змініть адресу доставки.",
+        "change_address_or_remove": "Змініть адресу доставки або %{remove_action}.",
+        "remove_items_action": {
+          "one": "вилучіть недоступний товар",
+          "other": "вилучіть недоступні товари"
+        },
+        "empty_cart_action": "очистіть кошик і поверніться до магазину",
+        "unavailable_line_item": "%{product_name} / %{variant_label}"
+      },
+      "deliverability": {
+        "not_deliverable": {
+          "title": {
+            "one": "Доставка недоступна для %{count} товару",
+            "other": "Доставка недоступна для %{count} товарів"
+          },
+          "message": {
+            "one": "Цей товар буде вилучено з вашого кошика, оскільки для вашої адреси немає доступних способів доставки.",
+            "other": "Ці товари буде вилучено з вашого кошика, оскільки для вашої адреси немає доступних способів доставки."
+          },
+          "label": "Без доставки"
+        }
+      },
+      "order_summary": {
+        "title": "Підсумок замовлення",
+        "product_disclosures": {
+          "title": "Розкриття інформації про товар"
+        },
+        "group_title_label": "Частина «%{group_title}»",
+        "for_add_on": "Для: %{group_title}",
+        "from_shop_heading": "Від %{shop_name}",
+        "from_other_stores_heading": "З інших магазинів",
+        "from_multiple_stores_heading": "З кількох магазинів",
+        "number_items": {
+          "one": "%{count} товар",
+          "other": "%{count} товарів"
+        },
+        "view_all_items": {
+          "one": "Переглянути %{count} товар",
+          "other": "Переглянути всі товари (%{count})"
+        },
+        "more_items_modal": {
+          "search_item": "Пошук",
+          "clear_search": "Очистити пошук",
+          "empty_results": "За запитом «%{searchText}» нічого не знайдено. Перевірте правопис або спробуйте інше слово чи фразу.",
+          "number_items_shown": "%{shownNumber} з %{totalNumber} товарів"
+        },
+        "order_name_label": "Замовлення %{name}",
+        "shopping_cart_label": "Кошик покупок",
+        "discount_title": "Знижка",
+        "discount_title_with_position": "Знижка %{position}",
+        "discount_title_stacking": {
+          "one": "Знижка",
+          "other": "Знижки"
+        },
+        "discount_order_stacking": {
+          "one": "Знижка на замовлення",
+          "other": "Знижки на замовлення"
+        },
+        "discount_label": "Код знижки",
+        "discount_not_found": "Не вдалося знайти дійсну знижку за введеним кодом",
+        "discount_placeholder": "Код знижки",
+        "discount_code_applied": "Код знижки застосовано",
+        "discount_code_applied_with_code": "Код знижки %{code} застосовано",
+        "discount_code_removed": "Код знижки %{code} вилучено"
       }
     }
   }
