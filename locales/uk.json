@@ -2718,11 +2718,70 @@
         "or": "АБО",
         "cancel": "Скасувати",
         "your_location": "вашої локації",
-        "search_button": "Знайти магазини"
+        "search_button": "Знайти магазини",
+        "no_stores_found": "Магазинів не знайдено",
+        "all_stores_far_away": {
+          "title": "Найближчі локації розташовані далі ніж за %{distance}",
+          "title_with_item": {
+            "one": "Найближча локація з вашим товаром розташована далі ніж за %{distance} від %{location}",
+            "other": "Найближча локація з вашими товарами розташована далі ніж за %{distance} від %{location}"
+          },
+          "title_with_location": "Найближча локація розташована далі ніж за %{distance} від %{location}",
+          "title_with_specific_location": "Найближча локація з вашим товаром розташована далі ніж за %{distance} від %{location}",
+          "description": "Виберіть локацію або %{ship_to_address_link}",
+          "description_with_location": "%{change_location_link} або %{ship_to_address_link}",
+          "ship_to_address_link": "доставити на адресу",
+          "change_location_link": "Змінити свою локацію"
+        },
+        "selected_pickup_option_no_longer_available": {
+          "title": "Раніше вибрана вами локація більше недоступна",
+          "description": "Ми вибрали найближчу локацію, де ваші товари є в наявності"
+        },
+        "could_not_resolve_address": "Не вдалося визначити вашу адресу. Спробуйте ще раз або скористайтеся іншою адресою",
+        "paginator": {
+          "accessibility_label": "Пагінація самовивозу",
+          "previous": "Попередня сторінка",
+          "next": "Наступна сторінка",
+          "label": {
+            "one": "%{first}-%{last} з %{count} магазину",
+            "other": "%{first}-%{last} з %{count} магазинів"
+          }
+        },
+        "reveal_more_label": {
+          "one": "Показати ще %{count} локацію",
+          "other": "Показати ще %{count} локацій"
+        },
+        "no_pickup_locations_found": "Місць самовивозу не знайдено",
+        "pickup_unavailable_banner_title": {
+          "one": "Немає локацій з вашим товаром",
+          "other": "Немає локацій з вашими товарами"
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "one": "Немає локацій у %{country} з вашим товаром",
+          "other": "Немає локацій у %{country} з вашими товарами"
+        },
+        "pickup_unavailable_banner_body": {
+          "try_different_location": "Спробуйте іншу локацію",
+          "ship_to_address": "доставити на адресу",
+          "there_are_no_stores": "Поблизу вашої адреси немає магазинів, або ваші товари недоступні для самовивозу.",
+          "ship_items": "Доставити ваші товари",
+          "search_elsewhere": "шукати в іншому місці",
+          "search_elsewhere_standalone": "Шукати в іншому місці",
+          "ship_items_or_search_elsewhere": "%{ship_items} або %{search_elsewhere}"
+        },
+        "geolocation": {
+          "permission_not_allowed": "Дозвольте доступ до геолокації або скористайтеся пошуком."
+        }
       },
       "shop_pay_external": {
         "return_to_store": "Повернутися до {{shopName}}",
-        "return_to_store_simple": "Повернутися до магазину"
+        "return_to_store_simple": "Повернутися до магазину",
+        "title": "Оформлення замовлення Shop Pay",
+        "errors": {
+          "problem_loading": "Виникла проблема із завантаженням Shop Pay",
+          "try_again_later": "Перевірте з'єднання або закрийте це вікно та спробуйте ще раз за кілька хвилин.",
+          "checkout_has_expired": "Термін дії вашого оформлення замовлення закінчився. Закрийте це вікно та спробуйте оформити замовлення ще раз з {{shopName}}."
+        }
       },
       "wallets": {
         "return_to_store": "Повернутися до магазину",
@@ -2905,6 +2964,80 @@
         "invalid_variant_id_target": "Інструкція щодо товару %{name} посилається на ідентифікатор варіанту %{variant_id}, якого немає серед позицій товарів.",
         "invalid_price_override_target": "Інструкція про заміну ціни для позиції %{stable_id} недійсна, оскільки це складова комплекту.",
         "discount_not_supported": "Інструкція про застосування знижки на товар не підтримує цей тип знижки."
+      },
+      "split_delivery": {
+        "accessibility": {
+          "status": {
+            "ship_separately": "%{items} буде відправлено окремо.",
+            "pickup_in_store": "%{items} буде забрано з магазину.",
+            "remove_items": "%{items} вилучено з кошика."
+          }
+        },
+        "pickup_all_items": "Забрати всі товари",
+        "items_for_pickup": "Товари для самовивозу",
+        "items_for_shipping": "Товари для доставки",
+        "items_moved_to_shipping_toast": "Товари, які не можна забрати самовивозом, переміщено до доставки",
+        "delivery_method": "Розділити спосіб доставки",
+        "delivery_method_menu": "Меню розділення способу доставки",
+        "inventory_issue_banner": {
+          "heading": {
+            "cannot_be_picked_up": {
+              "one": "%{count} товар не можна забрати самовивозом",
+              "other": "%{count} товарів не можна забрати самовивозом"
+            },
+            "cannot_be_shipped": {
+              "one": "%{count} товар не можна доставити",
+              "other": "%{count} товарів не можна доставити"
+            }
+          },
+          "remove_item": {
+            "one": "вилучити товар",
+            "other": "вилучити товари"
+          },
+          "remove_item_only": {
+            "one": "Вилучити товар",
+            "other": "Вилучити товари"
+          },
+          "ship_separately": {
+            "one": "Доставити окремо",
+            "other": "Доставити окремо"
+          },
+          "pick_them_up_in_store": {
+            "one": "Забрати з магазину",
+            "other": "Забрати з магазину"
+          },
+          "remove_items_or_ship": "%{ship_separately_link} або %{remove_items_link}",
+          "remove_items_or_pickup": "%{pickup_in_store_link} або %{remove_items_link}",
+          "merchandise_line_with_quantity": "%{title} (×%{quantity})"
+        },
+        "cross_border": {
+          "modal": {
+            "heading": "Змінити країну?",
+            "content": "Ваші локації самовивозу та доставки мають бути в одній країні. Зміна країни скине всі товари на доставку.",
+            "country_changed_heading": "Країну змінено",
+            "change_country": "Змінити країну"
+          },
+          "banner": "Ваш спосіб доставки оновлено"
+        }
+      },
+      "captcha": {
+        "title": "Пройдіть капчу, щоб продовжити",
+        "errors": {
+          "not_solved": "Пройдіть капчу, щоб продовжити"
+        }
+      },
+      "clipboard": {
+        "copied": "Скопійовано",
+        "failed_to_copy": "Не вдалося скопіювати"
+      },
+      "discount_errors": {
+        "generic_error": "Ваше замовлення не вдалося обробити, оскільки ваш код знижки більше недоступний. Перевірте загальну суму замовлення та спробуйте ще раз."
+      },
+      "b2b_errors": {
+        "lost_b2b_purchasing_permissions": "У вас більше немає дозволу оформлювати B2B-замовлення. %{logout_url}, щоб оформити особисте замовлення.",
+        "log_out_link_text": "Вийти",
+        "lost_permissions_subtitle": "У вас більше немає дозволу оформлювати B2B-замовлення. Вийдіть з облікового запису, щоб оформити особисте замовлення.",
+        "lost_permissions_title": "Немає дозволів для локації"
       }
     }
   },
