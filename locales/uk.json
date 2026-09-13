@@ -2391,7 +2391,142 @@
         "add_tip": "Додати чайові",
         "update_tip": "Оновити чайові",
         "message": "Дякуємо, ми це цінуємо.",
-        "preset_label": "%{tip_percent}%"
+        "preset_label": "%{tip_percent}%",
+        "no_tip_label": "Немає",
+        "not_available_with_spi": "Недоступно з розстрочкою Shop Pay"
+      },
+      "open_graph_meta_tag": {
+        "title_with_products": {
+          "zero": "Придбати %{product_name}",
+          "one": "Придбати %{product_name} та ще %{count} товар",
+          "other": "Придбати %{product_name} та ще %{count} товарів"
+        }
+      },
+      "subscriptions": {
+        "recurring_total_intervals": {
+          "day": {
+            "one": "день",
+            "other": "%{count} днів"
+          },
+          "week": {
+            "one": "тиждень",
+            "other": "%{count} тижнів"
+          },
+          "month": {
+            "one": "місяць",
+            "other": "%{count} місяців"
+          },
+          "year": {
+            "one": "рік",
+            "other": "%{count} років"
+          }
+        },
+        "recurring_totals": "%{total_price} кожні %{interval}",
+        "recurring_totals_with_initial_order_shipping_discount": "Перший платіж %{total_price_with_discount}, потім %{recurring_total}",
+        "recurring_totals_with_policies": {
+          "first_cycles": {
+            "one": "Перший платіж %{total_price}",
+            "other": "Перші %{count} платежів по %{total_price}"
+          },
+          "following_cycles": ", потім %{total_price} кожні %{interval}"
+        },
+        "recurring_totals_with_initial_order_shipping_discount_with_policies": {
+          "first_cycles": {
+            "one": ", потім %{count} платіж на суму %{total_price}",
+            "other": ", потім %{count} платежів по %{total_price}"
+          }
+        }
+      },
+      "customer_payment_methods": {
+        "page_title": "Способи оплати",
+        "title": "Способи оплати",
+        "update_card_button_label": "Оновити картку",
+        "delete_customer_mandate": {
+          "generic_error": "Під час обробки вашого запиту виникла помилка.",
+          "success_message": "Ваш спосіб оплати успішно видалено"
+        }
+      },
+      "throttle": {
+        "too_many_attempts": {
+          "message": "Забагато спроб",
+          "description": "Спробуйте ще раз за кілька хвилин"
+        },
+        "line_to_check_out": "Ви стоїте в черзі на оформлення замовлення",
+        "cart_summary_heading": "Ваш кошик",
+        "merchandise": {
+          "available": "Доступно",
+          "sold_out": "Немає в наявності"
+        },
+        "inventory": {
+          "partial_inventory_banner": "Частина товарів у вашому кошику розпродана і буде недоступна для покупки під час оформлення замовлення.",
+          "sold_out": {
+            "heading": "Товари у вашому кошику розпродано",
+            "storefront_body": "Поверніться до магазину, щоб продовжити покупки",
+            "no_storefront_body": "На жаль, товар, який ви хочете придбати, більше недоступний.",
+            "link": "Повернутися до магазину"
+          }
+        },
+        "title": "Черга",
+        "time_to_checkout_title": "Час оформлення замовлення - {{shopName}}",
+        "estimated_wait_time": {
+          "calculating": "Розрахунок орієнтовного часу очікування",
+          "less_than_one": "Орієнтовний час очікування: менше хвилини",
+          "one": "Орієнтовний час очікування: {{count}} хвилина",
+          "other": "Орієнтовний час очікування: {{count}} хвилин"
+        },
+        "last_checked": "(Останнє оновлення: {{time}})",
+        "footer": {
+          "heading": "Не оновлюйте цю сторінку — вона оновиться автоматично.",
+          "body": "Товари у вашому кошику не резервуються, доки ви не завершите оформлення замовлення."
+        }
+      },
+      "cart_checkout_validation": {
+        "runtime_error": "Під час обробки вашого запиту виникла помилка. Зверніться до власника магазину."
+      },
+      "no_address_location": {
+        "title": "Локація без адреси",
+        "header": "У вас немає адреси доставки для цієї локації",
+        "alt_header": "Відсутня адреса доставки",
+        "message": "Зв'яжіться з нами, щоб додати адресу для цієї локації та завершити оформлення замовлення.",
+        "email_us_button_label": "Напишіть нам електронною поштою"
+      },
+      "shop_wallet": {
+        "title": "Гаманець Shop Pay",
+        "description": "Виберіть, чим ви хочете скористатися для цієї покупки.",
+        "loading": "Завантаження вашого гаманця Shop Pay…",
+        "ready_status": "Ваш гаманець Shop Pay готовий. Виберіть спосіб оплати.",
+        "cancel": "Скасувати",
+        "retry": "Спробувати ще раз",
+        "return_to_hatch": "Повернутися до Hatch",
+        "choose_again": "Вибрати ще раз",
+        "payment_method": {
+          "heading": "Спосіб оплати",
+          "expiry": "Термін дії до {{expiry}}",
+          "accessibility_label": "{{brand}}, що закінчується на {{lastDigits}}"
+        },
+        "shipping_address": {
+          "heading": "Адреса доставки"
+        },
+        "confirm": {
+          "label": "Підтвердити вибір",
+          "success_title": "Вибір підтверджено",
+          "success_message": "Дані вибраного гаманця готові. Цей прототип поки що не передає їх у партнерський застосунок.",
+          "retryable_error_title": "Вибір не передано",
+          "retryable_error_message": "Спробуйте підтвердити вибір гаманця ще раз.",
+          "terminal_error_title": "З'єднання з гаманцем завершено",
+          "terminal_error_message": "Поверніться назад і відкрийте Shop Pay ще раз."
+        },
+        "cancelled": {
+          "title": "Вибір скасовано",
+          "message": "Дані гаманця не було передано, і покупку не здійснено."
+        },
+        "empty": {
+          "title": "Немає збережених карток",
+          "message": "У цьому гаманці Shop Pay немає збережених карток."
+        },
+        "ineligible": {
+          "title": "Немає прийнятних карток"
+        }
       }
     }
   }
