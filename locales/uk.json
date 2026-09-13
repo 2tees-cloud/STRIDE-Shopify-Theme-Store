@@ -699,7 +699,405 @@
         "discount_placeholder": "Код знижки",
         "discount_code_applied": "Код знижки застосовано",
         "discount_code_applied_with_code": "Код знижки %{code} застосовано",
-        "discount_code_removed": "Код знижки %{code} вилучено"
+        "discount_code_removed": "Код знижки %{code} вилучено",
+        "discount_code_replaced": "Код знижки %{old_code} вилучено, застосовано код %{code}",
+        "discount_code_replaced_multiple": "Кілька кодів знижки вилучено, застосовано код %{code}",
+        "discount_code_allocations_mismatch": "Ваш код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> змінився. Перегляньте кошик і спробуйте ще раз.",
+        "order_discounts_apply_to_local_shop": "Знижки на замовлення застосовуються лише до товарів з %{shop_name}",
+        "gift_card_applied": "Подарункову картку застосовано",
+        "enter_shipping_address": "Введіть адресу доставки",
+        "gift_card_title": "Подарункова картка",
+        "gift_card_label": "Подарункова картка",
+        "gift_card_placeholder": "Подарункова картка",
+        "gift_card_and_discount_title": "Код знижки або подарункова картка",
+        "gift_card_and_discount_label": "Код знижки або подарункова картка",
+        "gift_card_and_discount_placeholder": "Код знижки або подарункова картка",
+        "gift_cards_apply_to_local_shop": "Подарункові картки застосовуються лише до товарів з %{shop_name}",
+        "add_discount_or_gift_card": "Додати код знижки або подарункову картку",
+        "remove_gift_card_label": "Очистити подарункову картку",
+        "remove_discount_label": "Вилучити знижку",
+        "return_restocking_fee_label": "Плата за повернення товару на склад",
+        "return_shipping_fee_label": "Доставка при поверненні",
+        "free_shipping_discount_label": "Безкоштовна доставка",
+        "applied_free_shipping_discount_label": "Застосовано",
+        "apply_discount_button_label": "Застосувати",
+        "applied_discount_message": "Знижка %{amount} від загальної вартості замовлення",
+        "discount_has_been_applied": "Знижку застосовано",
+        "discount_has_been_removed": "Знижку вилучено",
+        "automatic_discount_tooltip": "Знижки, застосовані автоматично, не можна вилучити",
+        "gift_card_has_been_applied": "Подарункову картку застосовано",
+        "gift_card_has_been_removed": "Подарункову картку вилучено",
+        "gift_card_subscriptions_notice": "Подарункові картки застосовуються лише до першого платежу",
+        "discount_already_applied": "До цього замовлення вже застосовано знижку. Додати ще одну знижку не можна.",
+        "cart_does_not_meet_discount_requirements_notice": "Код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> недійсний для товарів у вашому кошику",
+        "discount_requires_customer_notice": "Введіть інформацію про доставку, щоб застосувати код знижки <strong style=\"text-transform:uppercase\">%{code}</strong>",
+        "customer_does_not_meet_discount_requirements_notice": "Код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> наразі вам недоступний",
+        "eligible_customer_missing_notice": "Код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> призначений лише для клієнтів, які відповідають умовам",
+        "shipping_information_does_not_meet_discount_requirements_notice": "Код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> недоступний для вашої адреси доставки",
+        "customer_already_used_once_per_customer_discount_notice": "Код знижки <strong style=\"text-transform:uppercase\">%{code}</strong> уже використано",
+        "subtotal_label": "Проміжний підсумок",
+        "subtotal_label_with_quantity": {
+          "one": "Проміжний підсумок · %{count} товар",
+          "other": "Проміжний підсумок · %{count} товарів"
+        },
+        "shipping_label": "Доставка",
+        "pickup_label": "Самовивіз з магазину",
+        "no_pickup_location": "Немає доступних місць самовивозу.",
+        "pickup_unavailable_banner_title": {
+          "one": "Немає магазинів, де є ваш товар",
+          "other": "Немає магазинів, де є ваші товари"
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "one": "Немає магазинів у %{country}, де є ваш товар",
+          "other": "Немає магазинів у %{country}, де є ваші товари"
+        },
+        "pickup_unavailable_banner_body": {
+          "ship_to_address": "Доставити на адресу",
+          "ship_to_address_instead_html": "%{link} натомість"
+        },
+        "tip_label": "Чайові",
+        "unconfirmed_label": "Непідтверджено",
+        "calculating_shipping": "Обчислення…",
+        "calculating": "Обчислення…",
+        "shipping_default_value": "Буде розраховано на наступному кроці",
+        "shipping_discount_title": "Знижка на доставку",
+        "shipping_pending_value": "—",
+        "shipping_pending_message": "Ще недоступно",
+        "shipping_policy_link": "Вартість доставки",
+        "taxes_label": "Податки",
+        "tax_line": {
+          "hst": "HST",
+          "gst": "GST",
+          "pst": "PST",
+          "rst": "RST",
+          "qst": "QST",
+          "vpt": "VPT"
+        },
+        "estimated_taxes_label": "Орієнтовні податки",
+        "estimated_taxes_label_short": "Орієнтовно",
+        "information_estimated_taxes_label": "Податки (орієнтовно)",
+        "estimated_taxes_finalization_tooltip_content": "Остаточну суму податку та загальну суму буде підтверджено електронною поштою або через SMS після оформлення замовлення.",
+        "estimated_taxes_finalization_tooltip_content_short": "Податок буде остаточно розраховано після оплати",
+        "order_total_label": "Загальна сума замовлення",
+        "price_before_discount_aria_text": "Початкова ціна",
+        "price_after_discount_aria_text": "Ціна зі знижкою",
+        "discount_code_aria_text": "Код знижки",
+        "total_savings": "Загальна економія",
+        "total_label": "Разом",
+        "total_due_label": "До сплати",
+        "total_paid_label": "Сплачено всього",
+        "total_price_label": "Загальна ціна",
+        "total_outstanding_label": "Сума до сплати",
+        "deposit_label": "Завдаток",
+        "total_due_today_label": "До сплати сьогодні",
+        "total_due_later_label": "До сплати пізніше",
+        "partial_total_label": "Разом",
+        "free_total_label": "Безкоштовно",
+        "free_shipping_total_label": "Безкоштовно",
+        "paid_label": "Сплачено",
+        "payment_due_label": "До сплати",
+        "vat_label_html": "Включно з податками на суму %{amount}",
+        "duties_included_label": "До загальної суми входять податки та мито. Жодних додаткових платежів під час доставки.",
+        "discount_and_gift_card_savings_notice": "Після знижок на суму %{discount_amount} та подарункових карток на суму %{gift_card_amount}",
+        "discount_savings_notice": "Після знижок на суму %{discount_amount}",
+        "gift_card_savings_notice": "Після подарункових карток на суму %{gift_card_amount}",
+        "cost_table_title": "Підсумок вартості",
+        "cost_table_item_column_header": "Товар",
+        "cost_table_value_column_header": "Значення",
+        "description_label": "Опис",
+        "price_label": "Ціна",
+        "price_per_item": {
+          "accessibility_label": "%{price} за товар",
+          "label": "%{price}/шт."
+        },
+        "quantity_label": "Кількість",
+        "product_change_label": "Змінити",
+        "product_image_label": "Зображення товару",
+        "product_image_quantity_label": "Кількість",
+        "scroll_order_summary": "Прокрутіть, щоб побачити більше товарів",
+        "expand_order_summary_short": "Показати",
+        "collapse_order_summary_short": "Приховати",
+        "original_price": "Початкова ціна",
+        "sale_price": "Ціна з розпродажу",
+        "compare_at_sale": "Розпродаж (%{sale_amount})",
+        "total_updated_label": "Оновлена загальна ціна:",
+        "order_total_updated_label": "Оновлена загальна сума",
+        "total_already_paid_label": "Сплачено",
+        "unit_price": {
+          "accessible_separator": "за",
+          "content_html": "%{price}%{accessible_separator}%{per_unit}",
+          "per_item": {
+            "single": "%{price} за штуку",
+            "one": "%{price} за %{count} товар",
+            "other": "%{price} за %{count} товарів"
+          },
+          "per_unit": {
+            "single": "%{price}/%{unit}",
+            "plural": "%{price}/%{count}%{unit}"
+          }
+        },
+        "gift_card_ending": "Подарункова картка, що закінчується на %{last_characters}",
+        "estimated_tax_label": "Орієнтовний податок",
+        "multiple_shipping_lines_label": "Загальна вартість доставки",
+        "recurring_subtotal_label": "Проміжний підсумок регулярного платежу",
+        "recurring_total_label": "Загальна сума регулярного платежу",
+        "recurring_total_tooltip": "Без урахування доставки, податків, мита та застосовних знижок",
+        "confirmation_number_label": "Підтвердження №%{confirmation_number}",
+        "higher_value_discount_applied": "Код <strong style=\"text-transform:uppercase\">%{code}</strong> не можна використати разом з наявними знижками.",
+        "percent_off_shipping": "Знижка %{percent}% на доставку",
+        "amount_off_shipping": "Знижка %{amount} на доставку",
+        "deferred_payment_info": {
+          "title": "Термін оплати %{amount_due} настає %{due_at}",
+          "description_html": "З питаннями щодо вашого замовлення %{contact_us}.",
+          "paid_today": "Сплачено сьогодні",
+          "paid_today_next": "Сплачено сьогодні",
+          "due_on_fulfillment_title": "Термін оплати %{amount_due} настає під час виконання замовлення",
+          "due_on_receipt_title": "Термін оплати %{amount_due} настає під час отримання"
+        },
+        "deferred_balance_info": {
+          "title": "Термін оплати залишку {{amount_due}} настає {{due_at}}",
+          "due_on_fulfillment_title": "Термін оплати залишку {{amount_due}} настає під час виконання замовлення"
+        },
+        "payment_terms_totals": {
+          "due_today": "До сплати сьогодні",
+          "due_today_next": "До сплати сьогодні",
+          "due_later": "До сплати %{due_at}",
+          "due_on_fulfillment": "До сплати під час виконання замовлення",
+          "due_on_fulfillment_next": "До сплати під час виконання",
+          "due_on_receipt": "До сплати під час отримання",
+          "due_later_checkout_to_draft": "До сплати пізніше",
+          "total_paid": "Сплачено всього"
+        },
+        "maximum_discount_code_limit_reached": "Ви досягли максимальної кількості кодів знижки. Вилучіть наявний код, щоб використати <strong style=\"text-transform:uppercase\">%{code}</strong>.",
+        "discount_code_application_failed": "Код <strong style=\"text-transform:uppercase\">%{code}</strong> наразі не працює. Зв'яжіться з нами, щоб отримати допомогу.",
+        "due_on_fulfillment": "До сплати під час виконання",
+        "gift_card_masked": "•••• %{last_characters}",
+        "subscriptions": "Підписки",
+        "duties_label": "Мито",
+        "duties_and_taxes_label": "Мито та податки",
+        "error_duties_tooltip": "Це замовлення відправляється з іншої країни, тому під час доставки може стягуватися мито та податки.",
+        "may_be_charged_on_delivery": "Може стягуватися під час доставки",
+        "total_updated_label_with_price": "Оновлена загальна ціна: %{totalPrice}",
+        "updated_shipping_method": "Оновлений спосіб доставки: %{shipping_method}",
+        "recurring_payments": "Регулярні платежі",
+        "recurring_total_multiple_label": "Це замовлення містить регулярне списання за декілька товарів",
+        "deferred_total_due_date_label": "До сплати {{date}}",
+        "deferred_total_due_date_label_next": "Термін сплати: %{date}",
+        "full_price": "Повна ціна: %{price}",
+        "custom_discount": "Користувацька знижка",
+        "expand_component_information": {
+          "one": "Показати %{count} товар",
+          "other": "Показати %{count} товарів"
+        },
+        "collapse_component_information": {
+          "one": "Приховати %{count} товар",
+          "other": "Приховати %{count} товарів"
+        },
+        "component_quantity_title": "%{quantity} × %{product_title}",
+        "discount_discovery": {
+          "add_code": "Додати знижку",
+          "back_to_finalize_order": "Повернутися до завершення замовлення",
+          "merchandise_quantity_label": {
+            "one": "%{count} товар",
+            "other": "%{count} товарів"
+          }
+        },
+        "alternative_payment_currency_total": "Списано як %{amount_due}",
+        "alternative_payment_currency_chinese_yuan": "Підтвердьте остаточну суму в CNY в застосунку %{wallet}.",
+        "lpm": {
+          "wechat_pay": {
+            "checkout_disclosure": "Підтвердьте остаточну суму в CNY в застосунку WeChat",
+            "checkout_disclosure_with_alternative_payment_currency": "%{shop_name} обробить цей платіж як %{amount_due} %{processing_currency}, який WeChat конвертує в CNY",
+            "checkout_disclosure_charged_in_cny": "%{shop_name} обробить цей платіж як %{amount_due} %{processing_currency}",
+            "post_purchase_disclosure": "Переглянути суму в CNY у WeChat"
+          },
+          "alipay": {
+            "checkout_disclosure": "Підтвердьте остаточну суму в CNY в застосунку Alipay",
+            "checkout_disclosure_with_alternative_payment_currency": "%{shop_name} обробить цей платіж як %{amount_due} %{processing_currency}, який Alipay конвертує в CNY",
+            "checkout_disclosure_charged_in_cny": "%{shop_name} обробить цей платіж як %{amount_due} %{processing_currency}",
+            "post_purchase_disclosure": "Переглянути суму в CNY в Alipay"
+          }
+        },
+        "pay_merchant_label": "Оплатити %{merchant_name}",
+        "discount_applies_to_subscription_items_only": "Ця знижка застосовується лише до товарів за підпискою"
+      },
+      "shipping": {
+        "title": "Доставка",
+        "delivery_title": "Доставка",
+        "shipping_method_title": "Спосіб доставки",
+        "shipping_method_rollup_accessibility_label": "Варіанти способу доставки",
+        "shipping_method_one_time_purchase_group_title": "Разова покупка",
+        "shipping_method_first_shipment_group_title": {
+          "one": "Перше відправлення",
+          "other": "Перші відправлення"
+        },
+        "shipping_method_subscription_group_title": "Підписка",
+        "shipping_method_recurring_shipments_group_title": {
+          "one": "Регулярне відправлення",
+          "other": "Регулярні відправлення"
+        },
+        "subscription_shipping": "Доставка за підпискою",
+        "subscription_local_delivery": "Локальна доставка за підпискою",
+        "subscription_pickup": "Самовивіз за підпискою",
+        "waiting_on_rate_notice": "Отримання доступних тарифів доставки…",
+        "waiting_on_pickup_location_notice": "Отримання доступних місць самовивозу…",
+        "no_rates_for_cart_or_destination_notice": "Немає доступних способів доставки для вашого кошика або адреси",
+        "no_pickup_location_notice": "Принаймні один з ваших товарів недоступний для самовивозу",
+        "no_rates_for_country_notice": "Для цієї адреси не знайдено тарифів доставки.",
+        "no_rates_contact_notice": "Зв'яжіться з нами, щоб дізнатися більше",
+        "free_rate_label": "Безкоштовно",
+        "cheapest_rate_label": "Найдешевший",
+        "estimated_delivery_date": {
+          "one": "%{count} робочий день",
+          "other": "%{count} робочих днів"
+        },
+        "estimated_delivery_date_range": "від %{minimum} до %{maximum} робочих днів",
+        "delivery_date_range": "%{min_time}–%{max_time}",
+        "estimated_delivery_time": "Орієнтовна доставка %{time}",
+        "estimated_delivery_time_range": "Орієнтовна доставка %{min_time}–%{max_time}",
+        "delivery_today": "Доставка в той самий день %{time}",
+        "delivery_tomorrow": "Доставка наступного дня %{time}",
+        "two_day_delivery": "Доставка за 2 дні %{time}",
+        "delivery": "Доставка %{time}",
+        "delivery_to": "Доставка на адресу",
+        "arrives_time": "Прибуде %{time}",
+        "arrives_time_range": "Прибуде %{min_time}–%{max_time}",
+        "estimated_time": "Орієнтовно %{time}",
+        "estimated_time_range": "Орієнтовно %{min_time}–%{max_time}",
+        "default_description": "Відправляється протягом 1 робочого дня",
+        "unbranded_default_description": "Готово до відправлення",
+        "unbranded_description_same_day": "Відправляється того самого робочого дня",
+        "unbranded_description_with_fulfillment_days": {
+          "one": "Відправляється наступного робочого дня",
+          "other": "Відправляється протягом %{count} робочих днів"
+        },
+        "unbranded_description_with_fulfillment_weeks": {
+          "one": "Відправляється протягом %{count} тижня",
+          "other": "Відправляється протягом %{count} тижнів"
+        },
+        "shipping_line_phone_label": "Номер мобільного телефону (обов'язково)",
+        "shipping_line_phone": "Кур'єр може скористатися цим номером, щоб зв'язатися з вами.",
+        "shipping_line_delivery_phone_label": "Номер мобільного телефону",
+        "shipping_line_delivery_phone": "З вами можуть зв'язатися для надання оновлень щодо доставки.",
+        "optional_shipping_line_delivery_instructions_label": "Інструкції з доставки (необов'язково)",
+        "shipping_line_delivery_instructions": "Введіть необхідну інформацію, наприклад код домофону або інструкції щодо передачі посилки.",
+        "other_method": {
+          "zero": "Інші способи недоступні",
+          "one": "Доступний ще %{count} спосіб за ціною",
+          "other": "Доступно ще %{count} способи від"
+        },
+        "shipping_rate_discounted_amount": "Було: %{original_amount}. Стало: %{amount}",
+        "local_delivery": "Локальна доставка",
+        "prime_not_available": {
+          "default": "Доставка Prime недоступна для вашого замовлення. Ваші варіанти доставки оновлено."
+        },
+        "subscription_delivery_description": {
+          "free_shipping_cycles": {
+            "one": "Безкоштовна доставка ще для %{count} відправлення",
+            "other": "Безкоштовна доставка ще для %{count} відправлень"
+          },
+          "free_shipping_cycles_delivery_not_included": {
+            "one": "Безкоштовна доставка для %{count} відправлення",
+            "other": "Безкоштовна доставка для %{count} відправлень"
+          },
+          "first_n_order_free_with_cycle": {
+            "one": "Безкоштовна доставка ще для %{count} відправлення, потім %{recurring_order_shipping_price}",
+            "other": "Безкоштовна доставка ще для %{count} відправлень, потім %{recurring_order_shipping_price}"
+          },
+          "first_n_order_free_with_cycle_delivery_not_included": {
+            "one": "Безкоштовна доставка для %{count} відправлення, потім %{recurring_order_shipping_price}",
+            "other": "Безкоштовна доставка для %{count} відправлень, потім %{recurring_order_shipping_price}"
+          },
+          "max_cycles_base_shipping": {
+            "one": "Ще %{count} відправлення за %{shipping_price}",
+            "other": "Ще %{count} відправлень по %{shipping_price} кожне"
+          },
+          "max_cycles_base_shipping_delivery_not_included": {
+            "one": "%{count} відправлення за %{shipping_price}",
+            "other": "Ще %{count} відправлень по %{shipping_price} кожне"
+          },
+          "prepaid_free_shipping_with_cycles": {
+            "one": "Безкоштовна доставка для першого циклу %{cycle}, потім %{recurring_order_shipping_price}",
+            "other": "Безкоштовна доставка для першого циклу %{cycle}, потім %{recurring_order_shipping_price}"
+          },
+          "prepaid_order_one_cycle": {
+            "one": "%{shipping_price} за ще %{count} відправлення",
+            "other": "%{shipping_price} за ще %{count} відправлень (%{per_delivery_cost})"
+          },
+          "prepaid_order_one_cycle_delivery_not_included": {
+            "one": "%{shipping_price} за %{count} відправлення",
+            "other": "%{shipping_price} за %{count} відправлень (%{per_delivery_cost})"
+          },
+          "prepaid_order_no_cycle": {
+            "one": "%{shipping_price} за ще %{count} відправлення, потім %{recurring_order_shipping_price}",
+            "other": "%{shipping_price} за ще %{count} відправлень (%{per_delivery_cost}), потім %{recurring_order_shipping_price}"
+          },
+          "prepaid_order_no_cycle_delivery_not_included": {
+            "one": "%{shipping_price} за %{count} відправлення, потім %{recurring_order_shipping_price}",
+            "other": "%{shipping_price} за %{count} відправлень (%{per_delivery_cost}), потім %{recurring_order_shipping_price}"
+          },
+          "subscription_free_with_frequency_label": "Безкоштовна доставка %{delivery_frequency}",
+          "prepaid_delivery_frequency": {
+            "one": "за %{count} відправлення",
+            "other": "за %{count} відправлень"
+          },
+          "subscription_delivery_frequency": {
+            "day": {
+              "one": "щодня",
+              "other": "кожні %{count} днів"
+            },
+            "week": {
+              "one": "щотижня",
+              "other": "кожні %{count} тижнів"
+            },
+            "month": {
+              "one": "щомісяця",
+              "other": "кожні %{count} місяців"
+            },
+            "year": {
+              "one": "щороку",
+              "other": "кожні %{count} років"
+            }
+          },
+          "multiple_subscriptions_shipping_price_label": "%{shipping_price} за відправлення",
+          "prepaid_shipping_price_label": "%{shipping_price} за відправлення × %{delivery_interval_count}",
+          "initial_order_discounted": "Вартість першої доставки %{discounted_shipping_cost}, потім %{frequency_description}",
+          "prepaid_initial_order_discounted": "Вартість першої доставки %{discounted_shipping_price} %{prepaid_delivery_frequency}",
+          "prepaid_initial_order_discounted_with_per_delivery_price": "Вартість першої доставки %{discounted_shipping_price} %{prepaid_delivery_frequency} (%{discounted_cost_per_delivery})",
+          "prepaid_initial_order_discounted_with_renewal": "Вартість першої доставки %{discounted_shipping_price} %{prepaid_delivery_frequency}, потім %{shipping_price} %{billing_cycle}",
+          "prepaid_initial_order_discounted_with_per_delivery_price_and_renewal": "Вартість першої доставки %{discounted_shipping_price} %{prepaid_delivery_frequency} (%{discounted_cost_per_delivery}), потім %{shipping_price} %{billing_cycle}",
+          "shipping_price_included": "Включено",
+          "recurring_order_shipping_price": "потім %{recurring_order_shipping_price}",
+          "first_order_shipping_price_included": "Перше замовлення включено, потім %{recurring_order_shipping_price}",
+          "first_order_different_shipping_price": "%{first_order_shipping_price} (%{per_delivery_price} за відправлення), потім %{recurring_order_shipping_price}",
+          "first_n_order_free": {
+            "one": "Перше замовлення безкоштовне",
+            "other": "Перші %{count} замовлень безкоштовні"
+          },
+          "free_for_first_n_order": {
+            "one": "Для першого замовлення",
+            "other": "Для перших %{count} замовлень"
+          }
+        },
+        "one_time_purchase_shipping": "Разова доставка",
+        "duties_and_taxes_title": "Мито та податки",
+        "shipping_information_required_notice": "Потрібна інформація про доставку. {{link}}.",
+        "shipping_information_redirect_link": "Введіть свою інформацію тут",
+        "loading_progressive_rates": "Пошук додаткових тарифів…",
+        "no_other_methods_available": "Інші способи недоступні",
+        "duties_and_taxes_options": {
+          "ddu_title": "Оплата під час доставки",
+          "ddu_caption": "Можуть стягуватися додаткові платежі",
+          "ddp_title": "Оплатити зараз",
+          "ddp_caption": "Без додаткових платежів під час доставки"
+        },
+        "shipping_method_combinations": {
+          "without_separator": "%{firstMethod}, %{secondMethod}",
+          "with_separator": "%{rest}, %{current},",
+          "combination": "%{rest} і %{current}"
+        },
+        "shipping_used_as_billing_notice": "Цю адресу також буде використано як платіжну адресу для цього замовлення.",
+        "address_update": "Оновити адресу"
       }
     }
   }
